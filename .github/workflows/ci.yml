@@ -8,3 +8,8 @@ on:
 
 jobs:
   rust:
+    name: Rust engine (build, test, lint)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
