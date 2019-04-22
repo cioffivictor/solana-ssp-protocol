@@ -1,2 +1,4 @@
 # Rust
 /target
+**/*.rs.bk
+*.pdb
