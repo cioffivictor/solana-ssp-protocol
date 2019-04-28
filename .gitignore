@@ -2,3 +2,5 @@
 /target
 **/*.rs.bk
 *.pdb
+
+# Cargo: this is a binary+library workspace; committing the lockfile is
