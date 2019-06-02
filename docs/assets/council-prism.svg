@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" role="img" aria-labelledby="title desc">
+  <title id="title">QuorumForge council prism</title>
+  <desc id="desc">A beam of mixed evidence enters a prism and refracts into four verdict bands: consensus, split, contested, and unsupported.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#140f33"/>
+      <stop offset="1" stop-color="#07040f"/>
