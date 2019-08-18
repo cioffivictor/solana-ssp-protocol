@@ -6,3 +6,8 @@
 #   make demo      run a full pipeline against the sample deliberations
 #   make bundle    build and verify a deterministic evidence bundle
 #   make fmt       format Rust sources (requires rustfmt)
+#   make clean     remove build artifacts
+
+CARGO ?= cargo
+NODE  ?= node
+NPM   ?= npm
