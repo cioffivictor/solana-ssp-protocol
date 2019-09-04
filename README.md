@@ -18,3 +18,23 @@ clean bands of light: **consensus**, **split**, **contested**, and
 
 ---
 
+## The one-paragraph pitch
+
+A council argues. Somebody has to write down what the argument *concluded*.
+QuorumForge is that scribe — and, more importantly, that *judge*. It is **not an
+agent orchestrator**: it does not run agents, call models, or manage prompts. It
+operates purely on the *record* of a deliberation after the debate is over. That
+separation is the whole point. Because the engine only reads a static transcript
+of positions, its judgements are reproducible: the same evidence file always
+yields the same verdict, the same report bytes, and the same integrity digest.
+You can commit a verdict to version control and diff it next week.
+
+---
+
+## Why a prism?
+
+White light looks like a single, undifferentiated thing until a prism teases it
+apart. A pile of agent opinions is the same: it *feels* like noise until you
+separate it by direction and strength. QuorumForge's prism has exactly four
+exit angles, and every claim leaves through exactly one of them.
+
