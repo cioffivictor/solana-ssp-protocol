@@ -1,2 +1,4 @@
 # QuorumForge deliberation — line-oriented (.qf) format
 # ------------------------------------------------------
+# Topic: is the distributed cache coherent under concurrent writes?
+# This file exercises consensus, contested, split, and unsupported outcomes.
