@@ -5,3 +5,5 @@
 #
 # Grammar reminder (see docs/EVIDENCE.md):
 #   delib | <id> | <question>
+#   agent | <id> | <name> | <weight> | <role>
+#   claim | <id> | <topic> | <text>
