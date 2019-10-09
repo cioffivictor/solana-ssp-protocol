@@ -1,0 +1,3 @@
+{
+  "id": "migration-strategy",
+  "question": "Should the platform migrate from the monolith to service-per-domain now?",
