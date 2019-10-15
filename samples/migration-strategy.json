@@ -1,3 +1,6 @@
 {
   "id": "migration-strategy",
   "question": "Should the platform migrate from the monolith to service-per-domain now?",
+  "agents": [
+    { "id": "pearl", "name": "Pearl Adeyemi",  "weight": 1.4, "role": "architecture" },
+    { "id": "rune",  "name": "Rune Halvorsen", "weight": 1.2, "role": "reliability" },
