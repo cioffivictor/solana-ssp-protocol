@@ -4,3 +4,7 @@
   "agents": [
     { "id": "pearl", "name": "Pearl Adeyemi",  "weight": 1.4, "role": "architecture" },
     { "id": "rune",  "name": "Rune Halvorsen", "weight": 1.2, "role": "reliability" },
+    { "id": "sol",   "name": "Sol Marchetti",  "weight": 1.0, "role": "delivery" },
+    { "id": "twyla", "name": "Twyla Osei",      "weight": 1.1, "role": "cost" },
+    { "id": "vex",   "name": "Vex Nkemelu",     "weight": 0.9, "role": "security" }
+  ],
