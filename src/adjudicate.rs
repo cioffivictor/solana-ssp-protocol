@@ -26,3 +26,17 @@
 //! ## Verdict classification
 //!
 //! Two thresholds govern classification, both configurable:
+//!
+//! * `consensus_threshold` (default `0.66`): if `|polarity| >=` this and the
+//!   dissent ratio is below `dissent_ceiling`, the claim is a
+//!   [`Outcome::Consensus`] (affirmed if polarity is positive, negated if
+//!   negative).
+//! * `dissent_ceiling` (default `0.34`): the fraction of decisive mass on the
+//!   losing side. When both sides carry meaningful weight, the claim is
+//!   [`Outcome::Contested`].
+//!
+//! Claims that clear neither bar land in [`Outcome::Split`]. This gives four
+//! mutually exclusive outcomes: `Consensus`, `Contested`, `Split`, and
+//! `Unsupported`.
+
+use crate::model::{Deliberation, Stance};
