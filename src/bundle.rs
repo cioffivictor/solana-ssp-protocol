@@ -11,3 +11,16 @@ use crate::json::{self, Json};
 use crate::model::{Deliberation, Position};
 
 /// A packaged deliberation plus verdicts plus an integrity digest.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Bundle {
+    pub deliberation: Deliberation,
+    pub adjudication: Adjudication,
+    /// Hex FNV-1a digest of the canonical JSON body (excluding the digest).
+    pub digest: String,
+}
+
+/// Build a bundle from a deliberation and its adjudication.
+pub fn build(delib: &Deliberation, adj: &Adjudication) -> Bundle {
+    let body = canonical_body(delib, adj);
+    let text = json::to_string(&body);
+    let digest = fnv1a_hex(text.as_bytes());
