@@ -85,3 +85,46 @@ impl fmt::Display for JsonError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "JSON error at byte {}: {}", self.position, self.message)
     }
+}
+
+impl std::error::Error for JsonError {}
+
+/// Parse a UTF-8 JSON document into a [`Json`] value.
+pub fn parse(input: &str) -> Result<Json, JsonError> {
+    let mut parser = Parser {
+        bytes: input.as_bytes(),
+        pos: 0,
+    };
+    parser.skip_ws();
+    let value = parser.parse_value()?;
+    parser.skip_ws();
+    if parser.pos != parser.bytes.len() {
+        return Err(parser.err("trailing characters after JSON value"));
+    }
+    Ok(value)
+}
+
+struct Parser<'a> {
+    bytes: &'a [u8],
+    pos: usize,
+}
+
+impl<'a> Parser<'a> {
+    fn err(&self, msg: &str) -> JsonError {
+        JsonError {
+            message: msg.to_string(),
+            position: self.pos,
+        }
+    }
+
+    fn peek(&self) -> Option<u8> {
+        self.bytes.get(self.pos).copied()
+    }
+
+    fn skip_ws(&mut self) {
+        while let Some(b) = self.peek() {
+            if b == b' ' || b == b'\t' || b == b'\n' || b == b'\r' {
+                self.pos += 1;
+            } else {
+                break;
+            }
