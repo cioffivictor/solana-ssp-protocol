@@ -25,3 +25,31 @@
 
 use crate::json::{self, Json};
 use crate::model::{Agent, Citation, Claim, Deliberation, Position, Stance};
+
+/// An error encountered while parsing evidence.
+#[derive(Debug, Clone, PartialEq)]
+pub struct ParseError {
+    pub line: usize,
+    pub message: String,
+}
+
+impl std::fmt::Display for ParseError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if self.line == 0 {
+            write!(f, "parse error: {}", self.message)
+        } else {
+            write!(f, "parse error on line {}: {}", self.line, self.message)
+        }
+    }
+}
+
+impl std::error::Error for ParseError {}
+
+/// Detect the format from a file extension and dispatch to the right parser.
+pub fn parse_auto(path: &str, contents: &str) -> Result<Deliberation, ParseError> {
+    let lower = path.to_lowercase();
+    if lower.ends_with(".json") {
+        parse_json(contents)
+    } else {
+        parse_lines(contents)
+    }
