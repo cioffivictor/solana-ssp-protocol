@@ -53,3 +53,31 @@ pub fn parse_auto(path: &str, contents: &str) -> Result<Deliberation, ParseError
     } else {
         parse_lines(contents)
     }
+}
+
+/// Split a line into pipe-delimited fields, honouring `\|` escapes.
+fn split_fields(line: &str) -> Vec<String> {
+    let mut fields = Vec::new();
+    let mut current = String::new();
+    let mut chars = line.chars().peekable();
+    while let Some(ch) = chars.next() {
+        match ch {
+            '\\' if chars.peek() == Some(&'|') => {
+                chars.next();
+                current.push('|');
+            }
+            '|' => {
+                fields.push(current.trim().to_string());
+                current = String::new();
+            }
+            _ => current.push(ch),
+        }
+    }
+    fields.push(current.trim().to_string());
+    fields
+}
+
+/// Parse the line-oriented `.qf` format.
+pub fn parse_lines(contents: &str) -> Result<Deliberation, ParseError> {
+    let mut delib: Option<Deliberation> = None;
+
