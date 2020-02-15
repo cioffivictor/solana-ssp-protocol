@@ -13,3 +13,18 @@
 
 use crate::adjudicate::{Adjudication, Outcome, Verdict};
 use crate::json::{self, Json};
+use crate::model::Deliberation;
+use std::collections::BTreeMap;
+
+/// Render a console-friendly text report.
+pub fn render_text(delib: &Deliberation, adj: &Adjudication) -> String {
+    let mut out = String::new();
+    let bar = "=".repeat(72);
+    let thin = "-".repeat(72);
+
+    out.push_str(&bar);
+    out.push('\n');
+    out.push_str(&format!(
+        "QUORUMFORGE VERDICT  ::  {}\n",
+        adj.deliberation_id
+    ));
