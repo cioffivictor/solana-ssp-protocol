@@ -11,3 +11,16 @@ fn agent(id: &str, weight: f64) -> Agent {
         role: String::new(),
     }
 }
+
+fn claim(id: &str) -> Claim {
+    Claim {
+        id: id.into(),
+        text: format!("claim {}", id),
+        normalized: format!("claim {}", id),
+        topic: String::new(),
+    }
+}
+
+fn pos(agent: &str, claim: &str, stance: Stance, confidence: f64) -> Position {
+    Position {
+        agent_id: agent.into(),
