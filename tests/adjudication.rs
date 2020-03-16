@@ -24,3 +24,16 @@ fn claim(id: &str) -> Claim {
 fn pos(agent: &str, claim: &str, stance: Stance, confidence: f64) -> Position {
     Position {
         agent_id: agent.into(),
+        claim_id: claim.into(),
+        stance,
+        confidence,
+        citations: Vec::new(),
+        note: String::new(),
+    }
+}
+
+fn build(agents: Vec<Agent>, claims: Vec<Claim>, positions: Vec<Position>) -> Deliberation {
+    let mut d = Deliberation::new("t", "question");
+    for a in agents {
+        d.agents.insert(a.id.clone(), a);
+    }
