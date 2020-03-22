@@ -37,3 +37,17 @@ fn build(agents: Vec<Agent>, claims: Vec<Claim>, positions: Vec<Position>) -> De
     for a in agents {
         d.agents.insert(a.id.clone(), a);
     }
+    for c in claims {
+        d.claims.insert(c.id.clone(), c);
+    }
+    d.positions = positions;
+    d
+}
+
+#[test]
+fn unanimous_support_is_consensus_affirmed() {
+    let d = build(
+        vec![agent("a", 1.0), agent("b", 1.0)],
+        vec![claim("c1")],
+        vec![
+            pos("a", "c1", Stance::Support, 1.0),
