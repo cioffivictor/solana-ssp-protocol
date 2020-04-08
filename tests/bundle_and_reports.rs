@@ -11,3 +11,10 @@ const NORM: &str = include_str!("../samples/normalization.qf");
 
 fn run(path: &str, src: &str) -> (quorumforge::Deliberation, quorumforge::Adjudication) {
     let mut d = parse::parse_auto(path, src).unwrap();
+    normalize::normalize_deliberation(&mut d);
+    let adj = adjudicate(&d, &Policy::default());
+    (d, adj)
+}
+
+#[test]
+fn bundle_is_byte_deterministic() {
