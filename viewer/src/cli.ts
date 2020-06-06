@@ -19,3 +19,14 @@ import { renderConsole, renderHtml } from "./render.js";
 
 const HELP = `qf-view — QuorumForge council viewer
 
+USAGE:
+  qf-view [options] <report.json | ->
+
+OPTIONS:
+  --html            Emit a standalone HTML document instead of console text.
+  --no-color        Disable ANSI colour in console output.
+  --width <n>       Claim-text column width for console output (default 60).
+  -o, --output <f>  Write to a file instead of stdout.
+  -h, --help        Show this help.
+
+EXAMPLES:
