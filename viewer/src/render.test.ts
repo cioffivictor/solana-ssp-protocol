@@ -7,3 +7,13 @@ import { parseReport, type Report } from "./report.js";
 import { renderConsole, renderHtml } from "./render.js";
 
 const SAMPLE: Report = {
+  schema: "quorumforge.report.v1",
+  deliberation_id: "demo",
+  question: "Is the sky blue at noon?",
+  summary: {
+    total_claims: 3,
+    consensus: 1,
+    contested: 1,
+    split: 0,
+    unsupported: 1,
+    cohesion: 0.62,
