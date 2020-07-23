@@ -26,3 +26,13 @@ const SAMPLE: Report = {
   verdicts: [
     {
       claim: "c1",
+      text: "The sky scatters blue light.",
+      topic: "optics",
+      normalized: "the sky scatters blue light",
+      outcome: "consensus",
+      affirmed: true,
+      polarity: 1.0,
+      decisive_mass: 2.5,
+      support_mass: 2.5,
+      contradiction_mass: 0,
+      dissent_ratio: 0,
