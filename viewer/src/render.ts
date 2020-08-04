@@ -16,3 +16,22 @@ const ANSI = {
   yellow: "\x1b[33m",
   cyan: "\x1b[36m",
   magenta: "\x1b[35m",
+  gray: "\x1b[90m",
+};
+
+const OUTCOME_META: Record<
+  Outcome,
+  { glyph: string; color: string; label: string }
+> = {
+  consensus: { glyph: "◆", color: ANSI.green, label: "CONSENSUS" },
+  contested: { glyph: "▲", color: ANSI.red, label: "CONTESTED" },
+  split: { glyph: "◈", color: ANSI.yellow, label: "SPLIT" },
+  unsupported: { glyph: "○", color: ANSI.gray, label: "UNSUPPORTED" },
+};
+
+export interface ConsoleOptions {
+  /** Disable ANSI colour codes (for piping to a file). */
+  noColor?: boolean;
+  /** Column width for the claim text column. */
+  width?: number;
+}
