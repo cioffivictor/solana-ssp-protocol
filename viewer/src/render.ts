@@ -54,3 +54,21 @@ export function renderConsole(report: Report, opts: ConsoleOptions = {}): string
     lines.push(paint(ANSI.dim, `  ${l}`));
   }
   lines.push(paint(ANSI.magenta, heavy));
+
+  const s = report.summary;
+  const cohesionBar = bar(s.cohesion, 20);
+  lines.push(
+    `claims ${s.total_claims}   ` +
+      paint(ANSI.green, `consensus ${s.consensus}`) +
+      "   " +
+      paint(ANSI.red, `contested ${s.contested}`) +
+      "   " +
+      paint(ANSI.yellow, `split ${s.split}`) +
+      "   " +
+      paint(ANSI.gray, `unsupported ${s.unsupported}`),
+  );
+  lines.push(
+    `cohesion ${paint(ANSI.cyan, cohesionBar)} ${(s.cohesion * 100).toFixed(1)}%`,
+  );
+  lines.push(paint(ANSI.gray, rule));
+
