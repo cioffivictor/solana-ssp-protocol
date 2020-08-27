@@ -3,3 +3,8 @@
 // renderer stay fully typed without any runtime schema library.
 
 export type Outcome = "consensus" | "contested" | "split" | "unsupported";
+
+export interface AgentView {
+  id: string;
+  name: string;
+  role: string;
