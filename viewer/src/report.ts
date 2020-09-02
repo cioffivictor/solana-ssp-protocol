@@ -8,3 +8,8 @@ export interface AgentView {
   id: string;
   name: string;
   role: string;
+  weight: number;
+  influence: number;
+}
+
+export interface VerdictView {
