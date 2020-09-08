@@ -13,3 +13,9 @@ export interface AgentView {
 }
 
 export interface VerdictView {
+  claim: string;
+  text: string;
+  topic: string;
+  normalized: string;
+  outcome: Outcome;
+  affirmed: boolean;
