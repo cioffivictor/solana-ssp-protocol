@@ -7,3 +7,7 @@
 //! which merely lean one way, and which lack the evidence to conclude anything.
 //!
 //! It is *not* an agent orchestrator. QuorumForge does not run agents, call
+//! models, or manage prompts. It operates purely on the *record* of a
+//! deliberation after the fact, which is what makes its judgements auditable
+//! and reproducible.
+//!
