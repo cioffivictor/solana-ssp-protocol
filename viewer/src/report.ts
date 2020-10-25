@@ -19,3 +19,8 @@ export interface VerdictView {
   normalized: string;
   outcome: Outcome;
   affirmed: boolean;
+  polarity: number;
+  decisive_mass: number;
+  support_mass: number;
+  contradiction_mass: number;
+  dissent_ratio: number;
