@@ -7,3 +7,6 @@
 #   delib | <id> | <question>
 #   agent | <id> | <name> | <weight> | <role>
 #   claim | <id> | <topic> | <text>
+#   pos   | <agent> | <claim> | <stance> | <confidence> | <note>
+#   cite  | <agent> | <claim> | <source> | <locator>
+
