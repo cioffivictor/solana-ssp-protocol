@@ -10,3 +10,5 @@
 #   pos   | <agent> | <claim> | <stance> | <confidence> | <note>
 #   cite  | <agent> | <claim> | <source> | <locator>
 
+delib | cache-coherence | Is the distributed write-back cache coherent under concurrent writes?
+
