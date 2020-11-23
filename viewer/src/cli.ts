@@ -41,3 +41,14 @@ interface Options {
   output: string | null;
   input: string | null;
 }
+
+function parseArgs(argv: string[]): Options {
+  const opts: Options = {
+    html: false,
+    noColor: false,
+    width: 60,
+    output: null,
+    input: null,
+  };
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i];
