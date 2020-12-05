@@ -8,3 +8,6 @@
     { "id": "twyla", "name": "Twyla Osei",      "weight": 1.1, "role": "cost" },
     { "id": "vex",   "name": "Vex Nkemelu",     "weight": 0.9, "role": "security" }
   ],
+  "claims": [
+    { "id": "m1", "topic": "coupling",     "text": "Domain boundaries in the monolith are already well isolated." },
+    { "id": "m2", "topic": "reliability",  "text": "Splitting services will reduce blast radius of failures." },
