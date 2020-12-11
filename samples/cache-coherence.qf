@@ -12,3 +12,5 @@
 
 delib | cache-coherence | Is the distributed write-back cache coherent under concurrent writes?
 
+# --- Council ---------------------------------------------------------------
+agent | ada    | Ada Reyes      | 1.6 | systems-verification
