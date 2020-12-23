@@ -64,3 +64,16 @@ fn unanimous_support_is_consensus_affirmed() {
 }
 
 #[test]
+fn unanimous_contradiction_is_consensus_negated() {
+    let d = build(
+        vec![agent("a", 1.0), agent("b", 2.0)],
+        vec![claim("c1")],
+        vec![
+            pos("a", "c1", Stance::Contradict, 1.0),
+            pos("b", "c1", Stance::Contradict, 0.9),
+        ],
+    );
+    let v = verdict_for(&d, "c1", &Policy::default());
+    assert_eq!(v.outcome, Outcome::Consensus);
+    assert!(!v.affirmed, "consensus that a claim is false is 'negated'");
+    assert!(v.polarity < 0.0);
