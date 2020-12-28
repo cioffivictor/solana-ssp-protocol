@@ -59,3 +59,23 @@ dependencies on either side of the fence.
 quorumforge/
 ├── src/                      Rust core + CLI (std library only)
 │   ├── lib.rs                public API and the end-to-end `run`
+│   ├── model.rs              Agent / Claim / Position / Deliberation
+│   ├── json.rs               a compact, idempotent JSON codec
+│   ├── parse.rs              line-oriented (.qf) and JSON parsers
+│   ├── normalize.rs          claim canonicalization + clustering
+│   ├── adjudicate.rs         the weighted verdict engine
+│   ├── bundle.rs             deterministic, digest-stamped bundles
+│   ├── report.rs             text + JSON report renderers
+│   └── bin/quorumforge.rs    the `quorumforge` command-line tool
+├── tests/                    focused Rust integration tests
+├── viewer/                   TypeScript council viewer (dependency-light)
+│   └── src/                  report model, ANSI + HTML renderers, CLI, tests
+├── samples/                  rich sample deliberations (.qf and .json)
+├── docs/
+│   ├── EVIDENCE.md           the normative input-format reference
+│   └── assets/               the two animated SVGs on this page
+├── Cargo.toml   Makefile   LICENSE   CHANGELOG.md   .gitignore
+└── .github/workflows/ci.yml
+```
+
+Two languages, one contract: the Rust core emits a `quorumforge.report.v1` JSON
