@@ -58,3 +58,18 @@ pub fn render_text(delib: &Deliberation, adj: &Adjudication) -> String {
         let claim = delib.claims.get(&verdict.claim_id);
         let text = claim.map(|c| c.text.as_str()).unwrap_or("(unknown claim)");
         let topic = claim.map(|c| c.topic.as_str()).unwrap_or("");
+        let glyph = outcome_glyph(verdict.outcome);
+        let direction = if verdict.outcome == Outcome::Unsupported {
+            "n/a".to_string()
+        } else if verdict.affirmed {
+            "affirmed".to_string()
+        } else {
+            "negated".to_string()
+        };
+        out.push_str(&format!(
+            "{} [{}] {}\n",
+            glyph,
+            verdict.claim_id,
+            wrap(text, 58, "         "),
+        ));
+        let topic_label = if topic.is_empty() {
