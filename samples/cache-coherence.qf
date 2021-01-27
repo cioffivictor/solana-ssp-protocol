@@ -14,3 +14,6 @@ delib | cache-coherence | Is the distributed write-back cache coherent under con
 
 # --- Council ---------------------------------------------------------------
 agent | ada    | Ada Reyes      | 1.6 | systems-verification
+agent | boro   | Boro Kanel     | 1.0 | performance-skeptic
+agent | cyan   | Cyan Okafor    | 1.3 | formal-methods
+agent | dice   | Dice Vardhan   | 0.8 | field-operations
