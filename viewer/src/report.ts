@@ -24,3 +24,8 @@ export interface VerdictView {
   support_mass: number;
   contradiction_mass: number;
   dissent_ratio: number;
+  supporters: number;
+  dissenters: number;
+  abstentions: number;
+  citations: number;
+  majority_agents: string[];
