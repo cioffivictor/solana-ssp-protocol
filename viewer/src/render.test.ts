@@ -36,3 +36,13 @@ const SAMPLE: Report = {
       support_mass: 2.5,
       contradiction_mass: 0,
       dissent_ratio: 0,
+      supporters: 2,
+      dissenters: 0,
+      abstentions: 0,
+      citations: 1,
+      majority_agents: ["a", "b"],
+      minority_agents: [],
+    },
+    {
+      claim: "c2",
+      text: "The sky is green.",
