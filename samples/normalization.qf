@@ -3,3 +3,4 @@
 # The three claims below are phrased differently but normalize to the same
 # proposition. Run `quorumforge inspect samples/normalization.qf` to see the
 # `normalized` field collapse the hedges and contractions.
+
