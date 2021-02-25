@@ -11,3 +11,6 @@
   "claims": [
     { "id": "m1", "topic": "coupling",     "text": "Domain boundaries in the monolith are already well isolated." },
     { "id": "m2", "topic": "reliability",  "text": "Splitting services will reduce blast radius of failures." },
+    { "id": "m3", "topic": "cost",         "text": "The migration pays for itself within four quarters." },
+    { "id": "m4", "topic": "delivery",     "text": "Teams can ship independently after the split." },
+    { "id": "m5", "topic": "security",     "text": "Per-service auth boundaries improve the security posture." },
