@@ -79,3 +79,24 @@ quorumforge/
 ```
 
 Two languages, one contract: the Rust core emits a `quorumforge.report.v1` JSON
+document, and the TypeScript viewer consumes exactly that schema. Neither side
+pulls in a runtime dependency — the Rust crate is standard-library-only, and the
+viewer's sole `devDependency` is the TypeScript compiler itself.
+
+---
+
+## Quick start
+
+You need a Rust toolchain (1.74+) for the engine and Node.js (18+) plus npm for
+the optional viewer. Nothing else.
+
+```sh
+# 1. Build and test the Rust engine.
+cargo build --release
+cargo test
+
+# 2. Adjudicate a sample deliberation as a console report.
+cargo run --release -- adjudicate samples/cache-coherence.qf
+```
+
+That last command prints something like:
