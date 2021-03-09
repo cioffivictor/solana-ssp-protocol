@@ -46,3 +46,12 @@ const SAMPLE: Report = {
     {
       claim: "c2",
       text: "The sky is green.",
+      topic: "optics",
+      normalized: "the sky is green",
+      outcome: "contested",
+      affirmed: false,
+      polarity: -0.2,
+      decisive_mass: 2.0,
+      support_mass: 0.8,
+      contradiction_mass: 1.2,
+      dissent_ratio: 0.4,
