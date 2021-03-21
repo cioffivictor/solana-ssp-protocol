@@ -30,3 +30,20 @@ delib | d1 | Q
 
 # another
 agent | a | A | 1.0 | r
+claim | c1 | t | text
+pos   | a | c1 | support | 1.0 |
+";
+    let d = parse::parse_lines(src).unwrap();
+    assert_eq!(d.agents.len(), 1);
+}
+
+#[test]
+fn cite_attaches_to_last_matching_position() {
+    let src = "\
+delib | d1 | Q
+agent | a | A | 1.0 | r
+claim | c1 | t | text
+pos   | a | c1 | support | 1.0 | first
+cite  | a | c1 | doc:one | page 3
+cite  | a | c1 | doc:two | page 4
+";
