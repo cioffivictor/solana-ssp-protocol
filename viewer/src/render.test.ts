@@ -55,3 +55,13 @@ const SAMPLE: Report = {
       support_mass: 0.8,
       contradiction_mass: 1.2,
       dissent_ratio: 0.4,
+      supporters: 1,
+      dissenters: 1,
+      abstentions: 0,
+      citations: 0,
+      majority_agents: ["b"],
+      minority_agents: ["a"],
+    },
+    {
+      claim: "c3",
+      text: "The sky tastes sweet.",
