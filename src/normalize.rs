@@ -11,3 +11,16 @@
 use crate::model::{Claim, Deliberation};
 use std::collections::BTreeMap;
 
+/// Hedging prefixes that carry no propositional content and are dropped from
+/// the head of a claim during normalization.
+const LEADING_HEDGES: &[&str] = &[
+    "i think that",
+    "i think",
+    "i believe that",
+    "i believe",
+    "it seems that",
+    "it seems",
+    "arguably",
+    "presumably",
+    "clearly",
+    "obviously",
