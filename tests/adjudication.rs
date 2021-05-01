@@ -77,3 +77,16 @@ fn unanimous_contradiction_is_consensus_negated() {
     assert_eq!(v.outcome, Outcome::Consensus);
     assert!(!v.affirmed, "consensus that a claim is false is 'negated'");
     assert!(v.polarity < 0.0);
+}
+
+#[test]
+fn near_even_split_is_contested() {
+    let d = build(
+        vec![agent("a", 1.0), agent("b", 1.0)],
+        vec![claim("c1")],
+        vec![
+            pos("a", "c1", Stance::Support, 1.0),
+            pos("b", "c1", Stance::Contradict, 1.0),
+        ],
+    );
+    let v = verdict_for(&d, "c1", &Policy::default());
