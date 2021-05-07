@@ -24,3 +24,16 @@ pub fn build(delib: &Deliberation, adj: &Adjudication) -> Bundle {
     let body = canonical_body(delib, adj);
     let text = json::to_string(&body);
     let digest = fnv1a_hex(text.as_bytes());
+    Bundle {
+        deliberation: delib.clone(),
+        adjudication: adj.clone(),
+        digest,
+    }
+}
+
+/// The canonical JSON body of a bundle, with the digest omitted. This exact
+/// value is what the digest is computed over, and what [`to_json`] wraps.
+fn canonical_body(delib: &Deliberation, adj: &Adjudication) -> Json {
+    // Agents in id order (BTreeMap already ordered).
+    let agents: Vec<Json> = delib
+        .agents
