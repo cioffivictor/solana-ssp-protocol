@@ -120,3 +120,24 @@ Council cohesion: 60.1%   Policy: consensus>=0.66, dissent<0.34
 
 ---
 
+## The council viewer
+
+The prism is prettiest when you let the viewer render it. Build it once, then
+pipe a JSON report straight in.
+
+```sh
+# Build the viewer (installs only the TypeScript compiler).
+cd viewer
+npm install
+npm run build
+cd ..
+
+# Pipe a JSON report from the engine into the viewer's ANSI renderer.
+cargo run --release -- adjudicate --format json samples/cache-coherence.qf \
+  | node viewer/dist/cli.js -
+
+# Or produce a standalone, self-contained HTML council page.
+cargo run --release -- adjudicate --format json samples/migration-strategy.json \
+  | node viewer/dist/cli.js --html - -o council.html
+```
+
