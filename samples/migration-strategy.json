@@ -14,3 +14,7 @@
     { "id": "m3", "topic": "cost",         "text": "The migration pays for itself within four quarters." },
     { "id": "m4", "topic": "delivery",     "text": "Teams can ship independently after the split." },
     { "id": "m5", "topic": "security",     "text": "Per-service auth boundaries improve the security posture." },
+    { "id": "m6", "topic": "timing",       "text": "Now is the right time to begin the migration." }
+  ],
+  "positions": [
+    { "agent": "pearl", "claim": "m1", "stance": "support", "confidence": 0.8,
