@@ -14,3 +14,11 @@
     <radialGradient id="core" cx="0.5" cy="0.5" r="0.5">
       <stop offset="0" stop-color="#ffffff"/>
       <stop offset="1" stop-color="#7c5cff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="640" height="360" fill="url(#sky)"/>
