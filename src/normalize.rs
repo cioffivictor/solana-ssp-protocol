@@ -24,3 +24,16 @@ const LEADING_HEDGES: &[&str] = &[
     "presumably",
     "clearly",
     "obviously",
+    "in my view",
+    "it is likely that",
+    "likely",
+    "perhaps",
+    "maybe",
+];
+
+/// Compute the canonical form of a single claim's text.
+pub fn normalize_text(text: &str) -> String {
+    // 1. Lower-case and split on whitespace to collapse runs.
+    let lowered = text.to_lowercase();
+    let mut joined = lowered.split_whitespace().collect::<Vec<_>>().join(" ");
+
