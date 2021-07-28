@@ -90,3 +90,17 @@ fn near_even_split_is_contested() {
         ],
     );
     let v = verdict_for(&d, "c1", &Policy::default());
+    assert_eq!(v.outcome, Outcome::Contested);
+    assert!((v.dissent_ratio - 0.5).abs() < 1e-9);
+    assert!((v.polarity - 0.0).abs() < 1e-9);
+}
+
+#[test]
+fn moderate_lean_below_threshold_is_split() {
+    // 60/40 support: polarity 0.2, dissent 0.4. Dissent 0.4 >= 0.34 ceiling
+    // would make it contested, so tune to 70/30 -> polarity 0.4, dissent 0.3.
+    let d = build(
+        vec![agent("a", 0.7), agent("b", 0.3)],
+        vec![claim("c1")],
+        vec![
+            pos("a", "c1", Stance::Support, 1.0),
