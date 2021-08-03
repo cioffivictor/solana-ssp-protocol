@@ -65,3 +65,13 @@ const SAMPLE: Report = {
     {
       claim: "c3",
       text: "The sky tastes sweet.",
+      topic: "misc",
+      normalized: "the sky tastes sweet",
+      outcome: "unsupported",
+      affirmed: true,
+      polarity: 0,
+      decisive_mass: 0,
+      support_mass: 0,
+      contradiction_mass: 0,
+      dissent_ratio: 0,
+      supporters: 0,
