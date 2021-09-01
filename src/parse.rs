@@ -81,3 +81,30 @@ fn split_fields(line: &str) -> Vec<String> {
 pub fn parse_lines(contents: &str) -> Result<Deliberation, ParseError> {
     let mut delib: Option<Deliberation> = None;
 
+    for (idx, raw) in contents.lines().enumerate() {
+        let line_no = idx + 1;
+        let line = raw.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        let fields = split_fields(line);
+        let directive = fields[0].to_ascii_lowercase();
+
+        macro_rules! need {
+            ($n:expr) => {
+                if fields.len() < $n {
+                    return Err(ParseError {
+                        line: line_no,
+                        message: format!(
+                            "'{}' needs {} fields, found {}",
+                            directive,
+                            $n - 1,
+                            fields.len() - 1
+                        ),
+                    });
+                }
+            };
+        }
+
+        match directive.as_str() {
+            "delib" => {
