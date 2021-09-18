@@ -20,3 +20,7 @@ SAMPLE_JSON := samples/migration-strategy.json
 .PHONY: help
 help:
 	@echo "QuorumForge make targets:"
+	@echo "  build         build the release engine and the viewer"
+	@echo "  build-rust    build the Rust engine (release)"
+	@echo "  build-viewer  install + compile the TypeScript viewer"
+	@echo "  test          run all Rust and viewer tests"
