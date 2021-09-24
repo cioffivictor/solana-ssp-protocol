@@ -103,3 +103,18 @@ pub fn render_text(delib: &Deliberation, adj: &Adjudication) -> String {
     for (agent_id, score) in &influence {
         let name = delib
             .agents
+            .get(agent_id)
+            .map(|a| a.name.as_str())
+            .unwrap_or(agent_id.as_str());
+        out.push_str(&format!("  {:<16} {:>7.2}   {}\n", agent_id, score, name));
+    }
+    out.push_str(&bar);
+    out.push('\n');
+    out
+}
+
+fn outcome_glyph(outcome: Outcome) -> &'static str {
+    match outcome {
+        Outcome::Consensus => "[=]",
+        Outcome::Contested => "[!]",
+        Outcome::Split => "[~]",
