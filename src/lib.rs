@@ -11,3 +11,8 @@
 //! deliberation after the fact, which is what makes its judgements auditable
 //! and reproducible.
 //!
+//! ## Pipeline
+//!
+//! ```text
+//!   evidence file            Deliberation           Adjudication
+//!  (.qf or .json)  --parse-->  (model)   --adjudicate-->  (verdicts)
