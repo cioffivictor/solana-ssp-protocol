@@ -19,3 +19,6 @@ agent | cyan   | Cyan Okafor    | 1.3 | formal-methods
 agent | dice   | Dice Vardhan   | 0.8 | field-operations
 agent | echo   | Echo Lindqvist | 1.1 | correctness-review
 
+# --- Claims ----------------------------------------------------------------
+claim | c1 | linearizability | Writes to a single key are linearizable.
+claim | c2 | linearizability | Writes across multiple keys are linearizable.
