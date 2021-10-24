@@ -6,3 +6,6 @@ to adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.1.0] — 2026-08-31
 
+The first release. QuorumForge arrives as a complete, dependency-free evidence
+adjudication engine with a matching council viewer.
+
