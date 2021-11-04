@@ -9,3 +9,6 @@ to adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 The first release. QuorumForge arrives as a complete, dependency-free evidence
 adjudication engine with a matching council viewer.
 
+### Added
+
+- **Rust core (std-only).**
