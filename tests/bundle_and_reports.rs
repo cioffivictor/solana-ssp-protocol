@@ -24,3 +24,10 @@ fn bundle_is_byte_deterministic() {
     assert_eq!(bundle::to_json(&b1), bundle::to_json(&b2));
     assert_eq!(b1.digest, b2.digest);
 }
+
+#[test]
+fn bundle_digest_survives_reparse() {
+    let (d, adj) = run("cache.qf", CACHE);
+    let b = bundle::build(&d, &adj);
+    assert!(bundle::verify(&b), "freshly built bundle must verify");
+
