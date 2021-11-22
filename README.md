@@ -141,3 +141,23 @@ cargo run --release -- adjudicate --format json samples/migration-strategy.json 
   | node viewer/dist/cli.js --html - -o council.html
 ```
 
+The console renderer draws unicode influence meters and colour-codes each
+verdict band. The HTML renderer emits a single file with **all** styling inlined
+— no remote fonts, scripts, or images — so it opens offline and can be committed
+as an artifact.
+
+```sh
+# Run the viewer's own test suite.
+cd viewer && npm test
+```
+
+---
+
+## The command-line tool
+
+```text
+quorumforge <command> [options] <evidence-file | ->
+
+COMMANDS
+  adjudicate   Parse, normalize, and print a verdict report (text or json).
+  bundle       Emit a deterministic, digest-stamped evidence bundle (JSON).
