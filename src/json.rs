@@ -128,3 +128,47 @@ impl<'a> Parser<'a> {
             } else {
                 break;
             }
+        }
+    }
+
+    fn parse_value(&mut self) -> Result<Json, JsonError> {
+        self.skip_ws();
+        match self.peek() {
+            Some(b'{') => self.parse_object(),
+            Some(b'[') => self.parse_array(),
+            Some(b'"') => Ok(Json::Str(self.parse_string()?)),
+            Some(b't') | Some(b'f') => self.parse_bool(),
+            Some(b'n') => self.parse_null(),
+            Some(c) if c == b'-' || c.is_ascii_digit() => self.parse_number(),
+            Some(_) => Err(self.err("unexpected character")),
+            None => Err(self.err("unexpected end of input")),
+        }
+    }
+
+    fn parse_object(&mut self) -> Result<Json, JsonError> {
+        self.pos += 1; // consume '{'
+        let mut entries: Vec<(String, Json)> = Vec::new();
+        self.skip_ws();
+        if self.peek() == Some(b'}') {
+            self.pos += 1;
+            return Ok(Json::Obj(entries));
+        }
+        loop {
+            self.skip_ws();
+            if self.peek() != Some(b'"') {
+                return Err(self.err("expected string key in object"));
+            }
+            let key = self.parse_string()?;
+            self.skip_ws();
+            if self.peek() != Some(b':') {
+                return Err(self.err("expected ':' after object key"));
+            }
+            self.pos += 1;
+            let value = self.parse_value()?;
+            // Last-writer-wins keeps behaviour predictable on duplicate keys.
+            if let Some(slot) = entries.iter_mut().find(|(k, _)| *k == key) {
+                slot.1 = value;
+            } else {
+                entries.push((key, value));
+            }
+            self.skip_ws();
