@@ -34,3 +34,8 @@ jobs:
       - name: Build (release)
         run: cargo build --release
 
+      - name: Test (incl. doctests)
+        run: cargo test
+
+      - name: Smoke-test the CLI on every sample
+        run: |
