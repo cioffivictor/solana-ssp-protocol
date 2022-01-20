@@ -6,3 +6,5 @@
 # Cargo: this is a binary+library workspace; committing the lockfile is
 # reasonable, but we keep it out here since the crate has zero dependencies
 # and the lockfile would be trivially empty and pure noise.
+Cargo.lock
+
