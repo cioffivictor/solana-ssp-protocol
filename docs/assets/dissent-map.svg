@@ -5,3 +5,7 @@
   <defs>
     <radialGradient id="bg2" cx="0.5" cy="0.45" r="0.7">
       <stop offset="0" stop-color="#1a1240"/>
+      <stop offset="1" stop-color="#08050f"/>
+    </radialGradient>
+    <radialGradient id="orb" cx="0.4" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#ffffff"/>
