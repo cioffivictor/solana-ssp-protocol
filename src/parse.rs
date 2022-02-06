@@ -108,3 +108,31 @@ pub fn parse_lines(contents: &str) -> Result<Deliberation, ParseError> {
 
         match directive.as_str() {
             "delib" => {
+                need!(3);
+                if delib.is_some() {
+                    return Err(ParseError {
+                        line: line_no,
+                        message: "only one 'delib' record is allowed per file".into(),
+                    });
+                }
+                delib = Some(Deliberation::new(fields[1].clone(), fields[2].clone()));
+            }
+            "agent" => {
+                need!(3);
+                let d = require_delib(&mut delib, line_no)?;
+                let weight = parse_f64(fields.get(3), 1.0, line_no, "weight")?;
+                let role = fields.get(4).cloned().unwrap_or_default();
+                let id = fields[1].clone();
+                d.agents.insert(
+                    id.clone(),
+                    Agent {
+                        id,
+                        name: fields[2].clone(),
+                        weight,
+                        role,
+                    },
+                );
+            }
+            "claim" => {
+                need!(4);
+                let d = require_delib(&mut delib, line_no)?;
