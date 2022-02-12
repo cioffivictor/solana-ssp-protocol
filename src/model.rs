@@ -29,3 +29,19 @@ impl Stance {
             "support" | "supports" | "+" | "for" => Some(Stance::Support),
             "contradict" | "contradicts" | "against" | "-" | "refute" | "refutes" => {
                 Some(Stance::Contradict)
+            }
+            "abstain" | "abstains" | "neutral" | "0" => Some(Stance::Abstain),
+            _ => None,
+        }
+    }
+
+    /// The canonical lowercase token for this stance.
+    pub fn as_token(self) -> &'static str {
+        match self {
+            Stance::Support => "support",
+            Stance::Contradict => "contradict",
+            Stance::Abstain => "abstain",
+        }
+    }
+
+    /// The signed direction a stance contributes to a claim's weighted score.
