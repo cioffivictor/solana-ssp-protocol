@@ -29,3 +29,8 @@ export interface VerdictView {
   abstentions: number;
   citations: number;
   majority_agents: string[];
+  minority_agents: string[];
+}
+
+export interface ReportSummary {
+  total_claims: number;
