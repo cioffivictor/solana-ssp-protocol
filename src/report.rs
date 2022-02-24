@@ -118,3 +118,19 @@ fn outcome_glyph(outcome: Outcome) -> &'static str {
         Outcome::Consensus => "[=]",
         Outcome::Contested => "[!]",
         Outcome::Split => "[~]",
+        Outcome::Unsupported => "[?]",
+    }
+}
+
+/// Sum of weighted decisive votes each agent cast, in id order. Used by both
+/// the text roster and the JSON report so they never disagree.
+fn agent_influence(delib: &Deliberation, adj: &Adjudication) -> Vec<(String, f64)> {
+    let mut scores: BTreeMap<String, f64> = BTreeMap::new();
+    for agent_id in delib.agents.keys() {
+        scores.insert(agent_id.clone(), 0.0);
+    }
+    for pos in &delib.positions {
+        if pos.stance == crate::model::Stance::Abstain {
+            continue;
+        }
+        let weight = delib.agent_weight(&pos.agent_id);
