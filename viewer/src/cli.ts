@@ -52,3 +52,14 @@ function parseArgs(argv: string[]): Options {
   };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
+    switch (arg) {
+      case "-h":
+      case "--help":
+        process.stdout.write(HELP);
+        process.exit(0);
+        break;
+      case "--html":
+        opts.html = true;
+        break;
+      case "--no-color":
+        opts.noColor = true;
