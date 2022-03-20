@@ -63,3 +63,14 @@ function parseArgs(argv: string[]): Options {
         break;
       case "--no-color":
         opts.noColor = true;
+        break;
+      case "--width": {
+        const v = argv[++i];
+        const n = Number(v);
+        if (!Number.isFinite(n) || n <= 0) {
+          fail(`--width expects a positive number, got '${v}'`);
+        }
+        opts.width = Math.floor(n);
+        break;
+      }
+      case "-o":
