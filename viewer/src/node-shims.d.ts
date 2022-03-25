@@ -14,3 +14,7 @@ declare const process: {
     isTTY?: boolean;
   };
   stdout: { write(text: string): boolean };
+  stderr: { write(text: string): boolean };
+};
+
+declare module "node:fs" {
