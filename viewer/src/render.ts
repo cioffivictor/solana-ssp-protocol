@@ -91,3 +91,22 @@ export function renderConsole(report: Report, opts: ConsoleOptions = {}): string
   return lines.join("\n") + "\n";
 }
 
+function renderVerdictConsole(
+  v: VerdictView,
+  width: number,
+  paint: (code: string, t: string) => string,
+): string[] {
+  const meta = OUTCOME_META[v.outcome];
+  const out: string[] = [];
+  const direction =
+    v.outcome === "unsupported" ? "" : v.affirmed ? " affirmed" : " negated";
+  const head = `${meta.glyph} [${v.claim}] `;
+  const wrapped = wrap(v.text, width);
+  out.push(paint(meta.color, `${head}${wrapped[0] ?? ""}`));
+  for (const cont of wrapped.slice(1)) {
+    out.push(paint(meta.color, `${" ".repeat(head.length)}${cont}`));
+  }
+  const polarity = (v.polarity >= 0 ? "+" : "") + v.polarity.toFixed(2);
+  out.push(
+    paint(
+      ANSI.dim,
