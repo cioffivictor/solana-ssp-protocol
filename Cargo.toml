@@ -9,3 +9,6 @@ readme = "README.md"
 repository = "https://example.invalid/quorumforge"
 keywords = ["evidence", "adjudication", "consensus", "cli", "reasoning"]
 categories = ["command-line-utilities", "text-processing"]
+
+# QuorumForge is deliberately dependency-free. The engine, parser, minimal
+# JSON codec, and CLI are all built on the Rust standard library so that
