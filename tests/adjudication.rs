@@ -104,3 +104,16 @@ fn moderate_lean_below_threshold_is_split() {
         vec![claim("c1")],
         vec![
             pos("a", "c1", Stance::Support, 1.0),
+            pos("b", "c1", Stance::Contradict, 1.0),
+        ],
+    );
+    let v = verdict_for(&d, "c1", &Policy::default());
+    assert_eq!(v.outcome, Outcome::Split);
+    assert!(v.affirmed);
+    assert!((v.polarity - 0.4).abs() < 1e-9);
+    assert!((v.dissent_ratio - 0.3).abs() < 1e-9);
+}
+
+#[test]
+fn only_abstentions_is_unsupported() {
+    let d = build(
