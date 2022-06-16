@@ -12,3 +12,7 @@
       <stop offset="0.5" stop-color="#7c5cff"/>
       <stop offset="1" stop-color="#2a1d66"/>
     </radialGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
