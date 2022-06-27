@@ -30,3 +30,11 @@
     <circle cx="560" cy="70" r="1.4"><animate attributeName="opacity" values="0.1;0.7;0.1" dur="6s" repeatCount="indefinite"/></circle>
     <circle cx="610" cy="300" r="1"><animate attributeName="opacity" values="0.2;0.8;0.2" dur="4.8s" repeatCount="indefinite"/></circle>
     <circle cx="40" cy="320" r="1.1"><animate attributeName="opacity" values="0.15;0.7;0.15" dur="5.2s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <!-- incoming mixed beam -->
+  <line x1="0" y1="180" x2="270" y2="180" stroke="url(#beam)" stroke-width="10" filter="url(#glow)">
+    <animate attributeName="stroke-width" values="8;12;8" dur="3s" repeatCount="indefinite"/>
+  </line>
+  <text x="20" y="165" fill="#b6aee0" font-family="monospace" font-size="12">mixed evidence</text>
+
