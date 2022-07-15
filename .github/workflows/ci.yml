@@ -39,3 +39,8 @@ jobs:
 
       - name: Smoke-test the CLI on every sample
         run: |
+          cargo run --release -- adjudicate samples/cache-coherence.qf
+          cargo run --release -- adjudicate --format json samples/migration-strategy.json > report.json
+          cargo run --release -- bundle samples/cache-coherence.qf -o bundle.json
+          cargo run --release -- verify bundle.json
+
