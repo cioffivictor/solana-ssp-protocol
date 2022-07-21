@@ -80,3 +80,20 @@ agent | cse  | Cse Varga   | 0.9 | support
 claim | r1 | quality | All P0 bugs are resolved.
 claim | r2 | risk    | The rollback path has been rehearsed.
 
+pos  | ana | r1 | support    | 0.9 | burn-down chart is at zero
+cite | ana | r1 | tracker:P0 | filter status=closed returns 0 rows
+pos  | ben | r1 | support    | 0.8 | verified the last three fixes
+pos  | cse | r1 | abstain    | 0.5 | no visibility into P0 triage
+
+pos  | ana | r2 | support    | 0.7 | dry run last Tuesday
+pos  | ben | r2 | contradict | 0.6 | the dry run skipped the data migration
+```
+
+---
+
+## 3. JSON format (`.json`)
+
+A single object with these top-level keys:
+
+| Key         | Type    | Required | Notes                                    |
+|-------------|---------|----------|------------------------------------------|
