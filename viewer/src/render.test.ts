@@ -75,3 +75,12 @@ const SAMPLE: Report = {
       contradiction_mass: 0,
       dissent_ratio: 0,
       supporters: 0,
+      dissenters: 0,
+      abstentions: 2,
+      citations: 0,
+      majority_agents: [],
+      minority_agents: [],
+    },
+  ],
+};
+
