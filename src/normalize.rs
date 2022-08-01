@@ -50,3 +50,16 @@ pub fn normalize_text(text: &str) -> String {
     for hedge in LEADING_HEDGES {
         if let Some(rest) = joined.strip_prefix(hedge) {
             // Require a word boundary so "likely" does not swallow "likelihood".
+            let boundary = rest
+                .chars()
+                .next()
+                .map(|c| !c.is_alphanumeric())
+                .unwrap_or(true);
+            if !boundary {
+                continue;
+            }
+            // A hedge may be followed by a comma or other punctuation
+            // ("arguably, ...") which should also be dropped.
+            let rest = rest.trim_start_matches(|c: char| c == ',' || c == ':' || c.is_whitespace());
+            // Only strip when a hedge is followed by more content.
+            if !rest.is_empty() {
