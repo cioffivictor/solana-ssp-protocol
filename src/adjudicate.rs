@@ -82,3 +82,17 @@ impl Policy {
         if self.minimum_mass < 0.0 {
             return Err(format!(
                 "minimum_mass must be non-negative, got {}",
+                self.minimum_mass
+            ));
+        }
+        Ok(())
+    }
+}
+
+/// The classification of a single claim.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Outcome {
+    /// Strong, low-dissent agreement. See [`Verdict::affirmed`] for direction.
+    Consensus,
+    /// Meaningful weight on both sides; the council is genuinely divided.
+    Contested,
