@@ -38,3 +38,9 @@ fn bundle_digest_survives_reparse() {
     let entries = root.as_object().unwrap();
     let stored = root.get("digest").unwrap().as_str().unwrap();
     let body: Vec<(String, quorumforge::json::Json)> = entries
+        .iter()
+        .filter(|(k, _)| k != "digest")
+        .cloned()
+        .collect();
+    let recomputed = bundle::fnv1a_hex(
+        quorumforge::json::to_string(&quorumforge::json::Json::Obj(body)).as_bytes(),
