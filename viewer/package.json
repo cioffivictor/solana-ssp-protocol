@@ -3,3 +3,4 @@
   "version": "0.1.0",
   "description": "A dependency-light council viewer that renders QuorumForge JSON reports as annotated ANSI console output or standalone HTML.",
   "license": "MIT",
+  "type": "module",
