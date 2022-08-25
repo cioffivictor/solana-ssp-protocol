@@ -21,3 +21,7 @@
 //!                              claims                       bundle
 //! ```
 //!
+//! ## Example
+//!
+//! ```
+//! use quorumforge::{parse, normalize, adjudicate};
