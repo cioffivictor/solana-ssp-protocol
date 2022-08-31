@@ -45,3 +45,19 @@ impl Stance {
     }
 
     /// The signed direction a stance contributes to a claim's weighted score.
+    pub fn sign(self) -> f64 {
+        match self {
+            Stance::Support => 1.0,
+            Stance::Contradict => -1.0,
+            Stance::Abstain => 0.0,
+        }
+    }
+}
+
+/// A source reference attached to a position.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Citation {
+    /// A short, stable identifier for the source (e.g. `doc:rfc-8949`).
+    pub source: String,
+    /// A human-readable locator: page, section, URL fragment, or quote.
+    pub locator: String,
