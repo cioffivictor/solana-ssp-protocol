@@ -25,3 +25,8 @@
 //!
 //! ```
 //! use quorumforge::{parse, normalize, adjudicate};
+//!
+//! let src = "\
+//! delib | d1 | Is the cache coherent under concurrent writes?
+//! agent | a | Ada | 1.5 | systems
+//! agent | b | Boro | 1.0 | skeptic
