@@ -9,3 +9,5 @@ delib | normalization | Does the release candidate meet the latency budget?
 agent | q1 | Quill  | 1.0 | qa
 agent | q2 | Rho    | 1.2 | perf
 agent | q3 | Sable  | 0.9 | product
+
+# These normalize identically: "the p99 latency is under 200ms"
