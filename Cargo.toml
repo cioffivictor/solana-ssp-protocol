@@ -12,3 +12,6 @@ categories = ["command-line-utilities", "text-processing"]
 
 # QuorumForge is deliberately dependency-free. The engine, parser, minimal
 # JSON codec, and CLI are all built on the Rust standard library so that
+# verdicts are reproducible on any toolchain without a lockfile churn.
+
+[lib]
