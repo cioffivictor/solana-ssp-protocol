@@ -44,3 +44,10 @@ fn bundle_digest_survives_reparse() {
         .collect();
     let recomputed = bundle::fnv1a_hex(
         quorumforge::json::to_string(&quorumforge::json::Json::Obj(body)).as_bytes(),
+    );
+    assert_eq!(recomputed, stored);
+}
+
+#[test]
+fn tampering_breaks_the_digest() {
+    let (d, adj) = run("cache.qf", CACHE);
