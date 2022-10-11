@@ -63,3 +63,16 @@ fn canonical_body(delib: &Deliberation, adj: &Adjudication) -> Json {
 
     // Positions sorted deterministically by (claim, agent, stance).
     let mut positions: Vec<&Position> = delib.positions.iter().collect();
+    positions.sort_by(|a, b| {
+        a.claim_id
+            .cmp(&b.claim_id)
+            .then(a.agent_id.cmp(&b.agent_id))
+            .then(a.stance.as_token().cmp(b.stance.as_token()))
+    });
+    let positions: Vec<Json> = positions
+        .iter()
+        .map(|p| {
+            let cites: Vec<Json> = p
+                .citations
+                .iter()
+                .map(|c| {
