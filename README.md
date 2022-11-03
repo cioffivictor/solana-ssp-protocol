@@ -182,3 +182,23 @@ cargo run -- adjudicate samples/cache-coherence.qf
 
 # JSON report from a JSON deliberation.
 cargo run -- adjudicate --format json samples/migration-strategy.json
+
+# See how claim normalization collapses hedged variants.
+cargo run -- inspect samples/normalization.qf
+
+# Build a deterministic bundle and verify its integrity digest.
+cargo run -- bundle samples/cache-coherence.qf -o bundle.json
+cargo run -- verify bundle.json          # -> "digest OK: ..."
+
+# Read from stdin (format assumed .qf unless --json is given).
+cat samples/cache-coherence.qf | cargo run -- adjudicate -
+
+# Loosen the policy so a 70/30 lean reads as consensus.
+cargo run -- adjudicate --consensus 0.3 --dissent 0.5 samples/cache-coherence.qf
+```
+
+Exit codes: `0` success, `2` usage error, `3` parse/validation error, `4` a
+`verify` digest mismatch. These make QuorumForge friendly to shell pipelines and
+CI gates.
+
+---
