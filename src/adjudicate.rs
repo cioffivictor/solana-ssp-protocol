@@ -110,3 +110,17 @@ impl Outcome {
             Outcome::Contested => "contested",
             Outcome::Split => "split",
             Outcome::Unsupported => "unsupported",
+        }
+    }
+}
+
+/// A per-claim verdict with all intermediate quantities retained for auditing.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Verdict {
+    pub claim_id: String,
+    pub normalized: String,
+    pub outcome: Outcome,
+    /// `true` when a consensus/split leans toward the claim being true.
+    pub affirmed: bool,
+    /// Sum of support votes.
+    pub support_mass: f64,
