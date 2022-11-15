@@ -34,3 +34,9 @@ export interface VerdictView {
 
 export interface ReportSummary {
   total_claims: number;
+  consensus: number;
+  contested: number;
+  split: number;
+  unsupported: number;
+  cohesion: number;
+}
