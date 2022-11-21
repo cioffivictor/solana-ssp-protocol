@@ -164,3 +164,30 @@ pub fn parse_lines(contents: &str) -> Result<Deliberation, ParseError> {
                     citations: Vec::new(),
                     note,
                 });
+            }
+            "cite" => {
+                need!(5);
+                let d = require_delib(&mut delib, line_no)?;
+                let agent_id = &fields[1];
+                let claim_id = &fields[2];
+                let citation = Citation::new(fields[3].clone(), fields[4].clone());
+                // Attach to the most recent matching position.
+                let target = d
+                    .positions
+                    .iter_mut()
+                    .rev()
+                    .find(|p| &p.agent_id == agent_id && &p.claim_id == claim_id);
+                match target {
+                    Some(pos) => pos.citations.push(citation),
+                    None => {
+                        return Err(ParseError {
+                            line: line_no,
+                            message: format!(
+                                "'cite' references position ({}, {}) that has not been declared",
+                                agent_id, claim_id
+                            ),
+                        })
+                    }
+                }
+            }
+            other => {
