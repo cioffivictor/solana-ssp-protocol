@@ -84,3 +84,13 @@ const SAMPLE: Report = {
   ],
 };
 
+let passed = 0;
+function test(name: string, fn: () => void): void {
+  try {
+    fn();
+    passed++;
+    process.stdout.write(`  ok  ${name}\n`);
+  } catch (err) {
+    process.stderr.write(`FAIL  ${name}\n      ${(err as Error).message}\n`);
+    process.exitCode = 1;
+  }
