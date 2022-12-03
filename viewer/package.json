@@ -5,3 +5,4 @@
   "license": "MIT",
   "type": "module",
   "bin": {
+    "qf-view": "dist/cli.js"
