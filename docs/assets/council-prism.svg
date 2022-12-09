@@ -38,3 +38,11 @@
   </line>
   <text x="20" y="165" fill="#b6aee0" font-family="monospace" font-size="12">mixed evidence</text>
 
+  <!-- the prism -->
+  <g filter="url(#glow)">
+    <polygon points="300,110 360,180 300,250" fill="#7c5cff" fill-opacity="0.18" stroke="#cdbbff" stroke-width="1.5">
+      <animateTransform attributeName="transform" type="rotate" values="-2 330 180; 2 330 180; -2 330 180" dur="8s" repeatCount="indefinite"/>
+    </polygon>
+    <circle cx="330" cy="180" r="26" fill="url(#core)">
+      <animate attributeName="r" values="20;30;20" dur="3s" repeatCount="indefinite"/>
+    </circle>
