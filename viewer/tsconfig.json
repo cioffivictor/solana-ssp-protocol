@@ -9,3 +9,4 @@
     "strict": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
+    "noUnusedParameters": true,
