@@ -110,3 +110,22 @@ function renderVerdictConsole(
   out.push(
     paint(
       ANSI.dim,
+      `    ${meta.label}${direction}  ` +
+        `polarity ${polarity}  mass ${v.decisive_mass.toFixed(2)}  ` +
+        `dissent ${(v.dissent_ratio * 100).toFixed(0)}%  cites ${v.citations}`,
+    ),
+  );
+  if (v.minority_agents.length > 0) {
+    out.push(paint(ANSI.red, `    dissent: ${v.minority_agents.join(", ")}`));
+  }
+  return out;
+}
+
+/** Render a small unicode meter for a value in [0, 1]. */
+function bar(fraction: number, cells: number): string {
+  const clamped = Math.max(0, Math.min(1, fraction));
+  const filled = Math.round(clamped * cells);
+  return "█".repeat(filled) + "░".repeat(cells - filled);
+}
+
+function pad(text: string, len: number): string {
