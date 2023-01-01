@@ -215,3 +215,47 @@ impl<'a> Parser<'a> {
     fn parse_string(&mut self) -> Result<String, JsonError> {
         self.pos += 1; // consume opening quote
         let mut out = String::new();
+        loop {
+            match self.peek() {
+                None => return Err(self.err("unterminated string")),
+                Some(b'"') => {
+                    self.pos += 1;
+                    break;
+                }
+                Some(b'\\') => {
+                    self.pos += 1;
+                    match self.peek() {
+                        Some(b'"') => out.push('"'),
+                        Some(b'\\') => out.push('\\'),
+                        Some(b'/') => out.push('/'),
+                        Some(b'n') => out.push('\n'),
+                        Some(b't') => out.push('\t'),
+                        Some(b'r') => out.push('\r'),
+                        Some(b'b') => out.push('\u{0008}'),
+                        Some(b'f') => out.push('\u{000C}'),
+                        Some(b'u') => {
+                            let cp = self.parse_hex4()?;
+                            // After parse_hex4, pos points just past the four
+                            // hex digits (i.e. at whatever follows the escape).
+                            // Handle surrogate pairs for characters outside the BMP.
+                            if (0xD800..=0xDBFF).contains(&cp) {
+                                if self.bytes.get(self.pos) == Some(&b'\\')
+                                    && self.bytes.get(self.pos + 1) == Some(&b'u')
+                                {
+                                    self.pos += 1; // consume the '\\'; parse_hex4 eats 'u'+digits
+                                    let low = self.parse_hex4()?;
+                                    let combined = 0x10000
+                                        + (((cp - 0xD800) as u32) << 10)
+                                        + (low - 0xDC00) as u32;
+                                    match char::from_u32(combined) {
+                                        Some(ch) => out.push(ch),
+                                        None => return Err(self.err("invalid surrogate pair")),
+                                    }
+                                } else {
+                                    return Err(self.err("lone high surrogate"));
+                                }
+                            } else {
+                                match char::from_u32(cp as u32) {
+                                    Some(ch) => out.push(ch),
+                                    None => return Err(self.err("invalid unicode escape")),
+                                }
