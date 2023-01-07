@@ -30,3 +30,7 @@
 //! delib | d1 | Is the cache coherent under concurrent writes?
 //! agent | a | Ada | 1.5 | systems
 //! agent | b | Boro | 1.0 | skeptic
+//! claim | c1 | cache | Writes are linearizable.
+//! pos   | a  | c1 | support     | 0.9 | verified with a model checker
+//! pos   | b  | c1 | contradict  | 0.4 | one race remains under retry
+//! ";
