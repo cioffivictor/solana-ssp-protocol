@@ -40,3 +40,8 @@ export interface ReportSummary {
   unsupported: number;
   cohesion: number;
 }
+
+export interface Policy {
+  consensus_threshold: number;
+  dissent_ceiling: number;
+  minimum_mass: number;
