@@ -84,3 +84,14 @@ function parseArgs(argv: string[]): Options {
         } else if (opts.input === null) {
           opts.input = arg;
         } else {
+          fail(`unexpected extra argument '${arg}'`);
+        }
+    }
+  }
+  return opts;
+}
+
+function fail(message: string): never {
+  process.stderr.write(`qf-view: ${message}\n`);
+  process.exit(2);
+}
