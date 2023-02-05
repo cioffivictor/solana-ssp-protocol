@@ -46,3 +46,11 @@
     <circle cx="330" cy="180" r="26" fill="url(#core)">
       <animate attributeName="r" values="20;30;20" dur="3s" repeatCount="indefinite"/>
     </circle>
+  </g>
+
+  <!-- four refracted verdict bands -->
+  <g stroke-width="4" filter="url(#glow)">
+    <line x1="345" y1="172" x2="620" y2="120" stroke="#25d0c0">
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="3.4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="345" y1="177" x2="620" y2="163" stroke="#ffd166">
