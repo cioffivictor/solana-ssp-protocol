@@ -15,3 +15,6 @@ adjudication engine with a matching council viewer.
   - Data model for agents, claims, positions, citations, and deliberations.
   - Two input parsers that converge on one model: a line-oriented `.qf` format
     (comments, escapes, `cite` attachment) and a JSON format.
+  - A compact, idempotent JSON codec — parser and writer — with insertion-order
+    preservation, unicode escape and surrogate-pair handling, and six-decimal
+    number snapping for byte-stable output.
