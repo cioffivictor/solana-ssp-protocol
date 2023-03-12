@@ -18,3 +18,6 @@
   ],
   "positions": [
     { "agent": "pearl", "claim": "m1", "stance": "support", "confidence": 0.8,
+      "note": "Module dependency graph is mostly acyclic already.",
+      "citations": [ { "source": "audit:module-graph", "locator": "3 back-edges out of 240" } ] },
+    { "agent": "rune",  "claim": "m1", "stance": "support", "confidence": 0.7, "note": "Shared DB tables are the only real coupling." },
