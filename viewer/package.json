@@ -6,3 +6,5 @@
   "type": "module",
   "bin": {
     "qf-view": "dist/cli.js"
+  },
+  "scripts": {
