@@ -152,3 +152,17 @@ pub struct Adjudication {
     pub deliberation_id: String,
     pub question: String,
     pub policy: Policy,
+    /// Verdicts keyed by claim id (ordered) for stable iteration.
+    pub verdicts: BTreeMap<String, Verdict>,
+    /// Count of each outcome, for headline summaries.
+    pub tally: Tally,
+    /// A single scalar in `[0,1]` summarising how settled the deliberation is.
+    pub cohesion: f64,
+}
+
+/// Outcome counts across all claims.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct Tally {
+    pub consensus: usize,
+    pub contested: usize,
+    pub split: usize,
