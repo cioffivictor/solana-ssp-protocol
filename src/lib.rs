@@ -34,3 +34,8 @@
 //! pos   | a  | c1 | support     | 0.9 | verified with a model checker
 //! pos   | b  | c1 | contradict  | 0.4 | one race remains under retry
 //! ";
+//! let mut delib = parse::parse_lines(src).unwrap();
+//! normalize::normalize_deliberation(&mut delib);
+//! let adj = adjudicate::adjudicate(&delib, &adjudicate::Policy::default());
+//! let verdict = &adj.verdicts["c1"];
+//! assert!(verdict.support_mass > verdict.contradiction_mass);
