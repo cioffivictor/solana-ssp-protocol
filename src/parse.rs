@@ -219,3 +219,31 @@ fn require_delib(
 
 fn parse_f64(
     field: Option<&String>,
+    default: f64,
+    line_no: usize,
+    what: &str,
+) -> Result<f64, ParseError> {
+    match field {
+        None => Ok(default),
+        Some(s) if s.is_empty() => Ok(default),
+        Some(s) => s.parse::<f64>().map_err(|_| ParseError {
+            line: line_no,
+            message: format!("invalid {} value '{}'", what, s),
+        }),
+    }
+}
+
+/// Parse the JSON evidence format.
+pub fn parse_json(contents: &str) -> Result<Deliberation, ParseError> {
+    let root = json::parse(contents).map_err(|e| ParseError {
+        line: 0,
+        message: e.message,
+    })?;
+
+    let id = str_field(&root, "id").unwrap_or_else(|| "unnamed".to_string());
+    let question = str_field(&root, "question").unwrap_or_default();
+    let mut delib = Deliberation::new(id, question);
+
+    if let Some(agents) = root.get("agents").and_then(Json::as_array) {
+        for a in agents {
+            let id = str_field(a, "id").ok_or_else(|| field_err("agent.id"))?;
