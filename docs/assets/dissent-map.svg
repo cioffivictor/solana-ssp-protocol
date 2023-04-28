@@ -16,3 +16,7 @@
       <feGaussianBlur stdDeviation="2.4" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
+  </defs>
+
+  <rect width="640" height="360" fill="url(#bg2)"/>
+
