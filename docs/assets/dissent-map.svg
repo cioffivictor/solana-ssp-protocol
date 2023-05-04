@@ -20,3 +20,7 @@
 
   <rect width="640" height="360" fill="url(#bg2)"/>
 
+  <!-- concentric consensus rings -->
+  <g fill="none" stroke="#cdbbff" stroke-opacity="0.12">
+    <circle cx="320" cy="180" r="60"/>
+    <circle cx="320" cy="180" r="110"/>
