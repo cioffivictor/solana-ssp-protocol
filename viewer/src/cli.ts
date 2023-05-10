@@ -95,3 +95,14 @@ function fail(message: string): never {
   process.stderr.write(`qf-view: ${message}\n`);
   process.exit(2);
 }
+
+function readStdin(): Promise<string> {
+  return new Promise((resolve) => {
+    let data = "";
+    process.stdin.setEncoding("utf8");
+    process.stdin.on("data", (chunk) => {
+      data += typeof chunk === "string" ? chunk : String(chunk);
+    });
+    process.stdin.on("end", () => resolve(data));
+  });
+}
