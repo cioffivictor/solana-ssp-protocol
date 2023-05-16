@@ -13,3 +13,4 @@ agent | q3 | Sable  | 0.9 | product
 # These normalize identically: "the p99 latency is under 200ms"
 claim | n1 | latency | I think the p99 latency is under 200ms.
 claim | n2 | latency | The p99 latency is under 200ms!
+claim | n3 | latency | Arguably, the p99 latency is under 200ms.
