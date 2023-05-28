@@ -51,3 +51,10 @@ fn bundle_digest_survives_reparse() {
 #[test]
 fn tampering_breaks_the_digest() {
     let (d, adj) = run("cache.qf", CACHE);
+    let mut b = bundle::build(&d, &adj);
+    // Flip one agent's weight; the stored digest should no longer match.
+    if let Some(a) = b.deliberation.agents.get_mut("ada") {
+        a.weight += 1.0;
+    }
+    assert!(
+        !bundle::verify(&b),
