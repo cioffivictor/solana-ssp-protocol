@@ -28,3 +28,8 @@ help:
 	@echo "  test-viewer   run the viewer test suite"
 	@echo "  demo          adjudicate the samples and render via the viewer"
 	@echo "  bundle        build and verify a deterministic bundle"
+	@echo "  fmt           format Rust sources"
+	@echo "  clean         remove build artifacts"
+
+.PHONY: build
+build: build-rust build-viewer
