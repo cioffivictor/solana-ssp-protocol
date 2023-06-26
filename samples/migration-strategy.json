@@ -21,3 +21,7 @@
       "note": "Module dependency graph is mostly acyclic already.",
       "citations": [ { "source": "audit:module-graph", "locator": "3 back-edges out of 240" } ] },
     { "agent": "rune",  "claim": "m1", "stance": "support", "confidence": 0.7, "note": "Shared DB tables are the only real coupling." },
+    { "agent": "sol",   "claim": "m1", "stance": "contradict", "confidence": 0.6, "note": "Billing and orders still share write paths." },
+    { "agent": "vex",   "claim": "m1", "stance": "support", "confidence": 0.5, "note": "Auth is already a separable concern." },
+
+    { "agent": "rune",  "claim": "m2", "stance": "support", "confidence": 0.9,
