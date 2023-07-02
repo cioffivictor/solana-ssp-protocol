@@ -29,3 +29,5 @@ claim | c5 | staleness       | Reads never observe a value older than the last a
 # --- Positions: c1 (expect strong consensus, affirmed) ---------------------
 pos  | ada  | c1 | support    | 0.95 | model-checked all interleavings for one key
 cite | ada  | c1 | model:tla-cache | invariant SingleKeyLinearizable holds across 2.1M states
+pos  | cyan | c1 | support    | 0.90 | independent Alloy model agrees
+cite | cyan | c1 | model:alloy-cache | scope 6, no counterexample
