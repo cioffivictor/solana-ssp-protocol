@@ -31,3 +31,6 @@ pos  | ada  | c1 | support    | 0.95 | model-checked all interleavings for one k
 cite | ada  | c1 | model:tla-cache | invariant SingleKeyLinearizable holds across 2.1M states
 pos  | cyan | c1 | support    | 0.90 | independent Alloy model agrees
 cite | cyan | c1 | model:alloy-cache | scope 6, no counterexample
+pos  | echo | c1 | support    | 0.85 | code review confirms single-key CAS path
+pos  | boro | c1 | support    | 0.70 | convinced after the second model run
+pos  | dice | c1 | abstain    | 0.50 | no field data on single-key contention yet
