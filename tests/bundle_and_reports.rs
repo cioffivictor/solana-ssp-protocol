@@ -58,3 +58,9 @@ fn tampering_breaks_the_digest() {
     }
     assert!(
         !bundle::verify(&b),
+        "mutating the body must invalidate the digest"
+    );
+}
+
+#[test]
+fn cache_sample_yields_expected_outcomes() {
