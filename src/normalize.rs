@@ -63,3 +63,16 @@ pub fn normalize_text(text: &str) -> String {
             let rest = rest.trim_start_matches(|c: char| c == ',' || c == ':' || c.is_whitespace());
             // Only strip when a hedge is followed by more content.
             if !rest.is_empty() {
+                joined = rest.to_string();
+                break;
+            }
+        }
+    }
+
+    // 4. Fold a few common contractions to their expanded forms so that
+    //    "isn't" and "is not" normalise together.
+    let expansions: &[(&str, &str)] = &[
+        ("isn't", "is not"),
+        ("aren't", "are not"),
+        ("wasn't", "was not"),
+        ("weren't", "were not"),
