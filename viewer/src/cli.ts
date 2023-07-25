@@ -106,3 +106,14 @@ function readStdin(): Promise<string> {
     process.stdin.on("end", () => resolve(data));
   });
 }
+
+async function main(): Promise<void> {
+  const argv = process.argv.slice(2);
+  if (argv.length === 0) {
+    process.stdout.write(HELP);
+    process.exit(2);
+  }
+  const opts = parseArgs(argv);
+  if (opts.input === null) {
+    fail("no report file given (use '-' for stdin)");
+  }
