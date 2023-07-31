@@ -54,3 +54,11 @@
       <animate attributeName="opacity" values="0.4;1;0.4" dur="3.4s" repeatCount="indefinite"/>
     </line>
     <line x1="345" y1="177" x2="620" y2="163" stroke="#ffd166">
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="3.9s" repeatCount="indefinite"/>
+    </line>
+    <line x1="345" y1="183" x2="620" y2="208" stroke="#ff5470">
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="4.3s" repeatCount="indefinite"/>
+    </line>
+    <line x1="345" y1="189" x2="620" y2="255" stroke="#7d8799">
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="4.7s" repeatCount="indefinite"/>
+    </line>
