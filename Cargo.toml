@@ -15,3 +15,6 @@ categories = ["command-line-utilities", "text-processing"]
 # verdicts are reproducible on any toolchain without a lockfile churn.
 
 [lib]
+name = "quorumforge"
+path = "src/lib.rs"
+
