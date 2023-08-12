@@ -76,3 +76,16 @@ pub fn normalize_text(text: &str) -> String {
         ("aren't", "are not"),
         ("wasn't", "was not"),
         ("weren't", "were not"),
+        ("doesn't", "does not"),
+        ("don't", "do not"),
+        ("didn't", "did not"),
+        ("can't", "cannot"),
+        ("won't", "will not"),
+        ("shouldn't", "should not"),
+        ("couldn't", "could not"),
+        ("wouldn't", "would not"),
+        ("it's", "it is"),
+    ];
+    for (from, to) in expansions {
+        if joined.contains(from) {
+            joined = joined.replace(from, to);
