@@ -104,3 +104,12 @@ test("parseReport accepts a valid report", () => {
 
 test("parseReport rejects a wrong schema", () => {
   assert.throws(() => parseReport({ schema: "nope" }), /unexpected schema/);
+});
+
+test("parseReport rejects a non-object", () => {
+  assert.throws(() => parseReport(42), /must be a JSON object/);
+});
+
+test("console output contains outcome labels", () => {
+  const out = renderConsole(SAMPLE, { noColor: true });
+  assert.ok(out.includes("CONSENSUS"));
