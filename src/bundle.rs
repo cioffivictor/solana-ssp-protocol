@@ -76,3 +76,16 @@ fn canonical_body(delib: &Deliberation, adj: &Adjudication) -> Json {
                 .citations
                 .iter()
                 .map(|c| {
+                    json::obj(vec![
+                        ("source", json::s(&c.source)),
+                        ("locator", json::s(&c.locator)),
+                    ])
+                })
+                .collect();
+            json::obj(vec![
+                ("agent", json::s(&p.agent_id)),
+                ("claim", json::s(&p.claim_id)),
+                ("stance", json::s(p.stance.as_token())),
+                ("confidence", json::num(p.confidence)),
+                ("note", json::s(&p.note)),
+                ("citations", Json::Arr(cites)),
