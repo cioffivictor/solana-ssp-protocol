@@ -8,3 +8,4 @@
     "qf-view": "dist/cli.js"
   },
   "scripts": {
+    "build": "tsc -p tsconfig.json",
