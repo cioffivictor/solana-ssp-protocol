@@ -45,3 +45,8 @@ export interface Policy {
   consensus_threshold: number;
   dissent_ceiling: number;
   minimum_mass: number;
+}
+
+export interface Report {
+  schema: string;
+  deliberation_id: string;
