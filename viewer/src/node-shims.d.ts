@@ -22,3 +22,7 @@ declare module "node:fs" {
   export function writeFileSync(path: string, data: string): void;
   export function existsSync(path: string): boolean;
 }
+
+declare module "node:process" {
+  const p: typeof process;
+  export default p;
