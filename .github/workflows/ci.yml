@@ -44,3 +44,8 @@ jobs:
           cargo run --release -- bundle samples/cache-coherence.qf -o bundle.json
           cargo run --release -- verify bundle.json
 
+      - name: Upload the JSON report for the viewer job
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-json
+          path: report.json
