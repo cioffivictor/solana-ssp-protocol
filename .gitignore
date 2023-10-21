@@ -8,3 +8,5 @@
 # and the lockfile would be trivially empty and pure noise.
 Cargo.lock
 
+# TypeScript viewer
+viewer/node_modules
