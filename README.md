@@ -202,3 +202,24 @@ Exit codes: `0` success, `2` usage error, `3` parse/validation error, `4` a
 CI gates.
 
 ---
+
+## How the prism actually bends light
+
+The scoring model is deliberately simple enough to reproduce with a pocket
+calculator. Every non-abstaining position casts a **signed vote**:
+
+```
+vote = sign(stance) · agent_weight · confidence
+```
+
+with `sign(support) = +1` and `sign(contradict) = −1`. Confidence is clamped to
+`[0, 1]` defensively. For a claim, sum the support votes into `S` and the
+contradiction magnitudes into `C`, then:
+
+```
+decisive_mass = S + C
+polarity      = (S − C) / decisive_mass       ∈ [−1, +1]
+dissent_ratio = min(S, C) / decisive_mass      ∈ [0, 0.5]
+```
+
+`polarity` is *which way* the light bends; `decisive_mass` is *how bright* the
