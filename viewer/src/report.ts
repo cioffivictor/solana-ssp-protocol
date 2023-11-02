@@ -50,3 +50,8 @@ export interface Policy {
 export interface Report {
   schema: string;
   deliberation_id: string;
+  question: string;
+  summary: ReportSummary;
+  policy: Policy;
+  agents: AgentView[];
+  verdicts: VerdictView[];
