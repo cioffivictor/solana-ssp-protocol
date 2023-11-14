@@ -25,3 +25,6 @@
     { "agent": "vex",   "claim": "m1", "stance": "support", "confidence": 0.5, "note": "Auth is already a separable concern." },
 
     { "agent": "rune",  "claim": "m2", "stance": "support", "confidence": 0.9,
+      "note": "Isolated failure domains contain cascading outages.",
+      "citations": [ { "source": "incident:2024-outage-review", "locator": "single monolith crash took down all traffic" } ] },
+    { "agent": "pearl", "claim": "m2", "stance": "support", "confidence": 0.8, "note": "Bulkheads become natural once split." },
