@@ -10,3 +10,4 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "view": "node dist/cli.js",
+    "test": "tsc -p tsconfig.json && node dist/render.test.js",
