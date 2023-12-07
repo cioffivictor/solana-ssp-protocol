@@ -33,3 +33,7 @@ help:
 
 .PHONY: build
 build: build-rust build-viewer
+
+.PHONY: build-rust
+build-rust:
+	$(CARGO) build --release
