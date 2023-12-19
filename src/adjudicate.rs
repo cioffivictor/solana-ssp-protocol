@@ -166,3 +166,17 @@ pub struct Tally {
     pub consensus: usize,
     pub contested: usize,
     pub split: usize,
+    pub unsupported: usize,
+}
+
+impl Tally {
+    pub fn total(&self) -> usize {
+        self.consensus + self.contested + self.split + self.unsupported
+    }
+}
+
+/// Adjudicate a single claim under a policy.
+pub fn verdict_for(delib: &Deliberation, claim_id: &str, policy: &Policy) -> Verdict {
+    let claim = delib.claims.get(claim_id);
+    let normalized = claim
+        .map(|c| {
