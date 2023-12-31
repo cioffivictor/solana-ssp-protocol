@@ -37,3 +37,8 @@ build: build-rust build-viewer
 .PHONY: build-rust
 build-rust:
 	$(CARGO) build --release
+
+.PHONY: build-viewer
+build-viewer:
+	cd viewer && $(NPM) install --no-audit --no-fund && $(NPM) run build
+
