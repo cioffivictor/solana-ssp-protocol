@@ -18,3 +18,6 @@ categories = ["command-line-utilities", "text-processing"]
 name = "quorumforge"
 path = "src/lib.rs"
 
+[[bin]]
+name = "quorumforge"
+path = "src/bin/quorumforge.rs"
