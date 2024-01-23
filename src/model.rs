@@ -61,3 +61,19 @@ pub struct Citation {
     pub source: String,
     /// A human-readable locator: page, section, URL fragment, or quote.
     pub locator: String,
+}
+
+impl Citation {
+    pub fn new(source: impl Into<String>, locator: impl Into<String>) -> Self {
+        Citation {
+            source: source.into(),
+            locator: locator.into(),
+        }
+    }
+}
+
+/// A single agent's stance on a single claim.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Position {
+    /// The id of the agent that holds this position.
+    pub agent_id: String,
