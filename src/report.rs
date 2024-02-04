@@ -149,3 +149,18 @@ fn wrap(text: &str, width: usize, indent: &str) -> String {
     for word in text.split_whitespace() {
         if current.is_empty() {
             current.push_str(word);
+        } else if current.len() + 1 + word.len() > width {
+            lines.push(current.clone());
+            current.clear();
+            current.push_str(word);
+        } else {
+            current.push(' ');
+            current.push_str(word);
+        }
+    }
+    if !current.is_empty() {
+        lines.push(current);
+    }
+    lines.join(&format!("\n{}", indent))
+}
+
