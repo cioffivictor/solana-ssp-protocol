@@ -64,3 +64,10 @@ fn tampering_breaks_the_digest() {
 
 #[test]
 fn cache_sample_yields_expected_outcomes() {
+    let (_d, adj) = run("cache.qf", CACHE);
+    assert_eq!(adj.verdicts["c1"].outcome, Outcome::Consensus);
+    assert!(adj.verdicts["c1"].affirmed);
+    assert_eq!(adj.verdicts["c2"].outcome, Outcome::Contested);
+    assert_eq!(adj.verdicts["c5"].outcome, Outcome::Unsupported);
+    // The sample is designed to exercise all four outcomes.
+    assert!(adj.tally.consensus >= 1);
