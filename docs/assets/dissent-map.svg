@@ -27,3 +27,7 @@
     <circle cx="320" cy="180" r="150">
       <animate attributeName="stroke-opacity" values="0.05;0.2;0.05" dur="6s" repeatCount="indefinite"/>
     </circle>
+  </g>
+
+  <!-- support threads (green) -->
+  <g stroke="#25d0c0" stroke-width="2" filter="url(#soft)">
