@@ -223,3 +223,23 @@ dissent_ratio = min(S, C) / decisive_mass      ∈ [0, 0.5]
 ```
 
 `polarity` is *which way* the light bends; `decisive_mass` is *how bright* the
+beam is; `dissent_ratio` is *how much* of the beam scatters the other way.
+
+<div align="center">
+<img src="docs/assets/dissent-map.svg" alt="A ring of agents around a central claim, with green support threads and red dissent threads pulsing inward" width="620" />
+</div>
+
+The classifier then reads those three numbers against a **policy** (see below):
+
+- **unsupported** if `decisive_mass ≤ minimum_mass`
+- **consensus** if `|polarity| ≥ consensus_threshold` **and** `dissent_ratio < dissent_ceiling`
+- **contested** if `dissent_ratio ≥ dissent_ceiling`
+- **split** otherwise
+
+Finally, the deliberation earns a single **cohesion** score in `[0, 1]`: the
+mass-weighted average of each claim's `|polarity|`. A council that agrees loudly
+on heavy claims scores near `1.0`; one that is evenly split scores near `0`.
+
+### Worked micro-example
+
+Two agents weigh in on one claim. Ada (weight `1.5`) supports at confidence
