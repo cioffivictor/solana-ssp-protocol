@@ -71,3 +71,10 @@ fn cache_sample_yields_expected_outcomes() {
     assert_eq!(adj.verdicts["c5"].outcome, Outcome::Unsupported);
     // The sample is designed to exercise all four outcomes.
     assert!(adj.tally.consensus >= 1);
+    assert!(adj.tally.contested >= 1);
+    assert!(adj.tally.split >= 1);
+    assert!(adj.tally.unsupported >= 1);
+}
+
+#[test]
+fn migration_sample_parses_and_adjudicates() {
