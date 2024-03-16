@@ -115,3 +115,16 @@ pub fn normalize_deliberation(delib: &mut Deliberation) {
 ///
 /// The returned map is ordered by normalized text; each value lists claim ids
 /// in sorted order, so the grouping is fully deterministic.
+pub fn cluster_by_normalized(delib: &Deliberation) -> BTreeMap<String, Vec<String>> {
+    let mut clusters: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    for claim in delib.claims.values() {
+        let key = if claim.normalized.is_empty() {
+            normalize_text(&claim.text)
+        } else {
+            claim.normalized.clone()
+        };
+        clusters.entry(key).or_default().push(claim.id.clone());
+    }
+    for ids in clusters.values_mut() {
+        ids.sort();
+    }
