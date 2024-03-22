@@ -243,3 +243,24 @@ on heavy claims scores near `1.0`; one that is evenly split scores near `0`.
 ### Worked micro-example
 
 Two agents weigh in on one claim. Ada (weight `1.5`) supports at confidence
+`0.8`; Bo (weight `1.0`) contradicts at confidence `0.6`.
+
+```
+S = 1.5 · 0.8 = 1.20        C = 1.0 · 0.6 = 0.60
+decisive_mass = 1.80
+polarity      = (1.20 − 0.60) / 1.80 = +0.333
+dissent_ratio = 0.60 / 1.80           =  0.333
+```
+
+Under the default policy (`consensus_threshold = 0.66`, `dissent_ceiling =
+0.34`): `dissent_ratio 0.333 < 0.34`, so it is not contested; `|polarity| 0.333
+< 0.66`, so it is not consensus. The verdict is **split, affirmed**.
+
+---
+
+## Tuning the policy
+
+Three knobs govern classification. All are validated to sensible ranges.
+
+| Knob | Flag | Default | Effect |
+|------|------|:-------:|--------|
