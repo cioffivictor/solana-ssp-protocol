@@ -180,3 +180,17 @@ pub fn verdict_for(delib: &Deliberation, claim_id: &str, policy: &Policy) -> Ver
     let claim = delib.claims.get(claim_id);
     let normalized = claim
         .map(|c| {
+            if c.normalized.is_empty() {
+                crate::normalize::normalize_text(&c.text)
+            } else {
+                c.normalized.clone()
+            }
+        })
+        .unwrap_or_default();
+
+    let mut support_mass = 0.0f64;
+    let mut contradiction_mass = 0.0f64;
+    let mut supporters = 0usize;
+    let mut dissenters = 0usize;
+    let mut abstentions = 0usize;
+    let mut citation_count = 0usize;
