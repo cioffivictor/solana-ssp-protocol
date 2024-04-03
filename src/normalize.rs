@@ -128,3 +128,16 @@ pub fn cluster_by_normalized(delib: &Deliberation) -> BTreeMap<String, Vec<Strin
     for ids in clusters.values_mut() {
         ids.sort();
     }
+    clusters
+}
+
+/// A lightweight token-overlap similarity in `[0.0, 1.0]` used only for
+/// diagnostics and the "near-duplicate" hints surfaced in reports. It is the
+/// Jaccard index over whitespace tokens of two normalized strings.
+pub fn similarity(a: &str, b: &str) -> f64 {
+    use std::collections::BTreeSet;
+    let sa: BTreeSet<&str> = a.split_whitespace().collect();
+    let sb: BTreeSet<&str> = b.split_whitespace().collect();
+    if sa.is_empty() && sb.is_empty() {
+        return 1.0;
+    }
