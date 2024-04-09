@@ -97,3 +97,19 @@ A single object with these top-level keys:
 
 | Key         | Type    | Required | Notes                                    |
 |-------------|---------|----------|------------------------------------------|
+| `id`        | string  | no       | Defaults to `"unnamed"`.                 |
+| `question`  | string  | no       | Defaults to empty.                       |
+| `agents`    | array   | no       | Array of agent objects.                  |
+| `claims`    | array   | no       | Array of claim objects.                  |
+| `positions` | array   | no       | Array of position objects.               |
+
+### 3.1 Object shapes
+
+```jsonc
+// agent
+{ "id": "ana", "name": "Ana Ito", "weight": 1.4, "role": "release-manager" }
+
+// claim
+{ "id": "r1", "topic": "quality", "text": "All P0 bugs are resolved." }
+
+// position
