@@ -264,3 +264,23 @@ Three knobs govern classification. All are validated to sensible ranges.
 
 | Knob | Flag | Default | Effect |
 |------|------|:-------:|--------|
+| `consensus_threshold` | `--consensus` | `0.66` | How lopsided a claim must be to count as consensus. |
+| `dissent_ceiling` | `--dissent` | `0.34` | How much losing-side mass tips a claim into "contested". |
+| `minimum_mass` | `--min-mass` | `~0` | How much decisive weight is needed to escape "unsupported". |
+
+Raising `consensus_threshold` makes the council harder to satisfy. Lowering
+`dissent_ceiling` makes it quicker to flag division. The defaults encode a
+familiar rule of thumb: **a two-thirds supermajority with limited dissent reads
+as consensus.**
+
+---
+
+## Deterministic bundles
+
+A **bundle** is a canonical, self-contained snapshot of a deliberation *and* its
+verdicts, stamped with a content digest (a small, dependency-free FNV-1a hash).
+Bundles are byte-stable — the same inputs always produce the same bytes — so
+they diff cleanly and can be checksummed in CI.
+
+```sh
+cargo run -- bundle samples/cache-coherence.qf -o bundle.json
