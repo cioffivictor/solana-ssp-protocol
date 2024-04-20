@@ -113,3 +113,20 @@ A single object with these top-level keys:
 { "id": "r1", "topic": "quality", "text": "All P0 bugs are resolved." }
 
 // position
+{
+  "agent": "ana",
+  "claim": "r1",
+  "stance": "support",          // support | contradict | abstain (+ synonyms)
+  "confidence": 0.9,            // [0.0, 1.0]
+  "note": "burn-down at zero",
+  "citations": [
+    { "source": "tracker:P0", "locator": "filter status=closed -> 0 rows" }
+  ]
+}
+```
+
+Field defaults match the line format: `weight` and `confidence` default to
+`1.0`; `role`, `note`, `topic`, `source`, and `locator` default to empty;
+`citations` defaults to an empty list.
+
+### 3.2 Equivalent example
