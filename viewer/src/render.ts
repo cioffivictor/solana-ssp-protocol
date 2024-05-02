@@ -129,3 +129,21 @@ function bar(fraction: number, cells: number): string {
 }
 
 function pad(text: string, len: number): string {
+  return text.length >= len ? text : text + " ".repeat(len - text.length);
+}
+
+function wrap(text: string, width: number): string[] {
+  const words = text.split(/\s+/).filter(Boolean);
+  const lines: string[] = [];
+  let current = "";
+  for (const word of words) {
+    if (current === "") {
+      current = word;
+    } else if (current.length + 1 + word.length > width) {
+      lines.push(current);
+      current = word;
+    } else {
+      current += " " + word;
+    }
+  }
+  if (current) lines.push(current);
