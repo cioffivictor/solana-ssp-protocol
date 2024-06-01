@@ -34,3 +34,5 @@ cite | cyan | c1 | model:alloy-cache | scope 6, no counterexample
 pos  | echo | c1 | support    | 0.85 | code review confirms single-key CAS path
 pos  | boro | c1 | support    | 0.70 | convinced after the second model run
 pos  | dice | c1 | abstain    | 0.50 | no field data on single-key contention yet
+
+# --- Positions: c2 (expect contested — genuine disagreement) ---------------
