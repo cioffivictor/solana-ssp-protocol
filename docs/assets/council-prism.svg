@@ -62,3 +62,11 @@
     <line x1="345" y1="189" x2="620" y2="255" stroke="#7d8799">
       <animate attributeName="opacity" values="0.3;0.8;0.3" dur="4.7s" repeatCount="indefinite"/>
     </line>
+  </g>
+
+  <!-- travelling photons along each band -->
+  <g>
+    <circle r="3.5" fill="#25d0c0"><animateMotion path="M345,172 L620,120" dur="2.2s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#ffd166"><animateMotion path="M345,177 L620,163" dur="2.6s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#ff5470"><animateMotion path="M345,183 L620,208" dur="2.9s" repeatCount="indefinite"/></circle>
+    <circle r="3" fill="#7d8799"><animateMotion path="M345,189 L620,255" dur="3.3s" repeatCount="indefinite"/></circle>
