@@ -96,3 +96,19 @@ delib | d1 | Q
 agent | a | A | 1.0 | r
 claim | c1 | t | text
 pos   | a | c1 | support | 2.0 |
+";
+    let err = parse::parse_lines(src).unwrap_err();
+    assert!(err.message.contains("outside [0,1]"));
+}
+
+#[test]
+fn missing_delib_header_is_rejected() {
+    let src = "agent | a | A | 1.0 | r\n";
+    let err = parse::parse_lines(src).unwrap_err();
+    assert!(err.message.contains("before the 'delib' header"));
+}
+
+#[test]
+fn parses_json_format_equivalently() {
+    let src = r#"
+    {
