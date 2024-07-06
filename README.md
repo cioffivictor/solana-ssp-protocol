@@ -284,3 +284,24 @@ they diff cleanly and can be checksummed in CI.
 
 ```sh
 cargo run -- bundle samples/cache-coherence.qf -o bundle.json
+cargo run -- verify bundle.json
+```
+
+The digest covers the *compact* canonical body with object keys in a fixed
+order, positions sorted by `(claim, agent, stance)`, and all floating-point
+values snapped to a six-decimal grid. That last detail is load-bearing: it makes
+the JSON writer **idempotent**, so a bundle survives a round trip through the
+parser without changing its digest. Mutate any field and `verify` returns exit
+code `4`.
+
+---
+
+## Testing
+
+Both halves ship with focused tests and are exercised together in CI.
+
+```sh
+# Rust: unit tests, integration tests, and doctests.
+cargo test
+
+# TypeScript: compile, then run the assertion-based renderer suite.
