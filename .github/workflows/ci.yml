@@ -49,3 +49,8 @@ jobs:
         with:
           name: report-json
           path: report.json
+
+  viewer:
+    name: TypeScript viewer (build, test)
+    runs-on: ubuntu-latest
+    needs: rust
