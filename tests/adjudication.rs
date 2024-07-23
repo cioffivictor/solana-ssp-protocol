@@ -130,3 +130,17 @@ fn only_abstentions_is_unsupported() {
     assert_eq!(v.decisive_mass, 0.0);
 }
 
+#[test]
+fn no_positions_at_all_is_unsupported() {
+    let d = build(vec![agent("a", 1.0)], vec![claim("lonely")], vec![]);
+    let v = verdict_for(&d, "lonely", &Policy::default());
+    assert_eq!(v.outcome, Outcome::Unsupported);
+}
+
+#[test]
+fn agent_weight_scales_influence() {
+    // A single heavyweight supporter should outweigh two light contradictors.
+    let d = build(
+        vec![agent("heavy", 3.0), agent("l1", 1.0), agent("l2", 1.0)],
+        vec![claim("c1")],
+        vec![
