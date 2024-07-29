@@ -89,3 +89,17 @@ fn canonical_body(delib: &Deliberation, adj: &Adjudication) -> Json {
                 ("confidence", json::num(p.confidence)),
                 ("note", json::s(&p.note)),
                 ("citations", Json::Arr(cites)),
+            ])
+        })
+        .collect();
+
+    let verdicts: Vec<Json> = adj.verdicts.values().map(verdict_json).collect();
+
+    json::obj(vec![
+        ("schema", json::s("quorumforge.bundle.v1")),
+        ("deliberation_id", json::s(&delib.id)),
+        ("question", json::s(&delib.question)),
+        ("policy", policy_json(&adj.policy)),
+        ("agents", Json::Arr(agents)),
+        ("claims", Json::Arr(claims)),
+        ("positions", Json::Arr(positions)),
