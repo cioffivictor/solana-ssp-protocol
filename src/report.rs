@@ -164,3 +164,18 @@ fn wrap(text: &str, width: usize, indent: &str) -> String {
     lines.join(&format!("\n{}", indent))
 }
 
+/// Render the structured JSON report consumed by the council viewer.
+pub fn render_json(delib: &Deliberation, adj: &Adjudication) -> String {
+    let verdicts: Vec<Json> = adj
+        .verdicts
+        .values()
+        .map(|v| verdict_report_json(delib, v))
+        .collect();
+
+    let agents: Vec<Json> = {
+        let influence: BTreeMap<String, f64> = agent_influence(delib, adj).into_iter().collect();
+        delib
+            .agents
+            .values()
+            .map(|a| {
+                json::obj(vec![
