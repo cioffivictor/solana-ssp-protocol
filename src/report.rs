@@ -179,3 +179,18 @@ pub fn render_json(delib: &Deliberation, adj: &Adjudication) -> String {
             .values()
             .map(|a| {
                 json::obj(vec![
+                    ("id", json::s(&a.id)),
+                    ("name", json::s(&a.name)),
+                    ("role", json::s(&a.role)),
+                    ("weight", json::num(a.weight)),
+                    (
+                        "influence",
+                        json::num(round6(*influence.get(&a.id).unwrap_or(&0.0))),
+                    ),
+                ])
+            })
+            .collect()
+    };
+
+    let report = json::obj(vec![
+        ("schema", json::s("quorumforge.report.v1")),
