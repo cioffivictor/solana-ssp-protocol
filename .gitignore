@@ -10,3 +10,5 @@ Cargo.lock
 
 # TypeScript viewer
 viewer/node_modules
+viewer/dist
+viewer/*.tsbuildinfo
