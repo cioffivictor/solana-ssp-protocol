@@ -44,3 +44,7 @@
 pub mod adjudicate;
 pub mod bundle;
 pub mod json;
+pub mod model;
+pub mod normalize;
+pub mod parse;
+pub mod report;
