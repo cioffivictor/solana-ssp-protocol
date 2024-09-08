@@ -92,3 +92,19 @@ pub struct Position {
 /// A council member with a credibility weight.
 #[derive(Debug, Clone, PartialEq)]
 pub struct Agent {
+    /// Stable identifier, unique within a deliberation.
+    pub id: String,
+    /// Display name.
+    pub name: String,
+    /// Credibility weight in `[0.0, +inf)`. Higher means more influence.
+    pub weight: f64,
+    /// Optional role label, e.g. `domain-expert`, `skeptic`, `archivist`.
+    pub role: String,
+}
+
+/// A proposition under adjudication.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Claim {
+    /// Stable identifier, unique within a deliberation.
+    pub id: String,
+    /// The raw claim text as authored.
