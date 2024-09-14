@@ -18,3 +18,4 @@ claim | n3 | latency | Arguably, the p99 latency is under 200ms.
 # A distinct claim with a contraction that expands during normalization.
 claim | n4 | latency | The service isn't dropping requests under load.
 
+pos | q1 | n1 | support    | 0.8 | measured 180ms in staging
