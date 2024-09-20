@@ -194,3 +194,18 @@ pub fn render_json(delib: &Deliberation, adj: &Adjudication) -> String {
 
     let report = json::obj(vec![
         ("schema", json::s("quorumforge.report.v1")),
+        ("deliberation_id", json::s(&adj.deliberation_id)),
+        ("question", json::s(&adj.question)),
+        (
+            "summary",
+            json::obj(vec![
+                ("total_claims", json::num(adj.tally.total() as f64)),
+                ("consensus", json::num(adj.tally.consensus as f64)),
+                ("contested", json::num(adj.tally.contested as f64)),
+                ("split", json::num(adj.tally.split as f64)),
+                ("unsupported", json::num(adj.tally.unsupported as f64)),
+                ("cohesion", json::num(round6(adj.cohesion))),
+            ]),
+        ),
+        (
+            "policy",
