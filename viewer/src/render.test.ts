@@ -113,3 +113,13 @@ test("parseReport rejects a non-object", () => {
 test("console output contains outcome labels", () => {
   const out = renderConsole(SAMPLE, { noColor: true });
   assert.ok(out.includes("CONSENSUS"));
+  assert.ok(out.includes("CONTESTED"));
+  assert.ok(out.includes("UNSUPPORTED"));
+});
+
+test("console output lists dissenting agents", () => {
+  const out = renderConsole(SAMPLE, { noColor: true });
+  assert.ok(out.includes("dissent: a"), "c2 dissent lists agent a");
+});
+
+test("no-color output has no ANSI escape codes", () => {
