@@ -112,3 +112,19 @@ fn missing_delib_header_is_rejected() {
 fn parses_json_format_equivalently() {
     let src = r#"
     {
+      "id": "d1",
+      "question": "Does it work?",
+      "agents": [ { "id": "a", "name": "Alice", "weight": 1.5, "role": "dev" } ],
+      "claims": [ { "id": "c1", "topic": "t", "text": "It works." } ],
+      "positions": [
+        { "agent": "a", "claim": "c1", "stance": "contradict", "confidence": 0.3,
+          "note": "nope", "citations": [ { "source": "s", "locator": "l" } ] }
+      ]
+    }
+    "#;
+    let d = parse::parse_json(src).unwrap();
+    assert_eq!(d.id, "d1");
+    assert_eq!(d.agents["a"].weight, 1.5);
+    assert_eq!(d.positions[0].stance, Stance::Contradict);
+    assert_eq!(d.positions[0].citations.len(), 1);
+}
