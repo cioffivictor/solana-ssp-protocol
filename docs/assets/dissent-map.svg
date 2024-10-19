@@ -35,3 +35,7 @@
     <line x1="320" y1="180" x2="500" y2="180"><animate attributeName="stroke-opacity" values="0.2;1;0.2" dur="3.2s" repeatCount="indefinite"/></line>
     <line x1="320" y1="180" x2="450" y2="300"><animate attributeName="stroke-opacity" values="0.2;1;0.2" dur="3.6s" repeatCount="indefinite"/></line>
   </g>
+
+  <!-- dissent threads (red) -->
+  <g stroke="#ff5470" stroke-width="2" filter="url(#soft)">
+    <line x1="320" y1="180" x2="170" y2="70"><animate attributeName="stroke-opacity" values="0.15;0.9;0.15" dur="3.1s" repeatCount="indefinite"/></line>
