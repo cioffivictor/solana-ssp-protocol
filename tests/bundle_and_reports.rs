@@ -78,3 +78,10 @@ fn cache_sample_yields_expected_outcomes() {
 
 #[test]
 fn migration_sample_parses_and_adjudicates() {
+    let (d, adj) = run("migration.json", MIGRATION);
+    assert_eq!(d.id, "migration-strategy");
+    assert_eq!(d.agents.len(), 5);
+    assert_eq!(d.claims.len(), 6);
+    assert_eq!(adj.tally.total(), 6);
+    // m4 (independent shipping) has four supporters and no dissent.
+    assert_eq!(adj.verdicts["m4"].outcome, Outcome::Consensus);
