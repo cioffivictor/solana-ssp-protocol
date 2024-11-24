@@ -274,3 +274,31 @@ pub fn parse_json(contents: &str) -> Result<Deliberation, ParseError> {
                     text,
                     topic,
                     normalized: String::new(),
+                },
+            );
+        }
+    }
+
+    if let Some(positions) = root.get("positions").and_then(Json::as_array) {
+        for p in positions {
+            let agent_id = str_field(p, "agent").ok_or_else(|| field_err("position.agent"))?;
+            let claim_id = str_field(p, "claim").ok_or_else(|| field_err("position.claim"))?;
+            let stance_token = str_field(p, "stance").unwrap_or_default();
+            let stance = Stance::parse(&stance_token).ok_or_else(|| ParseError {
+                line: 0,
+                message: format!("unknown stance '{}'", stance_token),
+            })?;
+            let confidence = p.get("confidence").and_then(Json::as_f64).unwrap_or(1.0);
+            let note = str_field(p, "note").unwrap_or_default();
+            let mut citations = Vec::new();
+            if let Some(cites) = p.get("citations").and_then(Json::as_array) {
+                for cj in cites {
+                    let source = str_field(cj, "source").unwrap_or_default();
+                    let locator = str_field(cj, "locator").unwrap_or_default();
+                    citations.push(Citation::new(source, locator));
+                }
+            }
+            delib.positions.push(Position {
+                agent_id,
+                claim_id,
+                stance,
