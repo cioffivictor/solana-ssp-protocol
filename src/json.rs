@@ -259,3 +259,46 @@ impl<'a> Parser<'a> {
                                     Some(ch) => out.push(ch),
                                     None => return Err(self.err("invalid unicode escape")),
                                 }
+                            }
+                            continue;
+                        }
+                        _ => return Err(self.err("invalid escape sequence")),
+                    }
+                    self.pos += 1;
+                }
+                Some(_) => {
+                    // Copy a full UTF-8 code point.
+                    let start = self.pos;
+                    let len = utf8_len(self.bytes[self.pos]);
+                    if start + len > self.bytes.len() {
+                        return Err(self.err("truncated UTF-8 sequence"));
+                    }
+                    match std::str::from_utf8(&self.bytes[start..start + len]) {
+                        Ok(s) => out.push_str(s),
+                        Err(_) => return Err(self.err("invalid UTF-8 in string")),
+                    }
+                    self.pos += len;
+                }
+            }
+        }
+        Ok(out)
+    }
+
+    fn parse_hex4(&mut self) -> Result<u16, JsonError> {
+        self.pos += 1; // consume 'u'
+        if self.pos + 4 > self.bytes.len() {
+            return Err(self.err("truncated \\u escape"));
+        }
+        let mut value: u16 = 0;
+        for _ in 0..4 {
+            let digit = self.bytes[self.pos];
+            let nibble = match digit {
+                b'0'..=b'9' => digit - b'0',
+                b'a'..=b'f' => digit - b'a' + 10,
+                b'A'..=b'F' => digit - b'A' + 10,
+                _ => return Err(self.err("invalid hex digit in \\u escape")),
+            };
+            value = value * 16 + nibble as u16;
+            self.pos += 1;
+        }
+        // pos now points just past the four hex digits.
