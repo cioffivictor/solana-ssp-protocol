@@ -36,3 +36,5 @@ pos  | boro | c1 | support    | 0.70 | convinced after the second model run
 pos  | dice | c1 | abstain    | 0.50 | no field data on single-key contention yet
 
 # --- Positions: c2 (expect contested — genuine disagreement) ---------------
+pos  | ada  | c2 | support    | 0.60 | two-phase commit path looks sound on paper
+pos  | cyan | c2 | contradict | 0.80 | found a cross-key stale-read window in the model
