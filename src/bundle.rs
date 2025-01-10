@@ -103,3 +103,16 @@ fn canonical_body(delib: &Deliberation, adj: &Adjudication) -> Json {
         ("agents", Json::Arr(agents)),
         ("claims", Json::Arr(claims)),
         ("positions", Json::Arr(positions)),
+        ("verdicts", Json::Arr(verdicts)),
+        ("summary", summary_json(adj)),
+    ])
+}
+
+fn policy_json(policy: &crate::adjudicate::Policy) -> Json {
+    json::obj(vec![
+        ("consensus_threshold", json::num(policy.consensus_threshold)),
+        ("dissent_ceiling", json::num(policy.dissent_ceiling)),
+        ("minimum_mass", json::num(policy.minimum_mass)),
+    ])
+}
+
