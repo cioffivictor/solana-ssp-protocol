@@ -128,3 +128,14 @@ async function main(): Promise<void> {
       fail(`cannot read '${opts.input}': ${(err as Error).message}`);
     }
   }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (err) {
+    fail(`input is not valid JSON: ${(err as Error).message}`);
+  }
+
+  let report;
+  try {
+    report = parseReport(parsed);
