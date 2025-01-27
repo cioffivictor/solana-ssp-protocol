@@ -208,3 +208,17 @@ pub fn verdict_for(delib: &Deliberation, claim_id: &str, policy: &Policy) -> Ver
                 support_mass += vote;
                 supporters += 1;
                 support_agents.push(pos.agent_id.clone());
+            }
+            Stance::Contradict => {
+                contradiction_mass += vote;
+                dissenters += 1;
+                contradict_agents.push(pos.agent_id.clone());
+            }
+            Stance::Abstain => {
+                abstentions += 1;
+            }
+        }
+    }
+
+    let decisive_mass = support_mass + contradiction_mass;
+    let polarity = if decisive_mass > 0.0 {
