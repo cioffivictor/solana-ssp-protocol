@@ -12,3 +12,5 @@ Cargo.lock
 viewer/node_modules
 viewer/dist
 viewer/*.tsbuildinfo
+
+# Generated artifacts from example commands in the README
