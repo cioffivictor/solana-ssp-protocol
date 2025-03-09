@@ -302,3 +302,47 @@ impl<'a> Parser<'a> {
             self.pos += 1;
         }
         // pos now points just past the four hex digits.
+        Ok(value)
+    }
+
+    fn parse_bool(&mut self) -> Result<Json, JsonError> {
+        if self.bytes[self.pos..].starts_with(b"true") {
+            self.pos += 4;
+            Ok(Json::Bool(true))
+        } else if self.bytes[self.pos..].starts_with(b"false") {
+            self.pos += 5;
+            Ok(Json::Bool(false))
+        } else {
+            Err(self.err("invalid literal"))
+        }
+    }
+
+    fn parse_null(&mut self) -> Result<Json, JsonError> {
+        if self.bytes[self.pos..].starts_with(b"null") {
+            self.pos += 4;
+            Ok(Json::Null)
+        } else {
+            Err(self.err("invalid literal"))
+        }
+    }
+
+    fn parse_number(&mut self) -> Result<Json, JsonError> {
+        let start = self.pos;
+        if self.peek() == Some(b'-') {
+            self.pos += 1;
+        }
+        while let Some(c) = self.peek() {
+            if c.is_ascii_digit() {
+                self.pos += 1;
+            } else {
+                break;
+            }
+        }
+        if self.peek() == Some(b'.') {
+            self.pos += 1;
+            while let Some(c) = self.peek() {
+                if c.is_ascii_digit() {
+                    self.pos += 1;
+                } else {
+                    break;
+                }
