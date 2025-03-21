@@ -222,3 +222,17 @@ pub fn verdict_for(delib: &Deliberation, claim_id: &str, policy: &Policy) -> Ver
 
     let decisive_mass = support_mass + contradiction_mass;
     let polarity = if decisive_mass > 0.0 {
+        (support_mass - contradiction_mass) / decisive_mass
+    } else {
+        0.0
+    };
+    let dissent_ratio = if decisive_mass > 0.0 {
+        support_mass.min(contradiction_mass) / decisive_mass
+    } else {
+        0.0
+    };
+    let affirmed = polarity >= 0.0;
+
+    let outcome = classify(decisive_mass, polarity, dissent_ratio, policy);
+
+    // The winning side depends on polarity; ties (polarity == 0) treat support
