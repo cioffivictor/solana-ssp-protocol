@@ -124,3 +124,19 @@ pub struct Deliberation {
     pub id: String,
     /// The question or motion the council is adjudicating.
     pub question: String,
+    /// Council members, keyed by id for lookup.
+    pub agents: BTreeMap<String, Agent>,
+    /// Claims, keyed by id for lookup.
+    pub claims: BTreeMap<String, Claim>,
+    /// Every position taken during the deliberation, in authored order.
+    pub positions: Vec<Position>,
+}
+
+impl Deliberation {
+    /// Create an empty deliberation with the given id and question.
+    pub fn new(id: impl Into<String>, question: impl Into<String>) -> Self {
+        Deliberation {
+            id: id.into(),
+            question: question.into(),
+            agents: BTreeMap::new(),
+            claims: BTreeMap::new(),
