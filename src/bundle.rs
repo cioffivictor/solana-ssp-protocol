@@ -116,3 +116,16 @@ fn policy_json(policy: &crate::adjudicate::Policy) -> Json {
     ])
 }
 
+fn summary_json(adj: &Adjudication) -> Json {
+    json::obj(vec![
+        ("consensus", json::num(adj.tally.consensus as f64)),
+        ("contested", json::num(adj.tally.contested as f64)),
+        ("split", json::num(adj.tally.split as f64)),
+        ("unsupported", json::num(adj.tally.unsupported as f64)),
+        ("total_claims", json::num(adj.tally.total() as f64)),
+        ("cohesion", json::num(round6(adj.cohesion))),
+    ])
+}
+
+fn verdict_json(v: &Verdict) -> Json {
+    json::obj(vec![
