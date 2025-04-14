@@ -157,3 +157,16 @@ fn agent_weight_scales_influence() {
 }
 
 #[test]
+fn confidence_is_clamped_defensively() {
+    // Confidence out of range would normally be rejected by the parser, but
+    // the engine still clamps so a hand-built deliberation cannot explode.
+    let d = build(
+        vec![agent("a", 1.0)],
+        vec![claim("c1")],
+        vec![pos("a", "c1", Stance::Support, 5.0)],
+    );
+    let v = verdict_for(&d, "c1", &Policy::default());
+    assert!((v.support_mass - 1.0).abs() < 1e-9, "5.0 clamps to 1.0");
+}
+
+#[test]
