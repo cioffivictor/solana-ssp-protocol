@@ -11,3 +11,5 @@
     "build": "tsc -p tsconfig.json",
     "view": "node dist/cli.js",
     "test": "tsc -p tsconfig.json && node dist/render.test.js",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
+  },
