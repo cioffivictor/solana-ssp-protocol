@@ -85,3 +85,9 @@ fn migration_sample_parses_and_adjudicates() {
     assert_eq!(adj.tally.total(), 6);
     // m4 (independent shipping) has four supporters and no dissent.
     assert_eq!(adj.verdicts["m4"].outcome, Outcome::Consensus);
+    assert!(adj.verdicts["m4"].affirmed);
+    // m6 is only abstentions.
+    assert_eq!(adj.verdicts["m6"].outcome, Outcome::Unsupported);
+}
+
+#[test]
