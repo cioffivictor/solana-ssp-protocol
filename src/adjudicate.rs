@@ -236,3 +236,17 @@ pub fn verdict_for(delib: &Deliberation, claim_id: &str, policy: &Policy) -> Ver
     let outcome = classify(decisive_mass, polarity, dissent_ratio, policy);
 
     // The winning side depends on polarity; ties (polarity == 0) treat support
+    // as the nominal majority for a stable, documented tie-break.
+    let (mut majority_agents, mut minority_agents) = if affirmed {
+        (support_agents, contradict_agents)
+    } else {
+        (contradict_agents, support_agents)
+    };
+    majority_agents.sort();
+    majority_agents.dedup();
+    minority_agents.sort();
+    minority_agents.dedup();
+
+    Verdict {
+        claim_id: claim_id.to_string(),
+        normalized,
