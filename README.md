@@ -325,3 +325,24 @@ render determinism.
 - **No dependencies.** Rust core is std-only; the viewer's only build-time
   dependency is `tsc`. There is no `Cargo.lock` churn and no `node_modules`
   supply chain to audit at runtime.
+- **Determinism first.** Ordered maps, sorted positions, snapped floats, and an
+  idempotent JSON writer mean identical inputs give identical bytes.
+- **Auditability over cleverness.** Every intermediate quantity (masses,
+  polarity, dissent) is retained in the report so a human can check the math.
+- **Offline forever.** No network calls, no remote media, no telemetry.
+
+---
+
+## Limitations
+
+QuorumForge is intentionally narrow. Know the edges before you rely on it.
+
+- **No semantic understanding.** Claim normalization is lexical only — it folds
+  hedges and contractions and collapses whitespace. Two claims that *mean* the
+  same thing but share no words are treated as distinct. There is no embedding
+  model, paraphrase detector, or entailment check, and adding one would break
+  determinism.
+- **No provenance grading.** Citations are recorded and counted, but their
+  *quality* is not assessed. A citation to a rigorous proof and a citation to a
+  hunch count the same toward the citation tally. Weight your agents, not your
+  sources.
