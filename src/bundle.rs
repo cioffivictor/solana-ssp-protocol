@@ -129,3 +129,16 @@ fn summary_json(adj: &Adjudication) -> Json {
 
 fn verdict_json(v: &Verdict) -> Json {
     json::obj(vec![
+        ("claim", json::s(&v.claim_id)),
+        ("normalized", json::s(&v.normalized)),
+        ("outcome", json::s(v.outcome.as_token())),
+        ("affirmed", Json::Bool(v.affirmed)),
+        ("support_mass", json::num(round6(v.support_mass))),
+        (
+            "contradiction_mass",
+            json::num(round6(v.contradiction_mass)),
+        ),
+        ("decisive_mass", json::num(round6(v.decisive_mass))),
+        ("polarity", json::num(round6(v.polarity))),
+        ("dissent_ratio", json::num(round6(v.dissent_ratio))),
+        ("supporters", json::num(v.supporters as f64)),
