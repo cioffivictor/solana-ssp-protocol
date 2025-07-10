@@ -46,3 +46,7 @@
   <line x1="320" y1="180" x2="250" y2="320" stroke="#7d8799" stroke-width="1.5" stroke-dasharray="4 4">
     <animate attributeName="stroke-opacity" values="0.1;0.4;0.1" dur="5s" repeatCount="indefinite"/>
   </line>
+
+  <!-- pulses travelling inward from agents to the claim -->
+  <g>
+    <circle r="3" fill="#25d0c0"><animateMotion path="M470,70 L320,180" dur="1.8s" repeatCount="indefinite"/></circle>
