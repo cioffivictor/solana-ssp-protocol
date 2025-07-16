@@ -41,3 +41,5 @@ pos  | cyan | c2 | contradict | 0.80 | found a cross-key stale-read window in th
 cite | cyan | c2 | model:alloy-cache | counterexample trace cross-key-stale-7
 pos  | echo | c2 | contradict | 0.75 | reproduced Cyan's trace in a unit test
 cite | echo | c2 | test:it_cross_key_stale | fails on commit reordering
+pos  | boro | c2 | support    | 0.50 | rare enough to ignore in practice
+pos  | dice | c2 | contradict | 0.65 | saw a matching anomaly in staging once
