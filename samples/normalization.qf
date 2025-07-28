@@ -21,3 +21,5 @@ claim | n4 | latency | The service isn't dropping requests under load.
 pos | q1 | n1 | support    | 0.8 | measured 180ms in staging
 cite| q1 | n1 | bench:staging-run-9 | p99 = 181ms
 pos | q2 | n2 | support    | 0.9 | reproduced on the perf rig
+pos | q3 | n3 | contradict | 0.4 | one region saw 240ms
+
