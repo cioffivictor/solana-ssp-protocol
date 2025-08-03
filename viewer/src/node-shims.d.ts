@@ -30,3 +30,7 @@ declare module "node:process" {
 
 declare module "node:assert/strict" {
   interface AssertStrict {
+    (value: unknown, message?: string): asserts value;
+    equal(actual: unknown, expected: unknown, message?: string): void;
+    ok(value: unknown, message?: string): asserts value;
+    throws(fn: () => unknown, expected?: RegExp | Error): void;
