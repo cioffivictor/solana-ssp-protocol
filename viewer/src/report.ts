@@ -55,3 +55,9 @@ export interface Report {
   policy: Policy;
   agents: AgentView[];
   verdicts: VerdictView[];
+}
+
+/**
+ * Validate an untyped parsed value as a QuorumForge report. Throws a
+ * descriptive error rather than returning a partially-typed object, so the CLI
+ * can fail loudly on malformed input.
