@@ -250,3 +250,17 @@ pub fn verdict_for(delib: &Deliberation, claim_id: &str, policy: &Policy) -> Ver
     Verdict {
         claim_id: claim_id.to_string(),
         normalized,
+        outcome,
+        affirmed,
+        support_mass,
+        contradiction_mass,
+        decisive_mass,
+        polarity,
+        dissent_ratio,
+        supporters,
+        dissenters,
+        abstentions,
+        citation_count,
+        majority_agents,
+        minority_agents,
+    }
