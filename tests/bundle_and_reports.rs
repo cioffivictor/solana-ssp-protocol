@@ -98,3 +98,10 @@ fn normalization_collapses_hedged_variants() {
     let n3 = &d.claims["n3"].normalized;
     assert_eq!(n1, n2);
     assert_eq!(n2, n3);
+    assert_eq!(n1, "the p99 latency is under 200ms");
+}
+
+#[test]
+fn normalize_text_expands_contractions() {
+    assert_eq!(normalize_text("It isn't broken."), "it is not broken");
+    assert_eq!(normalize_text("We can't ship."), "we cannot ship");
