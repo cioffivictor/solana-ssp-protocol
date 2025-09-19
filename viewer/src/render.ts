@@ -147,3 +147,22 @@ function wrap(text: string, width: number): string[] {
     }
   }
   if (current) lines.push(current);
+  return lines.length ? lines : [""];
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/**
+ * Render a report as a single self-contained HTML document. All styling is
+ * inline; there are no remote fonts, scripts, or images. The result can be
+ * opened directly in a browser or committed as an artifact.
+ */
+export function renderHtml(report: Report): string {
+  const s = report.summary;
+  const verdictCards = report.verdicts
