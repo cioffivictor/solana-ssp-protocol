@@ -264,3 +264,17 @@ pub fn verdict_for(delib: &Deliberation, claim_id: &str, policy: &Policy) -> Ver
         majority_agents,
         minority_agents,
     }
+}
+
+/// Apply the policy thresholds to classify one claim.
+fn classify(mass: f64, polarity: f64, dissent_ratio: f64, policy: &Policy) -> Outcome {
+    if mass <= policy.minimum_mass {
+        return Outcome::Unsupported;
+    }
+    let strong = polarity.abs() >= policy.consensus_threshold;
+    if strong && dissent_ratio < policy.dissent_ceiling {
+        Outcome::Consensus
+    } else if dissent_ratio >= policy.dissent_ceiling {
+        Outcome::Contested
+    } else {
+        Outcome::Split
