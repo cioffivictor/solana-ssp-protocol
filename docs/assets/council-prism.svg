@@ -70,3 +70,12 @@
     <circle r="3.5" fill="#ffd166"><animateMotion path="M345,177 L620,163" dur="2.6s" repeatCount="indefinite"/></circle>
     <circle r="3.5" fill="#ff5470"><animateMotion path="M345,183 L620,208" dur="2.9s" repeatCount="indefinite"/></circle>
     <circle r="3" fill="#7d8799"><animateMotion path="M345,189 L620,255" dur="3.3s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <g font-family="monospace" font-size="12" fill="#e8e6f5">
+    <text x="470" y="112">consensus</text>
+    <text x="500" y="158">split</text>
+    <text x="500" y="204">contested</text>
+    <text x="490" y="252" fill="#9d95c9">unsupported</text>
+  </g>
+</svg>
