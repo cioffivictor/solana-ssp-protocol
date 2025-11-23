@@ -166,3 +166,22 @@ function escapeHtml(text: string): string {
 export function renderHtml(report: Report): string {
   const s = report.summary;
   const verdictCards = report.verdicts
+    .map((v) => {
+      const meta = OUTCOME_META[v.outcome];
+      const hue =
+        v.outcome === "consensus"
+          ? 145
+          : v.outcome === "contested"
+            ? 5
+            : v.outcome === "split"
+              ? 45
+              : 220;
+      const dir =
+        v.outcome === "unsupported" ? "" : v.affirmed ? "affirmed" : "negated";
+      const dissent =
+        v.minority_agents.length > 0
+          ? `<div class="dissent">dissent: ${escapeHtml(
+              v.minority_agents.join(", "),
+            )}</div>`
+          : "";
+      return `      <article class="card" style="--hue:${hue}">
