@@ -150,3 +150,14 @@ async function main(): Promise<void> {
         width: opts.width,
       });
 
+  if (opts.output) {
+    writeFileSync(opts.output, rendered);
+  } else {
+    process.stdout.write(rendered);
+  }
+}
+
+main().catch((err) => {
+  process.stderr.write(`qf-view: ${(err as Error).message}\n`);
+  process.exit(1);
+});
