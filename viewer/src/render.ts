@@ -185,3 +185,22 @@ export function renderHtml(report: Report): string {
             )}</div>`
           : "";
       return `      <article class="card" style="--hue:${hue}">
+        <header><span class="pill">${meta.label}${dir ? " · " + dir : ""}</span>
+          <code>${escapeHtml(v.claim)}</code></header>
+        <p class="claim">${escapeHtml(v.text)}</p>
+        <div class="meter" title="polarity ${v.polarity.toFixed(2)}">
+          <span style="width:${((v.polarity + 1) / 2) * 100}%"></span>
+        </div>
+        <dl>
+          <div><dt>polarity</dt><dd>${v.polarity.toFixed(2)}</dd></div>
+          <div><dt>mass</dt><dd>${v.decisive_mass.toFixed(2)}</dd></div>
+          <div><dt>dissent</dt><dd>${(v.dissent_ratio * 100).toFixed(0)}%</dd></div>
+          <div><dt>cites</dt><dd>${v.citations}</dd></div>
+        </dl>${dissent}
+      </article>`;
+    })
+    .join("\n");
+
+  const roster = report.agents
+    .map(
+      (a) =>
