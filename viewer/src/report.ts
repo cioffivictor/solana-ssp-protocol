@@ -66,3 +66,8 @@ export function parseReport(value: unknown): Report {
   if (typeof value !== "object" || value === null) {
     throw new Error("report must be a JSON object");
   }
+  const obj = value as Record<string, unknown>;
+  if (obj.schema !== "quorumforge.report.v1") {
+    throw new Error(
+      `unexpected schema '${String(obj.schema)}', expected quorumforge.report.v1`,
+    );
