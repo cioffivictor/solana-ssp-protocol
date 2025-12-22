@@ -65,3 +65,8 @@ jobs:
       - name: Install viewer dependencies
         working-directory: viewer
         run: npm install --no-audit --no-fund
+
+      - name: Build the viewer
+        working-directory: viewer
+        run: npm run build
+
