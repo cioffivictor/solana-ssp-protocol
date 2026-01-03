@@ -204,3 +204,21 @@ export function renderHtml(report: Report): string {
   const roster = report.agents
     .map(
       (a) =>
+        `        <li><b>${escapeHtml(a.id)}</b> <span>${escapeHtml(
+          a.name,
+        )} · ${escapeHtml(a.role || "—")}</span>
+          <div class="bar"><span style="width:${Math.min(
+            100,
+            (a.influence / Math.max(1e-9, ...report.agents.map((x) => x.influence))) *
+              100,
+          )}%"></span></div>
+          <em>${a.influence.toFixed(2)}</em></li>`,
+    )
+    .join("\n");
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QuorumForge · ${escapeHtml(report.deliberation_id)}</title>
