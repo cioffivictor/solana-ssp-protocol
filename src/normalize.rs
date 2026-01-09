@@ -141,3 +141,16 @@ pub fn similarity(a: &str, b: &str) -> f64 {
     if sa.is_empty() && sb.is_empty() {
         return 1.0;
     }
+    let inter = sa.intersection(&sb).count() as f64;
+    let union = sa.union(&sb).count() as f64;
+    if union == 0.0 {
+        0.0
+    } else {
+        inter / union
+    }
+}
+
+/// Build a lookup of a claim id to its normalized form for a deliberation
+/// whose claims may not yet be normalized.
+pub fn normalized_index(delib: &Deliberation) -> BTreeMap<String, String> {
+    delib
