@@ -33,3 +33,6 @@ adjudication engine with a matching council viewer.
   build time), with an ANSI console renderer, a self-contained HTML renderer
   (no remote assets), report-schema validation, and an assertion-based test
   suite.
+- **Samples**: `cache-coherence.qf` (exercises all four outcomes),
+  `migration-strategy.json`, and `normalization.qf` (hedge/contraction folding).
+- **Docs**: `docs/EVIDENCE.md` normative format reference; a luminous
