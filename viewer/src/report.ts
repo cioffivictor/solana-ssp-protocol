@@ -71,3 +71,8 @@ export function parseReport(value: unknown): Report {
     throw new Error(
       `unexpected schema '${String(obj.schema)}', expected quorumforge.report.v1`,
     );
+  }
+  if (!Array.isArray(obj.verdicts)) {
+    throw new Error("report is missing a 'verdicts' array");
+  }
+  if (!Array.isArray(obj.agents)) {
