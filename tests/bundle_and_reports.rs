@@ -111,3 +111,10 @@ fn normalize_text_expands_contractions() {
 fn normalize_text_strips_leading_hedges() {
     assert_eq!(normalize_text("I think that X holds"), "x holds");
     assert_eq!(normalize_text("Arguably, X holds"), "x holds");
+    assert_eq!(normalize_text("Clearly X holds!"), "x holds");
+}
+
+#[test]
+fn normalize_text_keeps_boundary_words() {
+    // "likely" is a hedge, but "likelihood" must not be truncated.
+    assert_eq!(
