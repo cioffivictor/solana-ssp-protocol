@@ -154,3 +154,16 @@ pub fn similarity(a: &str, b: &str) -> f64 {
 /// whose claims may not yet be normalized.
 pub fn normalized_index(delib: &Deliberation) -> BTreeMap<String, String> {
     delib
+        .claims
+        .values()
+        .map(|c| {
+            let n = if c.normalized.is_empty() {
+                normalize_text(&c.text)
+            } else {
+                c.normalized.clone()
+            };
+            (c.id.clone(), n)
+        })
+        .collect()
+}
+
