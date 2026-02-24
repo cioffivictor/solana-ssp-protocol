@@ -70,3 +70,8 @@ jobs:
         working-directory: viewer
         run: npm run build
 
+      - name: Run the viewer test suite
+        working-directory: viewer
+        run: npm test
+
+      - name: Download the engine's JSON report
