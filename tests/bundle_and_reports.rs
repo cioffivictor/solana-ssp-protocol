@@ -118,3 +118,10 @@ fn normalize_text_strips_leading_hedges() {
 fn normalize_text_keeps_boundary_words() {
     // "likely" is a hedge, but "likelihood" must not be truncated.
     assert_eq!(
+        normalize_text("Likelihood ratios matter"),
+        "likelihood ratios matter"
+    );
+}
+
+#[test]
+fn clustering_groups_synonymous_claims() {
