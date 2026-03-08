@@ -125,3 +125,9 @@ fn normalize_text_keeps_boundary_words() {
 
 #[test]
 fn clustering_groups_synonymous_claims() {
+    let (d, _adj) = run("norm.qf", NORM);
+    let clusters = normalize::cluster_by_normalized(&d);
+    let group = clusters
+        .get("the p99 latency is under 200ms")
+        .expect("cluster exists");
+    assert_eq!(group.len(), 3);
