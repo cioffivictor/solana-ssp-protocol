@@ -433,3 +433,46 @@ fn write_value(out: &mut String, value: &Json, indent: Option<usize>, depth: usi
                 out.push(':');
                 if indent.is_some() {
                     out.push(' ');
+                }
+                write_value(out, val, indent, depth + 1);
+            }
+            newline_indent(out, indent, depth);
+            out.push('}');
+        }
+    }
+}
+
+fn newline_indent(out: &mut String, indent: Option<usize>, depth: usize) {
+    if let Some(width) = indent {
+        out.push('\n');
+        for _ in 0..(width * depth) {
+            out.push(' ');
+        }
+    }
+}
+
+fn write_string(out: &mut String, s: &str) {
+    out.push('"');
+    for ch in s.chars() {
+        match ch {
+            '"' => out.push_str("\\\""),
+            '\\' => out.push_str("\\\\"),
+            '\n' => out.push_str("\\n"),
+            '\t' => out.push_str("\\t"),
+            '\r' => out.push_str("\\r"),
+            '\u{0008}' => out.push_str("\\b"),
+            '\u{000C}' => out.push_str("\\f"),
+            c if (c as u32) < 0x20 => {
+                let _ = write!(out, "\\u{:04x}", c as u32);
+            }
+            c => out.push(c),
+        }
+    }
+    out.push('"');
+}
+
+/// Format a number so that the writer is **idempotent**: serialising a value,
+/// re-parsing it, and serialising again yields byte-identical output. This is
+/// what lets bundle digests survive a round trip through the parser.
+///
+/// The trick is to snap `n` to the same six-decimal grid the emitter uses
