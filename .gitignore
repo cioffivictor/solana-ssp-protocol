@@ -18,3 +18,5 @@ viewer/*.tsbuildinfo
 /council.html
 *.report.json
 
+# Editor / OS cruft
+.DS_Store
