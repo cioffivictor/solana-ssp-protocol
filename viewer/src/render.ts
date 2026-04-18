@@ -222,3 +222,22 @@ export function renderHtml(report: Report): string {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>QuorumForge · ${escapeHtml(report.deliberation_id)}</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 ui-monospace, "Cascadia Code", Menlo, monospace;
+    background: radial-gradient(1200px 800px at 20% -10%, #1a1442, #0a0716 60%);
+    color: #e8e6f5; padding: 2rem; }
+  h1 { font-size: 1.3rem; margin: 0 0 .2rem; letter-spacing: .04em; }
+  .q { color: #b6aee0; margin: 0 0 1.2rem; max-width: 60ch; }
+  .summary { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+  .summary span { padding: .3rem .7rem; border-radius: .5rem; background: #ffffff10; }
+  .cohesion { height: .5rem; background: #ffffff18; border-radius: 1rem; overflow: hidden; max-width: 420px; }
+  .cohesion > span { display: block; height: 100%; background: linear-gradient(90deg,#7c5cff,#25d0c0); }
+  .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .card { border: 1px solid hsl(var(--hue) 60% 45% / .5); border-radius: .8rem;
+    padding: 1rem; background: hsl(var(--hue) 50% 20% / .35); }
+  .card header { display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
+  .pill { font-size: .7rem; letter-spacing: .08em; padding: .15rem .5rem; border-radius: 1rem;
+    background: hsl(var(--hue) 70% 50% / .3); }
+  .card code { color: #cdbbff; }
