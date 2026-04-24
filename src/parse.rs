@@ -302,3 +302,31 @@ pub fn parse_json(contents: &str) -> Result<Deliberation, ParseError> {
                 agent_id,
                 claim_id,
                 stance,
+                confidence,
+                citations,
+                note,
+            });
+        }
+    }
+
+    validate(&delib)?;
+    Ok(delib)
+}
+
+fn str_field(value: &Json, key: &str) -> Option<String> {
+    value.get(key).and_then(Json::as_str).map(|s| s.to_string())
+}
+
+fn field_err(field: &str) -> ParseError {
+    ParseError {
+        line: 0,
+        message: format!("missing required field '{}'", field),
+    }
+}
+
+/// Post-parse structural validation: every position must reference known agents
+/// and claims. This catches typos before they silently drop votes.
+pub fn validate(delib: &Deliberation) -> Result<(), ParseError> {
+    for pos in &delib.positions {
+        if !delib.agents.contains_key(&pos.agent_id) {
+            return Err(ParseError {
