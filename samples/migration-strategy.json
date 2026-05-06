@@ -35,3 +35,6 @@
       "note": "Infra and on-call costs rise before any savings appear.",
       "citations": [ { "source": "model:tco-projection", "locator": "break-even at quarter 7, not 4" } ] },
     { "agent": "sol",   "claim": "m3", "stance": "contradict", "confidence": 0.6, "note": "Dual-run period is expensive." },
+    { "agent": "pearl", "claim": "m3", "stance": "support",    "confidence": 0.4, "note": "Optimistic on velocity gains." },
+
+    { "agent": "sol",   "claim": "m4", "stance": "support", "confidence": 0.85, "note": "Independent pipelines unblock parallel releases." },
