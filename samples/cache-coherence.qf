@@ -48,3 +48,5 @@ pos  | dice | c2 | contradict | 0.65 | saw a matching anomaly in staging once
 pos  | ada  | c3 | support    | 0.55 | recovery log replay is deterministic
 pos  | dice | c3 | support    | 0.60 | crash drills mostly recovered cleanly
 pos  | boro | c3 | contradict | 0.40 | one drill left an orphaned dirty page
+
+# --- Positions: c4 (expect split / performance leaning) --------------------
