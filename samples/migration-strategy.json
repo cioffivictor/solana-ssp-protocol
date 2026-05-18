@@ -38,3 +38,6 @@
     { "agent": "pearl", "claim": "m3", "stance": "support",    "confidence": 0.4, "note": "Optimistic on velocity gains." },
 
     { "agent": "sol",   "claim": "m4", "stance": "support", "confidence": 0.85, "note": "Independent pipelines unblock parallel releases." },
+    { "agent": "pearl", "claim": "m4", "stance": "support", "confidence": 0.8,  "note": "Contract tests replace lockstep deploys." },
+    { "agent": "rune",  "claim": "m4", "stance": "support", "confidence": 0.75, "note": "Rollbacks become per-service." },
+    { "agent": "twyla", "claim": "m4", "stance": "support", "confidence": 0.6,  "note": "Fewer merge trains." },
