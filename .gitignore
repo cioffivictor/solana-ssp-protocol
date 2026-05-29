@@ -20,3 +20,5 @@ viewer/*.tsbuildinfo
 
 # Editor / OS cruft
 .DS_Store
+Thumbs.db
+.idea/
