@@ -39,3 +39,6 @@ adjudication engine with a matching council viewer.
   prism-themed `README.md`; two original animated SVGs
   (`council-prism.svg`, `dissent-map.svg`).
 - **Tooling**: `Cargo.toml`, `Makefile`, `.gitignore`, MIT `LICENSE`, and a
+  GitHub Actions CI workflow that builds and tests both languages.
+
+### Notes
