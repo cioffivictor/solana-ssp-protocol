@@ -197,3 +197,16 @@ fn policy_thresholds_change_classification() {
             pos("b", "c1", Stance::Contradict, 1.0),
         ],
     );
+    // Default: 70/30 is a Split. Lower the consensus bar and raise dissent
+    // tolerance so the same votes read as Consensus.
+    let lenient = Policy {
+        consensus_threshold: 0.3,
+        dissent_ceiling: 0.5,
+        minimum_mass: 0.0,
+    };
+    let v = verdict_for(&d, "c1", &lenient);
+    assert_eq!(v.outcome, Outcome::Consensus);
+}
+
+#[test]
+fn tally_counts_every_outcome_once() {
