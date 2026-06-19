@@ -76,3 +76,9 @@ export function parseReport(value: unknown): Report {
     throw new Error("report is missing a 'verdicts' array");
   }
   if (!Array.isArray(obj.agents)) {
+    throw new Error("report is missing an 'agents' array");
+  }
+  // The shape is trusted beyond the top-level guards; the Rust emitter is the
+  // single source of truth for field presence.
+  return obj as unknown as Report;
+}
