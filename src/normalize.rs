@@ -167,3 +167,16 @@ pub fn normalized_index(delib: &Deliberation) -> BTreeMap<String, String> {
         .collect()
 }
 
+/// Convenience: apply normalization and return the fresh claim list, leaving
+/// the caller's ownership intact where a full mutation is not desired.
+pub fn normalized_claims(delib: &Deliberation) -> Vec<Claim> {
+    delib
+        .claims
+        .values()
+        .map(|c| {
+            let mut c = c.clone();
+            c.normalized = normalize_text(&c.text);
+            c
+        })
+        .collect()
+}
