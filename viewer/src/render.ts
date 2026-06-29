@@ -241,3 +241,22 @@ export function renderHtml(report: Report): string {
   .pill { font-size: .7rem; letter-spacing: .08em; padding: .15rem .5rem; border-radius: 1rem;
     background: hsl(var(--hue) 70% 50% / .3); }
   .card code { color: #cdbbff; }
+  .claim { margin: .6rem 0; }
+  .meter { height: .4rem; background: #ffffff14; border-radius: 1rem; overflow: hidden; }
+  .meter > span { display: block; height: 100%; background: linear-gradient(90deg,#ff5470,#25d0c0); }
+  dl { display: flex; gap: 1rem; margin: .6rem 0 0; flex-wrap: wrap; }
+  dl div { text-align: center; } dt { font-size: .65rem; color: #9d95c9; } dd { margin: 0; }
+  .dissent { margin-top: .5rem; color: #ff8fa3; font-size: .85rem; }
+  .roster { list-style: none; padding: 0; margin: 1.5rem 0 0; }
+  .roster li { display: grid; grid-template-columns: 8ch 1fr 10rem 4rem; gap: .6rem; align-items: center; }
+  .roster .bar { height: .5rem; background: #ffffff14; border-radius: 1rem; overflow: hidden; }
+  .roster .bar > span { display: block; height: 100%; background: linear-gradient(90deg,#7c5cff,#25d0c0); }
+  .roster em { text-align: right; color: #b6aee0; } .roster span { color: #9d95c9; }
+  h2 { font-size: .95rem; letter-spacing: .08em; color: #cdbbff; margin-top: 2rem; }
+</style>
+</head>
+<body>
+  <h1>QUORUMFORGE · ${escapeHtml(report.deliberation_id)}</h1>
+  <p class="q">${escapeHtml(report.question)}</p>
+  <div class="summary">
+    <span>claims ${s.total_claims}</span>
