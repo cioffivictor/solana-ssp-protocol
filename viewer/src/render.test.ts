@@ -123,3 +123,13 @@ test("console output lists dissenting agents", () => {
 });
 
 test("no-color output has no ANSI escape codes", () => {
+  const out = renderConsole(SAMPLE, { noColor: true });
+  // eslint-disable-next-line no-control-regex
+  assert.ok(!/\x1b\[/.test(out), "should contain no escape sequences");
+});
+
+test("colored output does contain ANSI codes", () => {
+  const out = renderConsole(SAMPLE, { noColor: false });
+  // eslint-disable-next-line no-control-regex
+  assert.ok(/\x1b\[/.test(out), "should contain escape sequences");
+});
