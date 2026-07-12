@@ -179,3 +179,20 @@ Before adjudication, every claim's text is reduced to a canonical
 3. removes a single leading hedge (`I think`, `arguably`, `clearly`, …) when it
    forms a whole leading word;
 4. expands a fixed set of contractions (`isn't` → `is not`, `can't` → `cannot`,
+   …) so negated variants align.
+
+Normalization is intentionally shallow and deterministic. It does **not**
+perform semantic paraphrase detection; see [Limitations](../README.md#limitations).
+
+---
+
+## 6. Scoring reference
+
+For each claim, every non-abstaining position casts a signed vote:
+
+```text
+vote = sign(stance) * agent_weight * confidence
+```
+
+where `sign(support) = +1` and `sign(contradict) = -1`. Let `S` be the sum of
+support votes and `C` the sum of contradiction vote magnitudes. Then:
