@@ -133,3 +133,12 @@ test("colored output does contain ANSI codes", () => {
   // eslint-disable-next-line no-control-regex
   assert.ok(/\x1b\[/.test(out), "should contain escape sequences");
 });
+
+test("console output shows the roster with both agents", () => {
+  const out = renderConsole(SAMPLE, { noColor: true });
+  assert.ok(out.includes("Ada"));
+  assert.ok(out.includes("Bo"));
+});
+
+test("html output is a self-contained document", () => {
+  const html = renderHtml(SAMPLE);
