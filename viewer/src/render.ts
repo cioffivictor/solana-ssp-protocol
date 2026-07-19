@@ -260,3 +260,22 @@ export function renderHtml(report: Report): string {
   <p class="q">${escapeHtml(report.question)}</p>
   <div class="summary">
     <span>claims ${s.total_claims}</span>
+    <span>consensus ${s.consensus}</span>
+    <span>contested ${s.contested}</span>
+    <span>split ${s.split}</span>
+    <span>unsupported ${s.unsupported}</span>
+  </div>
+  <div class="cohesion"><span style="width:${(s.cohesion * 100).toFixed(1)}%"></span></div>
+  <p class="q">council cohesion ${(s.cohesion * 100).toFixed(1)}%</p>
+  <h2>VERDICTS</h2>
+  <div class="grid">
+${verdictCards}
+  </div>
+  <h2>COUNCIL ROSTER</h2>
+  <ul class="roster">
+${roster}
+  </ul>
+</body>
+</html>
+`;
+}
