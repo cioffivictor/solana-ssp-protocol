@@ -41,3 +41,7 @@
     { "agent": "pearl", "claim": "m4", "stance": "support", "confidence": 0.8,  "note": "Contract tests replace lockstep deploys." },
     { "agent": "rune",  "claim": "m4", "stance": "support", "confidence": 0.75, "note": "Rollbacks become per-service." },
     { "agent": "twyla", "claim": "m4", "stance": "support", "confidence": 0.6,  "note": "Fewer merge trains." },
+
+    { "agent": "vex",   "claim": "m5", "stance": "support",    "confidence": 0.7, "note": "Explicit service identities and mTLS.",
+      "citations": [ { "source": "policy:zero-trust", "locator": "section 4: per-service identity" } ] },
+    { "agent": "rune",  "claim": "m5", "stance": "support",    "confidence": 0.5, "note": "Smaller trust zones." },
