@@ -168,3 +168,16 @@ fn round6(x: f64) -> f64 {
 /// Serialise a bundle to canonical pretty JSON, including the digest field.
 pub fn to_json(bundle: &Bundle) -> String {
     let body = canonical_body(&bundle.deliberation, &bundle.adjudication);
+    // Re-wrap with the digest as the first field so it is easy to spot.
+    let mut entries = vec![("digest".to_string(), json::s(&bundle.digest))];
+    if let Json::Obj(inner) = body {
+        entries.extend(inner);
+    }
+    json::to_string_pretty(&Json::Obj(entries))
+}
+
+/// Verify a bundle's digest matches its body. Returns `true` when intact.
+pub fn verify(bundle: &Bundle) -> bool {
+    let body = canonical_body(&bundle.deliberation, &bundle.adjudication);
+    let text = json::to_string(&body);
+    fnv1a_hex(text.as_bytes()) == bundle.digest
