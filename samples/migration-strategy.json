@@ -45,3 +45,6 @@
     { "agent": "vex",   "claim": "m5", "stance": "support",    "confidence": 0.7, "note": "Explicit service identities and mTLS.",
       "citations": [ { "source": "policy:zero-trust", "locator": "section 4: per-service identity" } ] },
     { "agent": "rune",  "claim": "m5", "stance": "support",    "confidence": 0.5, "note": "Smaller trust zones." },
+    { "agent": "sol",   "claim": "m5", "stance": "contradict", "confidence": 0.55, "note": "More network surface to secure." },
+    { "agent": "pearl", "claim": "m5", "stance": "contradict", "confidence": 0.45, "note": "Token sprawl is a new risk." },
+
