@@ -53,3 +53,7 @@
     <circle r="3" fill="#25d0c0"><animateMotion path="M500,180 L320,180" dur="2.1s" repeatCount="indefinite"/></circle>
     <circle r="3" fill="#ff5470"><animateMotion path="M170,70 L320,180" dur="2.4s" repeatCount="indefinite"/></circle>
     <circle r="3" fill="#ff5470"><animateMotion path="M140,200 L320,180" dur="2.7s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <!-- central claim orb, tilting by net polarity -->
+  <g filter="url(#soft)">
