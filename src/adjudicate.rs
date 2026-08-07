@@ -278,3 +278,17 @@ fn classify(mass: f64, polarity: f64, dissent_ratio: f64, policy: &Policy) -> Ou
         Outcome::Contested
     } else {
         Outcome::Split
+    }
+}
+
+/// Adjudicate a whole deliberation.
+pub fn adjudicate(delib: &Deliberation, policy: &Policy) -> Adjudication {
+    let mut verdicts = BTreeMap::new();
+    let mut tally = Tally::default();
+    let mut weighted_cohesion_num = 0.0f64;
+    let mut weighted_cohesion_den = 0.0f64;
+
+    for claim_id in delib.claims.keys() {
+        let verdict = verdict_for(delib, claim_id, policy);
+        match verdict.outcome {
+            Outcome::Consensus => tally.consensus += 1,
