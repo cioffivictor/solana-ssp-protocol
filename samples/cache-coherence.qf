@@ -53,3 +53,5 @@ pos  | boro | c3 | contradict | 0.40 | one drill left an orphaned dirty page
 pos  | boro | c4 | contradict | 0.85 | measured 8% coherence traffic at peak
 cite | boro | c4 | bench:peak-load-2024 | mean 8.1%, p99 12%
 pos  | dice | c4 | support    | 0.45 | typical load stayed under 5%
+pos  | ada  | c4 | abstain    | 0.50 | depends heavily on workload shape
+
