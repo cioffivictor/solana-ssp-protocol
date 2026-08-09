@@ -476,3 +476,47 @@ fn write_string(out: &mut String, s: &str) {
 /// what lets bundle digests survive a round trip through the parser.
 ///
 /// The trick is to snap `n` to the same six-decimal grid the emitter uses
+/// *before* deciding whether it is integral. Without this, a value like `1e-9`
+/// would print as `0.0` on the way out but re-parse to `0.0` and print as `0`,
+/// silently changing the digest.
+fn format_number(n: f64) -> String {
+    if !n.is_finite() {
+        // JSON has no representation for NaN/Infinity; emit null defensively.
+        return "null".to_string();
+    }
+    // Snap to six decimals so formatting is stable and idempotent.
+    let snapped = (n * 1_000_000.0).round() / 1_000_000.0;
+    if snapped.fract() == 0.0 && snapped.abs() < 1e15 {
+        format!("{}", snapped as i64)
+    } else {
+        let mut s = format!("{:.6}", snapped);
+        while s.ends_with('0') {
+            s.pop();
+        }
+        if s.ends_with('.') {
+            s.push('0');
+        }
+        s
+    }
+}
+
+/// Convenience constructor: build an object from ordered pairs.
+pub fn obj(pairs: Vec<(&str, Json)>) -> Json {
+    Json::Obj(pairs.into_iter().map(|(k, v)| (k.to_string(), v)).collect())
+}
+
+/// Convenience: build a string value.
+pub fn s(value: impl Into<String>) -> Json {
+    Json::Str(value.into())
+}
+
+/// Convenience: build a number value.
+pub fn num(value: f64) -> Json {
+    Json::Num(value)
+}
+
+/// Collect a sorted map into a JSON object (used where key order should follow
+/// natural sorting rather than insertion).
+pub fn obj_from_sorted(map: &BTreeMap<String, Json>) -> Json {
+    Json::Obj(map.iter().map(|(k, v)| (k.clone(), v.clone())).collect())
+}
