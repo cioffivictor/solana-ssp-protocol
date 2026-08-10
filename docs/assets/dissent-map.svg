@@ -61,3 +61,7 @@
       <animateTransform attributeName="transform" type="rotate" values="-6 320 180; 6 320 180; -6 320 180" dur="5s" repeatCount="indefinite"/>
       <circle cx="320" cy="180" r="34" fill="url(#orb)"/>
       <text x="320" y="185" text-anchor="middle" fill="#0b0616" font-family="monospace" font-size="13" font-weight="bold">claim</text>
+    </g>
+    <circle cx="320" cy="180" r="34" fill="none" stroke="#ffffff" stroke-opacity="0.4">
+      <animate attributeName="r" values="30;40;30" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="0.5;0;0.5" dur="3s" repeatCount="indefinite"/>
