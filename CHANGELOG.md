@@ -42,3 +42,6 @@ adjudication engine with a matching council viewer.
   GitHub Actions CI workflow that builds and tests both languages.
 
 ### Notes
+
+- The engine performs no network access and carries no runtime dependencies.
+- Verdicts are fully deterministic: identical inputs yield identical report
