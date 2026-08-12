@@ -53,3 +53,7 @@ pub use adjudicate::{adjudicate, Adjudication, Outcome, Policy, Verdict};
 pub use bundle::{build as build_bundle, Bundle};
 pub use model::{Agent, Citation, Claim, Deliberation, Position, Stance};
 
+/// The full end-to-end run: parse, normalize, and adjudicate a source string
+/// whose format is inferred from `path`. Returns the deliberation together with
+/// its adjudication so callers can render whichever report they need.
+pub fn run(
