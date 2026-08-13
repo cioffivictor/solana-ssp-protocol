@@ -366,3 +366,24 @@ QuorumForge is intentionally narrow. Know the edges before you rely on it.
   Do not use it as a cryptographic seal.
 
 ---
+
+## A note on the two encodings
+
+The line-oriented `.qf` format is built for humans and version control: comments,
+one record per line, and clean diffs. The JSON format is built for machines that
+generate deliberations programmatically. They are information-equivalent and
+converge on the same model — pick whichever fits the hand that writes it. The
+full grammar and schema live in [`docs/EVIDENCE.md`](docs/EVIDENCE.md).
+
+---
+
+## License & history
+
+Released under the [MIT License](LICENSE). See [`CHANGELOG.md`](CHANGELOG.md) for
+the release history.
+
+<div align="center">
+
+*Bring the argument. QuorumForge brings the light.*
+
+</div>
