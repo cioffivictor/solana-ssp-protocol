@@ -131,3 +131,10 @@ fn clustering_groups_synonymous_claims() {
         .get("the p99 latency is under 200ms")
         .expect("cluster exists");
     assert_eq!(group.len(), 3);
+    assert_eq!(
+        group,
+        &vec!["n1".to_string(), "n2".to_string(), "n3".to_string()]
+    );
+}
+
+#[test]
