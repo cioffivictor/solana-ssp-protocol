@@ -210,3 +210,16 @@ fn policy_thresholds_change_classification() {
 
 #[test]
 fn tally_counts_every_outcome_once() {
+    let d = build(
+        vec![agent("a", 1.0), agent("b", 1.0)],
+        vec![claim("con"), claim("cont"), claim("unsup")],
+        vec![
+            pos("a", "con", Stance::Support, 1.0),
+            pos("b", "con", Stance::Support, 1.0),
+            pos("a", "cont", Stance::Support, 1.0),
+            pos("b", "cont", Stance::Contradict, 1.0),
+            pos("a", "unsup", Stance::Abstain, 0.5),
+        ],
+    );
+    let adj = adjudicate(&d, &Policy::default());
+    assert_eq!(adj.tally.consensus, 1);
