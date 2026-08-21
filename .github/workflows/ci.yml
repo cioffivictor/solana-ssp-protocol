@@ -80,3 +80,9 @@ jobs:
           name: report-json
           path: viewer
 
+      - name: Render the report end-to-end (console + HTML)
+        working-directory: viewer
+        run: |
+          node dist/cli.js --no-color report.json
+          node dist/cli.js --html report.json -o council.html
+          test -s council.html && echo "HTML rendered ($(wc -c < council.html) bytes)"
