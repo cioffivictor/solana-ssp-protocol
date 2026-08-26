@@ -254,3 +254,19 @@ fn verdict_report_json(delib: &Deliberation, v: &Verdict) -> Json {
         ("citations", json::num(v.citation_count as f64)),
         (
             "majority_agents",
+            Json::Arr(v.majority_agents.iter().map(json::s).collect()),
+        ),
+        (
+            "minority_agents",
+            Json::Arr(v.minority_agents.iter().map(json::s).collect()),
+        ),
+    ])
+}
+
+fn round6(x: f64) -> f64 {
+    if x.is_finite() {
+        (x * 1_000_000.0).round() / 1_000_000.0
+    } else {
+        0.0
+    }
+}
