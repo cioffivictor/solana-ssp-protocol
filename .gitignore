@@ -22,3 +22,5 @@ viewer/*.tsbuildinfo
 .DS_Store
 Thumbs.db
 .idea/
+.vscode/
+*.swp
