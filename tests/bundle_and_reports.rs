@@ -138,3 +138,10 @@ fn clustering_groups_synonymous_claims() {
 }
 
 #[test]
+fn similarity_is_jaccard_over_tokens() {
+    assert!((similarity("a b c", "a b c") - 1.0).abs() < 1e-9);
+    assert!((similarity("a b", "c d") - 0.0).abs() < 1e-9);
+    // {a,b,c} vs {a,b} -> intersection 2, union 3.
+    assert!((similarity("a b c", "a b") - 2.0 / 3.0).abs() < 1e-9);
+}
+
