@@ -23,3 +23,5 @@ cite| q1 | n1 | bench:staging-run-9 | p99 = 181ms
 pos | q2 | n2 | support    | 0.9 | reproduced on the perf rig
 pos | q3 | n3 | contradict | 0.4 | one region saw 240ms
 
+pos | q2 | n4 | support    | 0.85 | zero drops across a 1M-request soak
+pos | q1 | n4 | support    | 0.6  | no drops in the smoke suite
