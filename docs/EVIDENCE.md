@@ -196,3 +196,20 @@ vote = sign(stance) * agent_weight * confidence
 
 where `sign(support) = +1` and `sign(contradict) = -1`. Let `S` be the sum of
 support votes and `C` the sum of contradiction vote magnitudes. Then:
+
+```text
+decisive_mass = S + C
+polarity      = (S - C) / decisive_mass          # in [-1, 1]
+dissent_ratio = min(S, C) / decisive_mass         # in [0, 0.5]
+```
+
+The classifier applies a [`Policy`](../README.md#tuning-the-policy):
+
+- `unsupported` when `decisive_mass <= minimum_mass`;
+- `consensus` when `|polarity| >= consensus_threshold` **and**
+  `dissent_ratio < dissent_ceiling`;
+- `contested` when `dissent_ratio >= dissent_ceiling`;
+- `split` otherwise.
+
+A `consensus` or `split` is `affirmed` when `polarity >= 0`, otherwise
+`negated`.
