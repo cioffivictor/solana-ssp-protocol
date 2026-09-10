@@ -1,4 +1,4 @@
-//! The QuorumForge data model.
+//! The SSP data model.
 //!
 //! A *deliberation* is the top-level unit: a bounded question submitted to a
 //! council of agents. Each [`Agent`] carries a credibility weight. Each
