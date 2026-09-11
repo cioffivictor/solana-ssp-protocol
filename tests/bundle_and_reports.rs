@@ -145,3 +145,10 @@ fn similarity_is_jaccard_over_tokens() {
     assert!((similarity("a b c", "a b") - 2.0 / 3.0).abs() < 1e-9);
 }
 
+#[test]
+fn end_to_end_run_matches_direct_pipeline() {
+    let (_d, adj_direct) = run("cache.qf", CACHE);
+    let (_d2, adj_lib) = quorumforge::run("cache.qf", CACHE, &Policy::default()).unwrap();
+    assert_eq!(adj_direct.verdicts, adj_lib.verdicts);
+    assert_eq!(adj_direct.cohesion, adj_lib.cohesion);
+}
