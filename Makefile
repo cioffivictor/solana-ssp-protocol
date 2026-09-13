@@ -68,3 +68,8 @@ bundle: build-rust
 .PHONY: fmt
 fmt:
 	$(CARGO) fmt
+
+.PHONY: clean
+clean:
+	$(CARGO) clean
+	rm -rf viewer/node_modules viewer/dist bundle.json council.html
