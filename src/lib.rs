@@ -62,3 +62,8 @@ pub fn run(
     policy: &Policy,
 ) -> Result<(Deliberation, Adjudication), Box<dyn std::error::Error>> {
     policy.validate()?;
+    let mut delib = parse::parse_auto(path, contents)?;
+    normalize::normalize_deliberation(&mut delib);
+    let adj = adjudicate::adjudicate(&delib, policy);
+    Ok((delib, adj))
+}
