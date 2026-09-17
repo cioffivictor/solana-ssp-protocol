@@ -223,3 +223,17 @@ fn tally_counts_every_outcome_once() {
     );
     let adj = adjudicate(&d, &Policy::default());
     assert_eq!(adj.tally.consensus, 1);
+    assert_eq!(adj.tally.contested, 1);
+    assert_eq!(adj.tally.unsupported, 1);
+    assert_eq!(adj.tally.total(), 3);
+}
+
+#[test]
+fn policy_validation_rejects_out_of_range() {
+    let bad = Policy {
+        consensus_threshold: 1.5,
+        ..Policy::default()
+    };
+    assert!(bad.validate().is_err());
+    assert!(Policy::default().validate().is_ok());
+}
