@@ -145,3 +145,19 @@ fn json_preserves_object_key_order() {
     let src = r#"{"zebra":1,"apple":2,"mango":3}"#;
     let parsed = json::parse(src).unwrap();
     let out = json::to_string(&parsed);
+    assert_eq!(out, src, "insertion order is preserved for determinism");
+}
+
+#[test]
+fn json_handles_unicode_escapes() {
+    let src = r#""caf\u00e9 \ud83d\ude00""#;
+    let parsed = json::parse(src).unwrap();
+    assert_eq!(parsed.as_str().unwrap(), "café 😀");
+}
+
+#[test]
+fn json_rejects_trailing_garbage() {
+    assert!(json::parse("{} oops").is_err());
+    assert!(json::parse("[1,2,").is_err());
+}
+
