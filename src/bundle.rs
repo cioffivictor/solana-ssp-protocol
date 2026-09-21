@@ -181,3 +181,17 @@ pub fn verify(bundle: &Bundle) -> bool {
     let body = canonical_body(&bundle.deliberation, &bundle.adjudication);
     let text = json::to_string(&body);
     fnv1a_hex(text.as_bytes()) == bundle.digest
+}
+
+/// FNV-1a 64-bit hash rendered as 16 lowercase hex digits. Small, fast, and
+/// entirely sufficient for a content-drift fingerprint (not a security hash).
+pub fn fnv1a_hex(bytes: &[u8]) -> String {
+    const OFFSET: u64 = 0xcbf29ce484222325;
+    const PRIME: u64 = 0x100000001b3;
+    let mut hash = OFFSET;
+    for &b in bytes {
+        hash ^= b as u64;
+        hash = hash.wrapping_mul(PRIME);
+    }
+    format!("{:016x}", hash)
+}
