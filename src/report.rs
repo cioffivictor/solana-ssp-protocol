@@ -25,7 +25,7 @@ pub fn render_text(delib: &Deliberation, adj: &Adjudication) -> String {
     out.push_str(&bar);
     out.push('\n');
     out.push_str(&format!(
-        "QUORUMFORGE VERDICT  ::  {}\n",
+        "SSP RISK REPORT  ::  {}\n",
         adj.deliberation_id
     ));
     out.push_str(&format!(
@@ -37,7 +37,7 @@ pub fn render_text(delib: &Deliberation, adj: &Adjudication) -> String {
 
     // Headline tally.
     out.push_str(&format!(
-        "Claims: {}   Consensus: {}   Contested: {}   Split: {}   Unsupported: {}\n",
+        "Assertions: {}   Expand: {}   Hedge: {}   Watch: {}   Backstop: {}\n",
         adj.tally.total(),
         adj.tally.consensus,
         adj.tally.contested,
@@ -45,7 +45,7 @@ pub fn render_text(delib: &Deliberation, adj: &Adjudication) -> String {
         adj.tally.unsupported,
     ));
     out.push_str(&format!(
-        "Council cohesion: {:.1}%   Policy: consensus>={:.2}, dissent<{:.2}\n",
+        "Stability index: {:.1}%   Policy: expand>={:.2}, stress<{:.2}\n",
         adj.cohesion * 100.0,
         adj.policy.consensus_threshold,
         adj.policy.dissent_ceiling,
@@ -78,7 +78,7 @@ pub fn render_text(delib: &Deliberation, adj: &Adjudication) -> String {
             format!("topic={}  ", topic)
         };
         out.push_str(&format!(
-            "     {:<11} {}polarity={:+.2}  mass={:.2}  dissent={:.0}%  cites={}\n",
+            "     {:<11} {}polarity={:+.2}  depth={:.2}  stress={:.0}%  cites={}\n",
             format!("{}/{}", verdict.outcome.as_token(), direction),
             topic_label,
             verdict.polarity,
@@ -193,7 +193,7 @@ pub fn render_json(delib: &Deliberation, adj: &Adjudication) -> String {
     };
 
     let report = json::obj(vec![
-        ("schema", json::s("quorumforge.report.v1")),
+        ("schema", json::s("ssp.report.v1")),
         ("deliberation_id", json::s(&adj.deliberation_id)),
         ("question", json::s(&adj.question)),
         (
