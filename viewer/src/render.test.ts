@@ -142,3 +142,13 @@ test("console output shows the roster with both agents", () => {
 
 test("html output is a self-contained document", () => {
   const html = renderHtml(SAMPLE);
+  assert.ok(html.startsWith("<!DOCTYPE html>"));
+  assert.ok(html.includes("<style>"), "styles are inlined");
+  assert.ok(!/https?:\/\//.test(html), "no remote resources referenced");
+  assert.ok(html.includes("The sky scatters blue light."));
+});
+
+test("html escapes angle brackets in claim text", () => {
+  const injected: Report = JSON.parse(JSON.stringify(SAMPLE));
+  injected.verdicts[0].text = "1 < 2 && 3 > 2";
+  const html = renderHtml(injected);
