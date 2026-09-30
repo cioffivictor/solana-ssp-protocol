@@ -1,15 +1,15 @@
 //! Tests for deterministic bundles, normalization, and end-to-end runs against
 //! the checked-in sample deliberations.
 
-use quorumforge::adjudicate::{adjudicate, Outcome, Policy};
-use quorumforge::normalize::{normalize_text, similarity};
-use quorumforge::{bundle, normalize, parse};
+use ssp::adjudicate::{adjudicate, Outcome, Policy};
+use ssp::normalize::{normalize_text, similarity};
+use ssp::{bundle, normalize, parse};
 
 const CACHE: &str = include_str!("../samples/cache-coherence.qf");
 const MIGRATION: &str = include_str!("../samples/migration-strategy.json");
 const NORM: &str = include_str!("../samples/normalization.qf");
 
-fn run(path: &str, src: &str) -> (quorumforge::Deliberation, quorumforge::Adjudication) {
+fn run(path: &str, src: &str) -> (ssp::Deliberation, ssp::Adjudication) {
     let mut d = parse::parse_auto(path, src).unwrap();
     normalize::normalize_deliberation(&mut d);
     let adj = adjudicate(&d, &Policy::default());
@@ -34,16 +34,16 @@ fn bundle_digest_survives_reparse() {
     // Serialise, strip the digest field the way the CLI's `verify` does, and
     // recompute. This guards the idempotent-number invariant end to end.
     let out = bundle::to_json(&b);
-    let root = quorumforge::json::parse(&out).unwrap();
+    let root = ssp::json::parse(&out).unwrap();
     let entries = root.as_object().unwrap();
     let stored = root.get("digest").unwrap().as_str().unwrap();
-    let body: Vec<(String, quorumforge::json::Json)> = entries
+    let body: Vec<(String, ssp::json::Json)> = entries
         .iter()
         .filter(|(k, _)| k != "digest")
         .cloned()
         .collect();
     let recomputed = bundle::fnv1a_hex(
-        quorumforge::json::to_string(&quorumforge::json::Json::Obj(body)).as_bytes(),
+        ssp::json::to_string(&ssp::json::Json::Obj(body)).as_bytes(),
     );
     assert_eq!(recomputed, stored);
 }
@@ -148,7 +148,7 @@ fn similarity_is_jaccard_over_tokens() {
 #[test]
 fn end_to_end_run_matches_direct_pipeline() {
     let (_d, adj_direct) = run("cache.qf", CACHE);
-    let (_d2, adj_lib) = quorumforge::run("cache.qf", CACHE, &Policy::default()).unwrap();
+    let (_d2, adj_lib) = ssp::run("cache.qf", CACHE, &Policy::default()).unwrap();
     assert_eq!(adj_direct.verdicts, adj_lib.verdicts);
     assert_eq!(adj_direct.cohesion, adj_lib.cohesion);
 }

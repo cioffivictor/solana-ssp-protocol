@@ -1,12 +1,12 @@
-//! # QuorumForge
+//! # SSP
 //!
-//! QuorumForge is a **multi-agent evidence adjudication engine**. It ingests a
+//! SSP is a **multi-agent evidence adjudication engine**. It ingests a
 //! recorded deliberation — a council of weighted agents taking positions on a
 //! set of claims, with citations and confidences — and turns it into a
 //! deterministic verdict: which claims reached consensus, which are contested,
 //! which merely lean one way, and which lack the evidence to conclude anything.
 //!
-//! It is *not* an agent orchestrator. QuorumForge does not run agents, call
+//! It is *not* an agent orchestrator. SSP does not run agents, call
 //! models, or manage prompts. It operates purely on the *record* of a
 //! deliberation after the fact, which is what makes its judgements auditable
 //! and reproducible.
@@ -24,7 +24,7 @@
 //! ## Example
 //!
 //! ```
-//! use quorumforge::{parse, normalize, adjudicate};
+//! use ssp::{parse, normalize, adjudicate};
 //!
 //! let src = "\
 //! delib | d1 | Is the cache coherent under concurrent writes?
@@ -42,6 +42,7 @@
 //! ```
 
 pub mod adjudicate;
+pub mod amm;
 pub mod bundle;
 pub mod json;
 pub mod model;

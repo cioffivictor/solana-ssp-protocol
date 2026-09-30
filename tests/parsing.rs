@@ -1,8 +1,8 @@
 //! Tests for the line-oriented and JSON parsers and the JSON codec.
 
-use quorumforge::json::{self, Json};
-use quorumforge::model::Stance;
-use quorumforge::parse;
+use ssp::json::{self, Json};
+use ssp::model::Stance;
+use ssp::parse;
 
 #[test]
 fn parses_minimal_line_format() {
