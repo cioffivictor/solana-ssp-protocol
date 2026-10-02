@@ -161,3 +161,20 @@ fn json_rejects_trailing_garbage() {
     assert!(json::parse("[1,2,").is_err());
 }
 
+#[test]
+fn integral_floats_serialize_without_decimal() {
+    let v = Json::Num(42.0);
+    assert_eq!(json::to_string(&v), "42");
+    let v = Json::Num(1.5);
+    assert_eq!(json::to_string(&v), "1.5");
+}
+
+#[test]
+fn tiny_values_snap_and_round_trip() {
+    // 1e-9 rounds to 0 on the six-decimal grid; the writer must be idempotent.
+    let v = Json::Num(1e-9);
+    let out1 = json::to_string(&v);
+    let reparsed = json::parse(&out1).unwrap();
+    let out2 = json::to_string(&reparsed);
+    assert_eq!(out1, out2);
+}
