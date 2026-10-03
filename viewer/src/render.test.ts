@@ -152,3 +152,13 @@ test("html escapes angle brackets in claim text", () => {
   const injected: Report = JSON.parse(JSON.stringify(SAMPLE));
   injected.verdicts[0].text = "1 < 2 && 3 > 2";
   const html = renderHtml(injected);
+  assert.ok(html.includes("1 &lt; 2 &amp;&amp; 3 &gt; 2"));
+  assert.ok(!html.includes("1 < 2 &&"));
+});
+
+test("renderers are deterministic", () => {
+  assert.equal(renderConsole(SAMPLE, {}), renderConsole(SAMPLE, {}));
+  assert.equal(renderHtml(SAMPLE), renderHtml(SAMPLE));
+});
+
+process.stdout.write(`\n${passed} viewer test(s) passed\n`);
