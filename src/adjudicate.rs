@@ -306,3 +306,17 @@ pub fn adjudicate(delib: &Deliberation, policy: &Policy) -> Adjudication {
     }
 
     let cohesion = if weighted_cohesion_den > 0.0 {
+        weighted_cohesion_num / weighted_cohesion_den
+    } else {
+        0.0
+    };
+
+    Adjudication {
+        deliberation_id: delib.id.clone(),
+        question: delib.question.clone(),
+        policy: *policy,
+        verdicts,
+        tally,
+        cohesion,
+    }
+}
