@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to QuorumForge are documented here. The format follows
+All notable changes to SSP are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project aims
 to adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -17,7 +17,7 @@ to adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Describe the fastest way to exercise the pipeline end to end.
 
 
-The first release. QuorumForge arrives as a complete, dependency-free evidence
+The first release. SSP arrives as a complete, dependency-free evidence
 adjudication engine with a matching council viewer.
 
 ### Added
@@ -37,10 +37,10 @@ adjudication engine with a matching council viewer.
     dissent ceiling, minimum mass) and a mass-weighted cohesion score.
   - Deterministic, digest-stamped evidence bundles (FNV-1a) with a `verify`
     round-trip guarantee.
-  - Text and `quorumforge.report.v1` JSON report renderers.
-- **CLI** (`quorumforge`) with `adjudicate`, `bundle`, `verify`, `inspect`, and
+  - Text and `ssp.report.v1` JSON report renderers.
+- **CLI** (`ssp`) with `adjudicate`, `bundle`, `verify`, `inspect`, and
   `help` commands; stdin support; policy flags; and meaningful exit codes.
-- **TypeScript council viewer** (`qf-view`), dependency-light (only `tsc` at
+- **TypeScript council viewer** (`ssp-view`), dependency-light (only `tsc` at
   build time), with an ANSI console renderer, a self-contained HTML renderer
   (no remote assets), report-schema validation, and an assertion-based test
   suite.
@@ -58,4 +58,4 @@ adjudication engine with a matching council viewer.
 - Verdicts are fully deterministic: identical inputs yield identical report
   bytes and identical bundle digests.
 
-[0.1.0]: https://example.invalid/quorumforge/releases/tag/v0.1.0
+[0.1.0]: https://example.invalid/ssp/releases/tag/v0.1.0

@@ -1,6 +1,6 @@
-# The QuorumForge Evidence Format
+# The SSP Evidence Format
 
-QuorumForge reads a *deliberation*: the recorded output of a council of agents
+SSP reads a *deliberation*: the recorded output of a council of agents
 arguing about a set of claims. This document is the normative reference for both
 supported input encodings. They carry identical information and converge on the
 same in-memory model, so you may author whichever suits your workflow.
@@ -155,7 +155,7 @@ Field defaults match the line format: `weight` and `confidence` default to
 
 ## 4. Validation
 
-After parsing, QuorumForge validates the deliberation and rejects it with a
+After parsing, SSP validates the deliberation and rejects it with a
 descriptive error if:
 
 - there is no `delib`/top-level object;
