@@ -1,4 +1,4 @@
-// Renderers for QuorumForge reports. Two targets share one report model:
+// Renderers for SSP reports. Two targets share one report model:
 //   * renderConsole  -> ANSI-coloured, fixed-width council digest for a terminal
 //   * renderHtml      -> a single self-contained HTML page (no remote assets)
 //
@@ -48,7 +48,7 @@ export function renderConsole(report: Report, opts: ConsoleOptions = {}): string
 
   lines.push(paint(ANSI.magenta, heavy));
   lines.push(
-    paint(ANSI.bold, `QUORUMFORGE COUNCIL  ::  ${report.deliberation_id}`),
+    paint(ANSI.bold, `SSP COUNCIL  ::  ${report.deliberation_id}`),
   );
   for (const l of wrap(report.question, 68)) {
     lines.push(paint(ANSI.dim, `  ${l}`));
@@ -221,7 +221,7 @@ export function renderHtml(report: Report): string {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>QuorumForge · ${escapeHtml(report.deliberation_id)}</title>
+<title>SSP · ${escapeHtml(report.deliberation_id)}</title>
 <style>
   :root { color-scheme: dark; }
   * { box-sizing: border-box; }
@@ -256,7 +256,7 @@ export function renderHtml(report: Report): string {
 </style>
 </head>
 <body>
-  <h1>QUORUMFORGE · ${escapeHtml(report.deliberation_id)}</h1>
+  <h1>SSP · ${escapeHtml(report.deliberation_id)}</h1>
   <p class="q">${escapeHtml(report.question)}</p>
   <div class="summary">
     <span>claims ${s.total_claims}</span>

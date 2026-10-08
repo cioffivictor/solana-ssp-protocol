@@ -1,4 +1,4 @@
-//! Parsers for the two documented QuorumForge evidence formats.
+//! Parsers for the two documented SSP evidence formats.
 //!
 //! ## Line-oriented format (`.qf`)
 //!

@@ -1,32 +1,34 @@
 [package]
-name = "quorumforge"
+name = "solana-stability-protocol"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.74"
-description = "A multi-agent evidence adjudication engine: normalize claims, weigh support and contradiction, and render deterministic verdicts."
+description = "SSP risk kernel: turn liquidity-agent attestations into deterministic liquidity regimes for Solana memecoin pools."
 license = "MIT"
 readme = "README.md"
-repository = "https://example.invalid/quorumforge"
-keywords = ["evidence", "adjudication", "consensus", "cli", "reasoning"]
-categories = ["command-line-utilities", "text-processing"]
+repository = "https://github.com/cioffivictor/solana-stability-protocol"
+keywords = ["solana", "liquidity", "defi", "risk", "deterministic"]
+categories = ["command-line-utilities", "cryptography::cryptocurrencies"]
 
-# QuorumForge is deliberately dependency-free. The engine, parser, minimal
-# JSON codec, and CLI are all built on the Rust standard library so that
-# verdicts are reproducible on any toolchain without a lockfile churn.
+# The kernel stays deliberately dependency-free: parser, codec, adjudicator and
+# CLI are std-only so a regime is reproducible on any toolchain. The on-chain
+# program under programs/ is a separate crate and the only place anchor-lang
+# appears.
+
+[workspace]
+members = ["programs/ssp-registry"]
+default-members = ["."]
 
 [lib]
-name = "quorumforge"
+name = "ssp"
 path = "src/lib.rs"
 
 [[bin]]
-name = "quorumforge"
-path = "src/bin/quorumforge.rs"
+name = "ssp"
+path = "src/bin/ssp.rs"
 
 [profile.release]
 opt-level = 3
 lto = true
 codegen-units = 1
 panic = "abort"
-
-[profile.dev]
-opt-level = 0

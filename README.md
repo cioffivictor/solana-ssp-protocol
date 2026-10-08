@@ -5,8 +5,8 @@
 </p>
 
 [![Rust](https://img.shields.io/badge/rust-1.74%2B-dea584?logo=rust&logoColor=white)](https://www.rust-lang.org)
-[![TypeScript](https://img.shields.io/badge/typescript-7.x-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Runtime dependencies](https://img.shields.io/badge/runtime%20dependencies-0-informational)](#properties)
+[![TypeScript](https://img.shields.io/badge/typescript-5.x-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Solana](https://img.shields.io/badge/solana-devnet-9945ff)](https://solana.com)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 SSP is liquidity infrastructure for Solana memecoin markets. It adjusts liquidity
@@ -18,9 +18,8 @@ pressure.
 SSP does not peg prices and does not claim to prevent drawdowns. The objective is
 that pool depth responds to conditions instead of staying fixed.
 
-**Status.** The risk kernel and the operations console are implemented and
-tested. The on-chain Anchor program is not written yet and is listed in the
-roadmap.
+**Status.** The risk kernel, the operations console and the on-chain Anchor
+program are implemented. The program targets devnet and is unaudited.
 
 ## Contents
 
@@ -31,6 +30,7 @@ roadmap.
 - [Regime classification](#regime-classification)
 - [Risk policy](#risk-policy)
 - [Attestations](#attestations)
+- [Solana integration](#solana-integration)
 - [Quick start](#quick-start)
 - [CLI reference](#cli-reference)
 - [Repository layout](#repository-layout)
@@ -101,18 +101,18 @@ cannot silently drop a vote.
 
 Every non-abstaining attestation casts a signed vote:
 
-```text
+~~~text
 vote = sign(stance) * capital_weight * oracle_confidence
-```
+~~~
 
 where `sign(healthy) = +1` and `sign(stressed) = -1`. Let `S` be the sum of
 healthy votes and `C` the sum of stressed magnitudes. Then:
 
-```text
+~~~text
 decisive_depth  = S + C
 regime_polarity = (S - C) / decisive_depth      in [-1, +1]
 stress_ratio    = min(S, C) / decisive_depth    in [0, 0.5]
-```
+~~~
 
 `regime_polarity` is the direction of the lean. `decisive_depth` is the capital
 behind the call. `stress_ratio` is the share of that capital on the losing side.
@@ -141,13 +141,13 @@ Two agents attest to one assertion. Agent `vlt`, capital weight `1.5`, attests
 `healthy` at confidence `0.8`. Agent `rsk`, weight `1.0`, attests `stressed` at
 confidence `0.6`.
 
-```text
+~~~text
 S = 1.5 * 0.8 = 1.20
 C = 1.0 * 0.6 = 0.60
 decisive_depth  = 1.80
 regime_polarity = (1.20 - 0.60) / 1.80 = +0.333
 stress_ratio    =  0.60 / 1.80         =  0.333
-```
+~~~
 
 With the default policy (`expansion_threshold = 0.66`, `stress_ceiling = 0.34`),
 `stress_ratio 0.333` is below the ceiling so the result is not `HEDGE`, and
@@ -186,10 +186,10 @@ An attestation is a canonical snapshot of an epoch together with its regimes,
 stamped with a content digest (FNV-1a). Attestations are byte-stable, so they
 diff cleanly and can be checked in CI before any on-chain submission.
 
-```bash
+~~~bash
 cargo run --release -- bundle samples/pool-stress.qf -o attestation.json
-cargo run --release -- verify attestation.json
-```
+cargo run --release -- verify samples/pool-stress.qf
+~~~
 
 <p align="center">
   <img src="https://i.imgur.com/08lXihF.png" alt="Attestation pipeline from epoch record to verified digest" width="100%">
@@ -202,20 +202,49 @@ The digest covers the canonical body with a fixed key order, positions sorted by
 the JSON writer idempotent, so a bundle survives a parser round trip without
 changing its digest. Any mutation makes `verify` exit with code `4`.
 
+## Solana integration
+
+The on-chain half lives in `programs/ssp-registry`, an Anchor program targeting
+devnet. It records the regime the kernel produced and applies it to the pool.
+
+| Instruction | Effect |
+| --- | --- |
+| `register_pool` | Creates the pool config and its reserve vault. |
+| `submit_attestation` | Records one agent's stance and confidence for the epoch. |
+| `settle_regime` | Writes the regime, polarity and stress, and reprices the fee. |
+| `deploy_backstop` | Pulls reserve capital into a pool below its depth floor. |
+
+| Account | Seeds |
+| --- | --- |
+| `PoolConfig` | `[b"pool", base_mint]` |
+| `RegimeState` | `[b"regime", pool]` |
+| `ReserveVault` | `[b"reserve", base_mint]` |
+| `Attestation` | `[b"attest", pool, agent, epoch_le]` |
+
+The fee band is narrow by construction: `expand` shaves 5 bps and `hedge` adds
+10, both clamped to 10..200 bps. The program never re-derives a verdict; the
+kernel never reads chain state. `docs/PROTOCOL.md` is the normative reference and
+`viewer/src/solana.ts` decodes the same accounts the program writes.
+
+~~~bash
+anchor build
+anchor test
+~~~
+
 ## Quick start
 
 Requires Rust 1.74 or newer. The console additionally requires Node.js 18 or
 newer. No other toolchain is needed.
 
-```bash
+~~~bash
 cargo build --release
 cargo test
 cargo run --release -- adjudicate samples/pool-stress.qf
-```
+~~~
 
 The last command prints a risk report:
 
-```text
+~~~text
 ========================================================================
 SSP RISK REPORT  ::  pool-stress
 Question: Does SOL-BONK hold depth above $250k under a 15% drawdown?
@@ -224,16 +253,16 @@ Assertions: 5   Expand: 1   Hedge: 1   Watch: 2   Backstop: 1
 Stability index: 58.7%   Policy: expand>=0.66, stress<0.34
 ------------------------------------------------------------------------
 [=] [p1] Pool depth stays above $250k through the drawdown.
-     expand/healthy topic=depth  polarity=+1.00  depth=4.32  stress=0%  cites=1
+     consensus/affirmed topic=depth  polarity=+1.00  depth=4.32  stress=0%  cites=1
 [!] [p2] A $10k sell moves price by less than 1.5%.
-     hedge/stressed topic=impact  polarity=-0.24  depth=3.85  stress=38%  cites=1
+     contested/negated topic=impact  polarity=-0.24  depth=3.85  stress=38%  cites=1
      dissenting: lzr, mm1
 ...
-```
+~~~
 
 ### Operations console
 
-```bash
+~~~bash
 cd viewer && npm install && npm run build && cd ..
 
 cargo run --release -- adjudicate --format json samples/pool-stress.qf \
@@ -241,15 +270,15 @@ cargo run --release -- adjudicate --format json samples/pool-stress.qf \
 
 cargo run --release -- adjudicate --format json samples/pool-stress.qf \
   | node viewer/dist/cli.js --html - -o risk.html
-```
+~~~
 
 The HTML renderer inlines all styling. No remote fonts, scripts or images, so
 the output opens offline and can be committed as a build artifact.
 
 ## CLI reference
 
-```text
-quorumforge <command> [options] <record-file | ->
+~~~text
+ssp <command> [options] <record-file | ->
 
 COMMANDS
   adjudicate   Parse, normalize and print a risk report (text or json).
@@ -265,14 +294,14 @@ OPTIONS
   --min-mass <n>         Minimum decisive depth to escape BACKSTOP.
   -o, --output <path>    Write to a file instead of stdout.
   --json                 Treat stdin or extensionless input as JSON.
-```
+~~~
 
 Exit codes: `0` success, `2` usage error, `3` parse or validation error, `4`
 digest mismatch. These make the tool usable as a CI gate.
 
 ## Repository layout
 
-```text
+~~~text
 src/                  Rust risk kernel, standard library only
   lib.rs              public API and the end-to-end run
   model.rs            Agent, Claim, Position, Citation, Deliberation
@@ -280,13 +309,15 @@ src/                  Rust risk kernel, standard library only
   parse.rs            line-oriented .qf parser and JSON parser
   normalize.rs        assertion canonicalization and clustering
   adjudicate.rs       weighted regime engine and policy
+  amm.rs              constant-product maths and depth targeting
   bundle.rs           deterministic digest-stamped attestations
   report.rs           text and JSON report renderers
-tests/                integration tests
-viewer/               TypeScript operations console
+programs/ssp-registry Anchor program: registry, regime state, reserve vault
+viewer/               TypeScript operations console and web3 decoding
 samples/              example epoch records
+docs/PROTOCOL.md      protocol reference
 docs/EVIDENCE.md      normative record format reference
-```
+~~~
 
 Protocol vocabulary maps to code as follows.
 
@@ -299,36 +330,33 @@ Protocol vocabulary maps to code as follows.
 | Risk policy | `Policy` |
 | Stability Index | `Adjudication.cohesion` |
 | Stability attestation | `Bundle` and FNV-1a digest |
-| Risk report | `quorumforge.report.v1` |
-| Operations console | `qf-view` |
-
-The crate and the report schema keep the internal name `quorumforge`. The report
-headline also uses the words `Claims` and `cohesion`; these are the kernel's
-original field names for pool assertions and the Stability Index.
+| Risk report | `ssp.report.v1` |
+| Operations console | `ssp-view` |
 
 ## Testing
 
-```bash
+~~~bash
 cargo test
 cd viewer && npm test
 make test
-```
+~~~
 
 The Rust suite covers all four regimes, weight and confidence scaling, policy
 tuning, parser error paths, JSON round-trip stability including unicode escapes
 and surrogate pairs, attestation determinism and tamper detection. The console
-suite covers report validation, colored against plain output, HTML escaping and
-render determinism.
+suite covers report validation, colored against plain output, HTML escaping,
+render determinism and on-chain account decoding.
 
 ## Properties
 
 - **Deterministic.** Ordered maps, sorted positions, snapped floats and an
   idempotent writer. Same input, same bytes.
-- **No runtime dependencies.** The Rust crate uses `std` only. The console's
-  single build-time dependency is the TypeScript compiler.
+- **Dependency-light.** The Rust kernel is `std` only. The console depends on
+  `@solana/web3.js` at runtime and on the TypeScript compiler at build time.
 - **Auditable.** Every intermediate value is kept in the report, so any regime
   can be re-derived by hand.
-- **Offline.** No network calls, no remote assets, no telemetry.
+- **Offline kernel.** No network calls, no remote assets, no telemetry. The
+  on-chain program is a separate crate.
 
 ## Limitations
 
@@ -342,7 +370,8 @@ render determinism.
 - An epoch is a static snapshot. There is no multi-round rebuttal.
 - Arithmetic is `f64` snapped to six decimals, not exact rationals.
 - The FNV-1a digest is an integrity fingerprint, not a cryptographic hash.
-- Nothing is on-chain yet.
+- The program is devnet-only and unaudited. The kernel does not read chain
+  state; a relayer is assumed to land `settle_regime` and `deploy_backstop`.
 
 ## Roadmap
 

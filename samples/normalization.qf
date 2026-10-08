@@ -1,7 +1,7 @@
-# QuorumForge deliberation — normalization showcase
+# SSP deliberation — normalization showcase
 # --------------------------------------------------
 # The three claims below are phrased differently but normalize to the same
-# proposition. Run `quorumforge inspect samples/normalization.qf` to see the
+# proposition. Run `ssp inspect samples/normalization.qf` to see the
 # `normalized` field collapse the hedges and contractions.
 
 delib | normalization | Does the release candidate meet the latency budget?

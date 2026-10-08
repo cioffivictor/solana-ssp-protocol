@@ -1,13 +1,13 @@
 //! A compact, dependency-free JSON reader and writer.
 //!
-//! QuorumForge accepts and emits JSON without pulling in `serde`. This module
+//! SSP accepts and emits JSON without pulling in `serde`. This module
 //! provides just enough of a JSON document model to parse deliberation files
 //! and serialise deterministic reports. It is intentionally small: it supports
 //! objects, arrays, strings, numbers (as `f64`), booleans, and null.
 //!
 //! The writer is stable: object keys are emitted in insertion order, so the
 //! same in-memory document always serialises to byte-identical output. This is
-//! a load-bearing property for QuorumForge's reproducible bundles.
+//! a load-bearing property for SSP's reproducible bundles.
 
 use std::collections::BTreeMap;
 use std::fmt::{self, Write as _};
