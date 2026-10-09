@@ -11,7 +11,7 @@ jobs:
     name: Rust engine (build, test, lint)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install Rust toolchain
         run: rustup toolchain install stable --profile minimal --component rustfmt clippy
