@@ -1,10 +1,10 @@
-// qf-view — the QuorumForge council viewer CLI.
+// ssp-view — the SSP council viewer CLI.
 //
-// Reads a `quorumforge.report.v1` JSON document (from a file or stdin) and
+// Reads a `ssp.report.v1` JSON document (from a file or stdin) and
 // renders it as a coloured console digest or a self-contained HTML page.
 //
 // Usage:
-//   qf-view [options] <report.json | ->
+//   ssp-view [options] <report.json | ->
 //
 // Options:
 //   --html            Emit a standalone HTML document instead of console text.
@@ -17,10 +17,10 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { parseReport } from "./report.js";
 import { renderConsole, renderHtml } from "./render.js";
 
-const HELP = `qf-view — QuorumForge council viewer
+const HELP = `ssp-view — SSP council viewer
 
 USAGE:
-  qf-view [options] <report.json | ->
+  ssp-view [options] <report.json | ->
 
 OPTIONS:
   --html            Emit a standalone HTML document instead of console text.
@@ -30,8 +30,8 @@ OPTIONS:
   -h, --help        Show this help.
 
 EXAMPLES:
-  quorumforge adjudicate --format json samples/cache-coherence.qf | qf-view -
-  qf-view --html report.json -o council.html
+  ssp adjudicate --format json samples/cache-coherence.qf | ssp-view -
+  ssp-view --html report.json -o council.html
 `;
 
 interface Options {
@@ -92,7 +92,7 @@ function parseArgs(argv: string[]): Options {
 }
 
 function fail(message: string): never {
-  process.stderr.write(`qf-view: ${message}\n`);
+  process.stderr.write(`ssp-view: ${message}\n`);
   process.exit(2);
 }
 
@@ -158,6 +158,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((err) => {
-  process.stderr.write(`qf-view: ${(err as Error).message}\n`);
+  process.stderr.write(`ssp-view: ${(err as Error).message}\n`);
   process.exit(1);
 });

@@ -1,19 +1,16 @@
 {
-  "name": "quorumforge-viewer",
+  "name": "ssp-viewer",
   "version": "0.1.0",
-  "description": "A dependency-light council viewer that renders QuorumForge JSON reports as annotated ANSI console output or standalone HTML.",
+  "description": "Operations console for the Solana Stability Protocol: renders risk reports as annotated ANSI output or standalone HTML, and decodes on-chain regime state.",
   "license": "MIT",
   "type": "module",
-  "bin": {
-    "qf-view": "dist/cli.js"
-  },
+  "bin": { "ssp-view": "dist/cli.js" },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "view": "node dist/cli.js",
-    "test": "tsc -p tsconfig.json && node dist/render.test.js",
+    "test": "tsc -p tsconfig.json && node dist/render.test.js && node dist/solana.test.js",
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
-  "devDependencies": {
-    "typescript": "^7.0.2"
-  }
+  "dependencies": { "@solana/web3.js": "^1.98.0" },
+  "devDependencies": { "typescript": "^5.9.3" }
 }

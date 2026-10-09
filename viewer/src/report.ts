@@ -1,5 +1,5 @@
-// Type definitions mirroring the `quorumforge.report.v1` JSON schema emitted by
-// `quorumforge adjudicate --format json`. Keeping these in one place lets the
+// Type definitions mirroring the `ssp.report.v1` JSON schema emitted by
+// `ssp adjudicate --format json`. Keeping these in one place lets the
 // renderer stay fully typed without any runtime schema library.
 
 export type Outcome = "consensus" | "contested" | "split" | "unsupported";
@@ -58,7 +58,7 @@ export interface Report {
 }
 
 /**
- * Validate an untyped parsed value as a QuorumForge report. Throws a
+ * Validate an untyped parsed value as a SSP report. Throws a
  * descriptive error rather than returning a partially-typed object, so the CLI
  * can fail loudly on malformed input.
  */
@@ -67,9 +67,9 @@ export function parseReport(value: unknown): Report {
     throw new Error("report must be a JSON object");
   }
   const obj = value as Record<string, unknown>;
-  if (obj.schema !== "quorumforge.report.v1") {
+  if (obj.schema !== "ssp.report.v1") {
     throw new Error(
-      `unexpected schema '${String(obj.schema)}', expected quorumforge.report.v1`,
+      `unexpected schema '${String(obj.schema)}', expected ssp.report.v1`,
     );
   }
   if (!Array.isArray(obj.verdicts)) {
