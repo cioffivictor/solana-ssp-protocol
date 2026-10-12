@@ -1,0 +1,13 @@
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+ssp_registry = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "cargo test"

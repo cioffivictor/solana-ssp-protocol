@@ -1,0 +1,16 @@
+[package]
+name = "ssp-registry"
+version = "0.1.0"
+edition = "2021"
+description = "On-chain pool registry, regime state and reserve vault for the Solana Stability Protocol."
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "ssp_registry"
+
+[dependencies]
+anchor-lang = "0.30.1"
+
+[features]
+default = []
+no-entrypoint = []
