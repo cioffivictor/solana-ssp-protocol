@@ -9,3 +9,5 @@ Thanks for looking. A few things that make a change easy to take:
 - for the viewer: `npm --prefix viewer test`
 4. Add a test for the behaviour you changed.
 5. Match the surrounding style; the codebase is deliberately small and flat.
+6. Re-run `cargo run -- adjudicate samples/cache-coherence.qf` before pushing - it exercises
+   the parser, the adjudicator and the report writer in one pass.
