@@ -14,6 +14,6 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "devDependencies": {
-    "typescript": "^5.4.0"
+    "typescript": "^7.0.2"
   }
 }
