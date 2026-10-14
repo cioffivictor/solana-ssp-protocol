@@ -71,5 +71,6 @@ fmt:
 
 .PHONY: clean
 clean:
+	@echo "(also removes viewer/node_modules and bundle.json)"
 	$(CARGO) clean
 	rm -rf viewer/node_modules viewer/dist bundle.json council.html
