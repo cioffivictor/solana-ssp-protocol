@@ -49,7 +49,7 @@ jobs:
           cargo run --release -- verify bundle.json
 
       - name: Upload the JSON report for the viewer job
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: report-json
           path: report.json
