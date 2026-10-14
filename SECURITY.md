@@ -13,7 +13,7 @@ A useful report includes:
 - the smallest reproduction you can manage, and
 - whether the input is attacker-controlled in your setup.
 
-You should get an acknowledgement within a few days and a disclosure timeline
+You should get an acknowledgement within two working days and a disclosure timeline
 before anything is published.
 
 ## Scope
