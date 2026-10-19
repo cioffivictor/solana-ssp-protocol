@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" role="img" aria-labelledby="t2 d2">
-  <title id="t2">QuorumForge dissent map</title>
+  <title id="t2">SSP dissent map</title>
   <desc id="d2">A ring of agents around a central claim. Green threads pulse toward supporters, red threads toward dissenters, and the central orb tilts by the net polarity.</desc>
   <defs>
     <radialGradient id="bg2" cx="0.5" cy="0.45" r="0.7">
