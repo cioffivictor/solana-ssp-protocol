@@ -2,14 +2,17 @@ name: anchor
 
 on:
   push:
-    paths: ["programs/**", "Anchor.toml", ".github/workflows/anchor.yml"]
+    branches: [main]
   pull_request:
-    paths: ["programs/**", "Anchor.toml"]
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
-      - run: cargo build -p ssp-registry
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build the risk kernel
+        run: cargo build --release
+      - name: Build the on-chain program
+        run: cargo build -p ssp-registry
