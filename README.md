@@ -1,389 +1,393 @@
-<!-- QuorumForge — a multi-agent evidence adjudication engine. -->
+# Solana Stability Protocol (SSP)
 
-<div align="center">
+<p align="center">
+  <img src="https://i.imgur.com/iTNvCwI.png" alt="Solana Stability Protocol" width="100%">
+</p>
 
-# ✦ QuorumForge ✦
+[![Rust](https://img.shields.io/badge/rust-1.74%2B-dea584?logo=rust&logoColor=white)](https://www.rust-lang.org)
+[![TypeScript](https://img.shields.io/badge/typescript-5.x-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Solana](https://img.shields.io/badge/solana-devnet-9945ff)](https://solana.com)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-### *Hold the evidence to the light. Watch the verdict refract.*
+SSP is liquidity infrastructure for Solana memecoin markets. It adjusts liquidity
+distribution, trading fees and capital allocation in response to volatility, pool
+depth and market conditions. A reserve backstop can deploy capital into pools
+whose depth falls below a threshold, which reduces price impact during sell
+pressure.
 
-<img src="docs/assets/council-prism.svg" alt="A beam of mixed evidence entering a prism and refracting into four verdict bands" width="640" />
+SSP does not peg prices and does not claim to prevent drawdowns. The objective is
+that pool depth responds to conditions instead of staying fixed.
 
-**QuorumForge** takes the recorded deliberation of a council of agents — who
-supported what, who pushed back, how sure they were, and what they cited — and
-passes it through a prism of weighted reasoning. Out the far side come four
-clean bands of light: **consensus**, **split**, **contested**, and
-**unsupported**. Deterministic. Auditable. Re-derivable by hand.
+**Status.** The risk kernel, the operations console and the on-chain Anchor
+program are implemented. The program targets devnet and is unaudited.
 
-</div>
+## Contents
 
----
+- [Mechanism](#mechanism)
+- [System architecture](#system-architecture)
+- [Data model](#data-model)
+- [Epoch lifecycle](#epoch-lifecycle)
+- [Regime classification](#regime-classification)
+- [Risk policy](#risk-policy)
+- [Attestations](#attestations)
+- [Solana integration](#solana-integration)
+- [Quick start](#quick-start)
+- [CLI reference](#cli-reference)
+- [Repository layout](#repository-layout)
+- [Testing](#testing)
+- [Properties](#properties)
+- [Limitations](#limitations)
+- [Roadmap](#roadmap)
 
-## The one-paragraph pitch
+## Mechanism
 
-A council argues. Somebody has to write down what the argument *concluded*.
-QuorumForge is that scribe — and, more importantly, that *judge*. It is **not an
-agent orchestrator**: it does not run agents, call models, or manage prompts. It
-operates purely on the *record* of a deliberation after the debate is over. That
-separation is the whole point. Because the engine only reads a static transcript
-of positions, its judgements are reproducible: the same evidence file always
-yields the same verdict, the same report bytes, and the same integrity digest.
-You can commit a verdict to version control and diff it next week.
+A set of liquidity agents attests to the state of each supported pool. Each agent
+carries a capital weight. Agents submit one of three stances on each pool
+assertion.
 
----
+| Stance | Meaning |
+| --- | --- |
+| `healthy` | The agent asserts the pool state holds. |
+| `stressed` | The agent asserts the pool state fails. |
+| `abstain` | The agent has no signal. Recorded, carries no weight. |
 
-## Why a prism?
+The risk kernel aggregates the attestations into one liquidity regime per pool
+assertion. The regime determines the action applied to the pool.
 
-White light looks like a single, undifferentiated thing until a prism teases it
-apart. A pile of agent opinions is the same: it *feels* like noise until you
-separate it by direction and strength. QuorumForge's prism has exactly four
-exit angles, and every claim leaves through exactly one of them.
+| Regime | Condition | Action |
+| --- | --- | --- |
+| `EXPAND` | Broad agreement, low stress. | Add depth, reduce fee, release reserve. |
+| `WATCH` | Directional lean below the expansion bar. | Hold allocation, skew fee toward the lean. |
+| `HEDGE` | Meaningful weight on both sides. | Rebalance inventory, raise fee. |
+| `BACKSTOP` | Insufficient decisive signal. | Deploy reserve capital as a floor. |
 
-| Band | Glyph | What it means |
-|------|:-----:|---------------|
-| **Consensus**   | ◆ | Strong agreement with little dissent. Affirmed or negated. |
-| **Split**       | ◈ | A real lean, but below the consensus bar. Not yet settled. |
-| **Contested**   | ▲ | Meaningful weight on *both* sides. The council is divided. |
-| **Unsupported** | ○ | Too little decisive weight to conclude anything at all. |
+`BACKSTOP` is a result, not an error path. An assertion with no decisive signal
+is a distinct finding from an assertion that fails.
 
-The "unsupported" band is not a failure mode — it is a finding. Knowing that a
-claim has *no* backing is often as valuable as knowing it is true.
+## System architecture
 
----
+<p align="center">
+  <img src="https://i.imgur.com/ECyTJIb.png" alt="System architecture: telemetry, epoch record, risk kernel, operations console, on-chain program" width="100%">
+</p>
 
-## Anatomy of the light
+<p align="center"><sub><b>Figure 1.</b> Component layout. The kernel is offline and dependency-free. The on-chain program is dashed because it is not implemented yet.</sub></p>
 
-QuorumForge is a small, sharp, mixed-language toolkit with no third-party
-dependencies on either side of the fence.
+The kernel does not run agents, does not call models and does not touch the
+network. It reads a recorded epoch and derives a result. Identical telemetry and
+identical attestations produce identical regimes, identical report bytes and an
+identical attestation digest.
 
-```
-quorumforge/
-├── src/                      Rust core + CLI (std library only)
-│   ├── lib.rs                public API and the end-to-end `run`
-│   ├── model.rs              Agent / Claim / Position / Deliberation
-│   ├── json.rs               a compact, idempotent JSON codec
-│   ├── parse.rs              line-oriented (.qf) and JSON parsers
-│   ├── normalize.rs          claim canonicalization + clustering
-│   ├── adjudicate.rs         the weighted verdict engine
-│   ├── bundle.rs             deterministic, digest-stamped bundles
-│   ├── report.rs             text + JSON report renderers
-│   └── bin/quorumforge.rs    the `quorumforge` command-line tool
-├── tests/                    focused Rust integration tests
-├── viewer/                   TypeScript council viewer (dependency-light)
-│   └── src/                  report model, ANSI + HTML renderers, CLI, tests
-├── samples/                  rich sample deliberations (.qf and .json)
-├── docs/
-│   ├── EVIDENCE.md           the normative input-format reference
-│   └── assets/               the two animated SVGs on this page
-├── Cargo.toml   Makefile   LICENSE   CHANGELOG.md   .gitignore
-└── .github/workflows/ci.yml
-```
+## Data model
 
-Two languages, one contract: the Rust core emits a `quorumforge.report.v1` JSON
-document, and the TypeScript viewer consumes exactly that schema. Neither side
-pulls in a runtime dependency — the Rust crate is standard-library-only, and the
-viewer's sole `devDependency` is the TypeScript compiler itself.
+<p align="center">
+  <img src="https://i.imgur.com/zdzkDpP.png" alt="Entity relationship diagram of the epoch record model" width="90%">
+</p>
 
----
+<p align="center"><sub><b>Figure 2.</b> Record model. One epoch, many agents and assertions, many attestations, zero or more citations per attestation.</sub></p>
+
+`weight` defaults to `1.0`. `confidence` is clamped to `[0, 1]`. A position that
+references an undeclared agent or claim is rejected at validation, so a typo
+cannot silently drop a vote.
+
+## Epoch lifecycle
+
+<p align="center">
+  <img src="https://i.imgur.com/vDm69Qe.png" alt="Sequence diagram of one epoch from telemetry to rendered report" width="100%">
+</p>
+
+<p align="center"><sub><b>Figure 3.</b> One epoch end to end. The kernel only reads the record; it never calls back into the agents.</sub></p>
+
+## Regime classification
+
+Every non-abstaining attestation casts a signed vote:
+
+~~~text
+vote = sign(stance) * capital_weight * oracle_confidence
+~~~
+
+where `sign(healthy) = +1` and `sign(stressed) = -1`. Let `S` be the sum of
+healthy votes and `C` the sum of stressed magnitudes. Then:
+
+~~~text
+decisive_depth  = S + C
+regime_polarity = (S - C) / decisive_depth      in [-1, +1]
+stress_ratio    = min(S, C) / decisive_depth    in [0, 0.5]
+~~~
+
+`regime_polarity` is the direction of the lean. `decisive_depth` is the capital
+behind the call. `stress_ratio` is the share of that capital on the losing side.
+
+The classifier reads those three values against the risk policy:
+
+- `BACKSTOP` when `decisive_depth <= minimum_depth`
+- `EXPAND` when `|regime_polarity| >= expansion_threshold` and `stress_ratio < stress_ceiling`
+- `HEDGE` when `stress_ratio >= stress_ceiling`
+- `WATCH` otherwise
+
+<p align="center">
+  <img src="https://i.imgur.com/4zKq1ro.png" alt="Decision flow of the regime classifier" width="100%">
+</p>
+
+<p align="center"><sub><b>Figure 4.</b> Classifier decision flow. Four mutually exclusive outcomes, three policy parameters.</sub></p>
+
+The epoch also produces one scalar, the Stability Index, in `[0, 1]`. It is the
+depth-weighted mean of `|regime_polarity|` across assertions. A set of agents that
+agrees on heavily attested assertions scores near `1.0`. An evenly divided one
+scores near `0`.
+
+### Worked example
+
+Two agents attest to one assertion. Agent `vlt`, capital weight `1.5`, attests
+`healthy` at confidence `0.8`. Agent `rsk`, weight `1.0`, attests `stressed` at
+confidence `0.6`.
+
+~~~text
+S = 1.5 * 0.8 = 1.20
+C = 1.0 * 0.6 = 0.60
+decisive_depth  = 1.80
+regime_polarity = (1.20 - 0.60) / 1.80 = +0.333
+stress_ratio    =  0.60 / 1.80         =  0.333
+~~~
+
+With the default policy (`expansion_threshold = 0.66`, `stress_ceiling = 0.34`),
+`stress_ratio 0.333` is below the ceiling so the result is not `HEDGE`, and
+`|polarity| 0.333` is below the threshold so it is not `EXPAND`. The regime is
+`WATCH`, leaning healthy.
+
+<p align="center">
+  <img src="https://i.imgur.com/293KVAm.png" alt="Decisive depth per assertion and resulting Stability Index" width="90%">
+</p>
+
+<p align="center"><sub><b>Figure 5.</b> Decisive depth per assertion in <code>samples/pool-stress.qf</code>, with the resulting Stability Index. Assertion p5 carries no decisive depth and resolves to BACKSTOP.</sub></p>
+
+## Risk policy
+
+Three parameters control classification. All are range-validated.
+
+| Parameter | Flag | Default | Effect |
+| --- | --- | --- | --- |
+| `expansion_threshold` | `--consensus` | `0.66` | Required polarity to release capital. |
+| `stress_ceiling` | `--dissent` | `0.34` | Losing-side share that forces a hedge. |
+| `minimum_depth` | `--min-mass` | `~0` | Decisive depth required to act at all. |
+
+The defaults encode a two-thirds supermajority rule with a limited stress
+tolerance. Raising the threshold makes expansion rarer. Lowering the ceiling
+makes hedging more frequent.
+
+<p align="center">
+  <img src="https://i.imgur.com/zKjFJMk.png" alt="Regime map plotting volatility against pool depth" width="90%">
+</p>
+
+<p align="center"><sub><b>Figure 6.</b> Regime map. Depth rises up the y axis, volatility rises along the x axis. Points are illustrative pool positions.</sub></p>
+
+## Attestations
+
+An attestation is a canonical snapshot of an epoch together with its regimes,
+stamped with a content digest (FNV-1a). Attestations are byte-stable, so they
+diff cleanly and can be checked in CI before any on-chain submission.
+
+~~~bash
+cargo run --release -- bundle samples/pool-stress.qf -o attestation.json
+cargo run --release -- verify samples/pool-stress.qf
+~~~
+
+<p align="center">
+  <img src="https://i.imgur.com/08lXihF.png" alt="Attestation pipeline from epoch record to verified digest" width="100%">
+</p>
+
+<p align="center"><sub><b>Figure 7.</b> Bundle and verify. Canonicalization is what makes the digest stable across a parser round trip.</sub></p>
+
+The digest covers the canonical body with a fixed key order, positions sorted by
+`(assertion, agent, stance)` and floats snapped to six decimals. The snap makes
+the JSON writer idempotent, so a bundle survives a parser round trip without
+changing its digest. Any mutation makes `verify` exit with code `4`.
+
+## Solana integration
+
+The on-chain half lives in `programs/ssp-registry`, an Anchor program targeting
+devnet. It records the regime the kernel produced and applies it to the pool.
+
+| Instruction | Effect |
+| --- | --- |
+| `register_pool` | Creates the pool config and its reserve vault. |
+| `submit_attestation` | Records one agent's stance and confidence for the epoch. |
+| `settle_regime` | Writes the regime, polarity and stress, and reprices the fee. |
+| `deploy_backstop` | Pulls reserve capital into a pool below its depth floor. |
+
+| Account | Seeds |
+| --- | --- |
+| `PoolConfig` | `[b"pool", base_mint]` |
+| `RegimeState` | `[b"regime", pool]` |
+| `ReserveVault` | `[b"reserve", base_mint]` |
+| `Attestation` | `[b"attest", pool, agent, epoch_le]` |
+
+The fee band is narrow by construction: `expand` shaves 5 bps and `hedge` adds
+10, both clamped to 10..200 bps. The program never re-derives a verdict; the
+kernel never reads chain state. `docs/PROTOCOL.md` is the normative reference and
+`viewer/src/solana.ts` decodes the same accounts the program writes.
+
+~~~bash
+anchor build
+anchor test
+~~~
 
 ## Quick start
 
-You need a Rust toolchain (1.74+) for the engine and Node.js (18+) plus npm for
-the optional viewer. Nothing else.
+Requires Rust 1.74 or newer. The console additionally requires Node.js 18 or
+newer. No other toolchain is needed.
 
-```sh
-# 1. Build and test the Rust engine.
+~~~bash
 cargo build --release
 cargo test
+cargo run --release -- adjudicate samples/pool-stress.qf
+~~~
 
-# 2. Adjudicate a sample deliberation as a console report.
-cargo run --release -- adjudicate samples/cache-coherence.qf
-```
+The last command prints a risk report:
 
-That last command prints something like:
-
-```text
+~~~text
 ========================================================================
-QUORUMFORGE VERDICT  ::  cache-coherence
-Question: Is the distributed write-back cache coherent under concurrent
-          writes?
+SSP RISK REPORT  ::  pool-stress
+Question: Does SOL-BONK hold depth above $250k under a 15% drawdown?
 ========================================================================
-Claims: 5   Consensus: 1   Contested: 1   Split: 2   Unsupported: 1
-Council cohesion: 60.1%   Policy: consensus>=0.66, dissent<0.34
+Assertions: 5   Expand: 1   Hedge: 1   Watch: 2   Backstop: 1
+Stability index: 58.7%   Policy: expand>=0.66, stress<0.34
 ------------------------------------------------------------------------
-[=] [c1] Writes to a single key are linearizable.
-     consensus/affirmed topic=linearizability  polarity=+1.00  mass=4.33  ...
-[!] [c2] Writes across multiple keys are linearizable.
-     contested/negated topic=linearizability  polarity=-0.24  ...
-     dissenting: ada, boro
+[=] [p1] Pool depth stays above $250k through the drawdown.
+     consensus/affirmed topic=depth  polarity=+1.00  depth=4.32  stress=0%  cites=1
+[!] [p2] A $10k sell moves price by less than 1.5%.
+     contested/negated topic=impact  polarity=-0.24  depth=3.85  stress=38%  cites=1
+     dissenting: lzr, mm1
 ...
-```
+~~~
 
----
+### Operations console
 
-## The council viewer
+~~~bash
+cd viewer && npm install && npm run build && cd ..
 
-The prism is prettiest when you let the viewer render it. Build it once, then
-pipe a JSON report straight in.
-
-```sh
-# Build the viewer (installs only the TypeScript compiler).
-cd viewer
-npm install
-npm run build
-cd ..
-
-# Pipe a JSON report from the engine into the viewer's ANSI renderer.
-cargo run --release -- adjudicate --format json samples/cache-coherence.qf \
+cargo run --release -- adjudicate --format json samples/pool-stress.qf \
   | node viewer/dist/cli.js -
 
-# Or produce a standalone, self-contained HTML council page.
-cargo run --release -- adjudicate --format json samples/migration-strategy.json \
-  | node viewer/dist/cli.js --html - -o council.html
-```
+cargo run --release -- adjudicate --format json samples/pool-stress.qf \
+  | node viewer/dist/cli.js --html - -o risk.html
+~~~
 
-The console renderer draws unicode influence meters and colour-codes each
-verdict band. The HTML renderer emits a single file with **all** styling inlined
-— no remote fonts, scripts, or images — so it opens offline and can be committed
-as an artifact.
+The HTML renderer inlines all styling. No remote fonts, scripts or images, so
+the output opens offline and can be committed as a build artifact.
 
-```sh
-# Run the viewer's own test suite.
-cd viewer && npm test
-```
+## CLI reference
 
----
-
-## The command-line tool
-
-```text
-quorumforge <command> [options] <evidence-file | ->
+~~~text
+ssp <command> [options] <record-file | ->
 
 COMMANDS
-  adjudicate   Parse, normalize, and print a verdict report (text or json).
-  bundle       Emit a deterministic, digest-stamped evidence bundle (JSON).
-  verify       Re-derive a bundle's digest from its body and confirm it.
-  inspect      Print the parsed, normalized deliberation as JSON.
-  help         Show usage.
+  adjudicate   Parse, normalize and print a risk report (text or json).
+  bundle       Emit a digest-stamped stability attestation.
+  verify       Re-derive an attestation digest and confirm it.
+  inspect      Print the parsed, normalized epoch record as JSON.
+  help         Print usage.
 
 OPTIONS
-  --format <text|json>   Report format for `adjudicate` (default: text).
-  --consensus <0..1>     Consensus polarity threshold (default: 0.66).
-  --dissent <0..1>       Dissent ceiling (default: 0.34).
-  --min-mass <n>         Minimum decisive mass to escape unsupported.
-  -o, --output <path>    Write output to a file instead of stdout.
-  --json                 Treat stdin / extensionless input as JSON.
-```
+  --format <text|json>   Report format for adjudicate. Default: text.
+  --consensus <0..1>     Expansion threshold. Default: 0.66.
+  --dissent <0..1>       Stress ceiling. Default: 0.34.
+  --min-mass <n>         Minimum decisive depth to escape BACKSTOP.
+  -o, --output <path>    Write to a file instead of stdout.
+  --json                 Treat stdin or extensionless input as JSON.
+~~~
 
-### Real invocations
+Exit codes: `0` success, `2` usage error, `3` parse or validation error, `4`
+digest mismatch. These make the tool usable as a CI gate.
 
-```sh
-# Text report from a line-oriented file.
-cargo run -- adjudicate samples/cache-coherence.qf
+## Repository layout
 
-# JSON report from a JSON deliberation.
-cargo run -- adjudicate --format json samples/migration-strategy.json
+~~~text
+src/                  Rust risk kernel, standard library only
+  lib.rs              public API and the end-to-end run
+  model.rs            Agent, Claim, Position, Citation, Deliberation
+  json.rs             compact idempotent JSON codec
+  parse.rs            line-oriented .qf parser and JSON parser
+  normalize.rs        assertion canonicalization and clustering
+  adjudicate.rs       weighted regime engine and policy
+  amm.rs              constant-product maths and depth targeting
+  bundle.rs           deterministic digest-stamped attestations
+  report.rs           text and JSON report renderers
+programs/ssp-registry Anchor program: registry, regime state, reserve vault
+viewer/               TypeScript operations console and web3 decoding
+samples/              example epoch records
+docs/PROTOCOL.md      protocol reference
+docs/EVIDENCE.md      normative record format reference
+~~~
 
-# See how claim normalization collapses hedged variants.
-cargo run -- inspect samples/normalization.qf
+Protocol vocabulary maps to code as follows.
 
-# Build a deterministic bundle and verify its integrity digest.
-cargo run -- bundle samples/cache-coherence.qf -o bundle.json
-cargo run -- verify bundle.json          # -> "digest OK: ..."
-
-# Read from stdin (format assumed .qf unless --json is given).
-cat samples/cache-coherence.qf | cargo run -- adjudicate -
-
-# Loosen the policy so a 70/30 lean reads as consensus.
-cargo run -- adjudicate --consensus 0.3 --dissent 0.5 samples/cache-coherence.qf
-```
-
-Exit codes: `0` success, `2` usage error, `3` parse/validation error, `4` a
-`verify` digest mismatch. These make QuorumForge friendly to shell pipelines and
-CI gates.
-
----
-
-## How the prism actually bends light
-
-The scoring model is deliberately simple enough to reproduce with a pocket
-calculator. Every non-abstaining position casts a **signed vote**:
-
-```
-vote = sign(stance) · agent_weight · confidence
-```
-
-with `sign(support) = +1` and `sign(contradict) = −1`. Confidence is clamped to
-`[0, 1]` defensively. For a claim, sum the support votes into `S` and the
-contradiction magnitudes into `C`, then:
-
-```
-decisive_mass = S + C
-polarity      = (S − C) / decisive_mass       ∈ [−1, +1]
-dissent_ratio = min(S, C) / decisive_mass      ∈ [0, 0.5]
-```
-
-`polarity` is *which way* the light bends; `decisive_mass` is *how bright* the
-beam is; `dissent_ratio` is *how much* of the beam scatters the other way.
-
-<div align="center">
-<img src="docs/assets/dissent-map.svg" alt="A ring of agents around a central claim, with green support threads and red dissent threads pulsing inward" width="620" />
-</div>
-
-The classifier then reads those three numbers against a **policy** (see below):
-
-- **unsupported** if `decisive_mass ≤ minimum_mass`
-- **consensus** if `|polarity| ≥ consensus_threshold` **and** `dissent_ratio < dissent_ceiling`
-- **contested** if `dissent_ratio ≥ dissent_ceiling`
-- **split** otherwise
-
-Finally, the deliberation earns a single **cohesion** score in `[0, 1]`: the
-mass-weighted average of each claim's `|polarity|`. A council that agrees loudly
-on heavy claims scores near `1.0`; one that is evenly split scores near `0`.
-
-### Worked micro-example
-
-Two agents weigh in on one claim. Ada (weight `1.5`) supports at confidence
-`0.8`; Bo (weight `1.0`) contradicts at confidence `0.6`.
-
-```
-S = 1.5 · 0.8 = 1.20        C = 1.0 · 0.6 = 0.60
-decisive_mass = 1.80
-polarity      = (1.20 − 0.60) / 1.80 = +0.333
-dissent_ratio = 0.60 / 1.80           =  0.333
-```
-
-Under the default policy (`consensus_threshold = 0.66`, `dissent_ceiling =
-0.34`): `dissent_ratio 0.333 < 0.34`, so it is not contested; `|polarity| 0.333
-< 0.66`, so it is not consensus. The verdict is **split, affirmed**.
-
----
-
-## Tuning the policy
-
-Three knobs govern classification. All are validated to sensible ranges.
-
-| Knob | Flag | Default | Effect |
-|------|------|:-------:|--------|
-| `consensus_threshold` | `--consensus` | `0.66` | How lopsided a claim must be to count as consensus. |
-| `dissent_ceiling` | `--dissent` | `0.34` | How much losing-side mass tips a claim into "contested". |
-| `minimum_mass` | `--min-mass` | `~0` | How much decisive weight is needed to escape "unsupported". |
-
-Raising `consensus_threshold` makes the council harder to satisfy. Lowering
-`dissent_ceiling` makes it quicker to flag division. The defaults encode a
-familiar rule of thumb: **a two-thirds supermajority with limited dissent reads
-as consensus.**
-
----
-
-## Deterministic bundles
-
-A **bundle** is a canonical, self-contained snapshot of a deliberation *and* its
-verdicts, stamped with a content digest (a small, dependency-free FNV-1a hash).
-Bundles are byte-stable — the same inputs always produce the same bytes — so
-they diff cleanly and can be checksummed in CI.
-
-```sh
-cargo run -- bundle samples/cache-coherence.qf -o bundle.json
-cargo run -- verify bundle.json
-```
-
-The digest covers the *compact* canonical body with object keys in a fixed
-order, positions sorted by `(claim, agent, stance)`, and all floating-point
-values snapped to a six-decimal grid. That last detail is load-bearing: it makes
-the JSON writer **idempotent**, so a bundle survives a round trip through the
-parser without changing its digest. Mutate any field and `verify` returns exit
-code `4`.
-
----
+| Protocol concept | Code |
+| --- | --- |
+| Liquidity agent and capital weight | `Agent { weight }` |
+| Pool assertion | `Claim` |
+| Attestation | `Position { stance, confidence }` |
+| Liquidity regime | `Outcome` |
+| Risk policy | `Policy` |
+| Stability Index | `Adjudication.cohesion` |
+| Stability attestation | `Bundle` and FNV-1a digest |
+| Risk report | `ssp.report.v1` |
+| Operations console | `ssp-view` |
 
 ## Testing
 
-Both halves ship with focused tests and are exercised together in CI.
-
-```sh
-# Rust: unit tests, integration tests, and doctests.
+~~~bash
 cargo test
-
-# TypeScript: compile, then run the assertion-based renderer suite.
 cd viewer && npm test
-
-# Everything, via the Makefile.
 make test
-```
+~~~
 
-The Rust suite covers the four verdict outcomes, weight and confidence scaling,
-policy tuning, parser error paths, JSON round-trip stability (including unicode
-escapes and surrogate pairs), bundle determinism, and tamper detection. The
-viewer suite covers report validation, ANSI vs. plain output, HTML escaping, and
-render determinism.
+The Rust suite covers all four regimes, weight and confidence scaling, policy
+tuning, parser error paths, JSON round-trip stability including unicode escapes
+and surrogate pairs, attestation determinism and tamper detection. The console
+suite covers report validation, colored against plain output, HTML escaping,
+render determinism and on-chain account decoding.
 
----
+## Properties
 
-## Design commitments
-
-- **No orchestration.** QuorumForge judges a transcript; it never runs agents.
-- **No dependencies.** Rust core is std-only; the viewer's only build-time
-  dependency is `tsc`. There is no `Cargo.lock` churn and no `node_modules`
-  supply chain to audit at runtime.
-- **Determinism first.** Ordered maps, sorted positions, snapped floats, and an
-  idempotent JSON writer mean identical inputs give identical bytes.
-- **Auditability over cleverness.** Every intermediate quantity (masses,
-  polarity, dissent) is retained in the report so a human can check the math.
-- **Offline forever.** No network calls, no remote media, no telemetry.
-
----
+- **Deterministic.** Ordered maps, sorted positions, snapped floats and an
+  idempotent writer. Same input, same bytes.
+- **Dependency-light.** The Rust kernel is `std` only. The console depends on
+  `@solana/web3.js` at runtime and on the TypeScript compiler at build time.
+- **Auditable.** Every intermediate value is kept in the report, so any regime
+  can be re-derived by hand.
+- **Offline kernel.** No network calls, no remote assets, no telemetry. The
+  on-chain program is a separate crate.
 
 ## Limitations
 
-QuorumForge is intentionally narrow. Know the edges before you rely on it.
+- Normalization is lexical. Assertions that share no words but mean the same
+  thing are treated as distinct. There is no embedding or entailment step.
+- Citations are counted, not graded. A proof and a hunch count the same.
+- Confidence is self-reported. The kernel cannot detect overconfidence.
+- Capital weights are supplied by the caller and never learned.
+- Positions are treated as independent. Collusion and duplicated reasoning are
+  not detected.
+- An epoch is a static snapshot. There is no multi-round rebuttal.
+- Arithmetic is `f64` snapped to six decimals, not exact rationals.
+- The FNV-1a digest is an integrity fingerprint, not a cryptographic hash.
+- The program is devnet-only and unaudited. The kernel does not read chain
+  state; a relayer is assumed to land `settle_regime` and `deploy_backstop`.
 
-- **No semantic understanding.** Claim normalization is lexical only — it folds
-  hedges and contractions and collapses whitespace. Two claims that *mean* the
-  same thing but share no words are treated as distinct. There is no embedding
-  model, paraphrase detector, or entailment check, and adding one would break
-  determinism.
-- **No provenance grading.** Citations are recorded and counted, but their
-  *quality* is not assessed. A citation to a rigorous proof and a citation to a
-  hunch count the same toward the citation tally. Weight your agents, not your
-  sources.
-- **Confidence is self-reported.** The engine trusts (after clamping) whatever
-  confidence an agent declares. It cannot detect overconfidence or calibration
-  drift.
-- **Weights are exogenous.** Credibility weights come from the input file.
-  QuorumForge does not learn or update them; garbage weights yield garbage
-  verdicts.
-- **Independence is assumed.** The scoring model treats positions as independent
-  votes. It does not detect collusion, duplicated reasoning, or agents that are
-  really one source wearing many hats.
-- **Single-round.** A deliberation is a static snapshot. There is no notion of
-  rebuttal rounds, position changes over time, or convergence dynamics beyond
-  what the final transcript records.
-- **Numbers are `f64` snapped to six decimals.** This is ample for adjudication
-  but is not arbitrary-precision arithmetic; do not treat masses as exact
-  rationals.
-- **The FNV-1a digest is an integrity fingerprint, not a security hash.** It
-  detects accidental drift and casual tampering, not a determined adversary.
-  Do not use it as a cryptographic seal.
+## Roadmap
 
----
+<p align="center">
+  <img src="https://i.imgur.com/IzBxZZO.png" alt="Delivery timeline from risk kernel to mainnet beta" width="100%">
+</p>
 
-## A note on the two encodings
+<p align="center"><sub><b>Figure 8.</b> Delivery plan. Kernel and console are done. On-chain work is in progress.</sub></p>
 
-The line-oriented `.qf` format is built for humans and version control: comments,
-one record per line, and clean diffs. The JSON format is built for machines that
-generate deliberations programmatically. They are information-equivalent and
-converge on the same model — pick whichever fits the hand that writes it. The
-full grammar and schema live in [`docs/EVIDENCE.md`](docs/EVIDENCE.md).
+## Record format
 
----
+Two encodings are accepted and are information-equivalent. The line-oriented
+`.qf` format is built for humans and version control: comments, one record per
+line, readable diffs. The JSON format is built for machine generation. The full
+grammar and schema are in [`docs/EVIDENCE.md`](docs/EVIDENCE.md).
 
-## License & history
+## License
 
-Released under the [MIT License](LICENSE). See [`CHANGELOG.md`](CHANGELOG.md) for
-the release history.
-
-<div align="center">
-
-*Bring the argument. QuorumForge brings the light.*
-
-</div>
+MIT. See [`LICENSE`](LICENSE) and [`CHANGELOG.md`](CHANGELOG.md).
