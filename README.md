@@ -5,6 +5,7 @@
 </p>
 
 [![Rust](https://img.shields.io/badge/rust-1.74%2B-dea584?logo=rust&logoColor=white)](https://www.rust-lang.org)
+[![anchor](https://img.shields.io/badge/anchor-0.31.1-blue)](https://www.anchor-lang.com/)
 [![TypeScript](https://img.shields.io/badge/typescript-5.x-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Solana](https://img.shields.io/badge/solana-devnet-9945ff)](https://solana.com)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
