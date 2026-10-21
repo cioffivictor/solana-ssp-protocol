@@ -1,5 +1,9 @@
 # Solana Stability Protocol (SSP)
 
+<p align="center">
+  <img src="https://i.imgur.com/iTNvCwI.png" alt="Solana Stability Protocol" width="100%">
+</p>
+
 [![Rust](https://img.shields.io/badge/rust-1.74%2B-dea584?logo=rust&logoColor=white)](https://www.rust-lang.org)
 [![TypeScript](https://img.shields.io/badge/typescript-7.x-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Runtime dependencies](https://img.shields.io/badge/runtime%20dependencies-0-informational)](#properties)
@@ -39,7 +43,7 @@ roadmap.
 
 A set of liquidity agents attests to the state of each supported pool. Each agent
 carries a capital weight. Agents submit one of three stances on each pool
-assertion:
+assertion.
 
 | Stance | Meaning |
 | --- | --- |
@@ -62,36 +66,11 @@ is a distinct finding from an assertion that fails.
 
 ## System architecture
 
-```mermaid
-flowchart TB
-    subgraph oc["Off-chain"]
-        TEL["Pool telemetry: depth, volatility, price impact"]
-        REC["Epoch record (.qf or .json)"]
-        TEL --> REC
-    end
+<p align="center">
+  <img src="https://i.imgur.com/ECyTJIb.png" alt="System architecture: telemetry, epoch record, risk kernel, operations console, on-chain program" width="100%">
+</p>
 
-    subgraph kern["Risk kernel, Rust, std-only"]
-        PAR["parse.rs"] --> NRM["normalize.rs"]
-        NRM --> ADJ["adjudicate.rs"]
-        ADJ --> BND["bundle.rs"]
-        ADJ --> RPT["report.rs"]
-    end
-
-    subgraph con["Operations console, TypeScript"]
-        VAL["report validation"] --> RAN["ANSI renderer"]
-        VAL --> RHT["HTML renderer"]
-    end
-
-    POL["Risk policy: expansion threshold, stress ceiling, minimum depth"]
-    AT["Stability attestation, digest-stamped"]
-    CHAIN["On-chain program, next milestone"]
-
-    REC --> PAR
-    POL --> ADJ
-    BND --> AT
-    RPT --> VAL
-    AT -.-> CHAIN
-```
+<p align="center"><sub><b>Figure 1.</b> Component layout. The kernel is offline and dependency-free. The on-chain program is dashed because it is not implemented yet.</sub></p>
 
 The kernel does not run agents, does not call models and does not touch the
 network. It reads a recorded epoch and derives a result. Identical telemetry and
@@ -100,41 +79,11 @@ identical attestation digest.
 
 ## Data model
 
-```mermaid
-erDiagram
-    DELIBERATION ||--o{ AGENT : "convenes"
-    DELIBERATION ||--o{ CLAIM : "raises"
-    AGENT ||--o{ POSITION : "casts"
-    CLAIM ||--o{ POSITION : "receives"
-    POSITION ||--o{ CITATION : "cites"
+<p align="center">
+  <img src="https://i.imgur.com/zdzkDpP.png" alt="Entity relationship diagram of the epoch record model" width="90%">
+</p>
 
-    DELIBERATION {
-        string id
-        string question
-    }
-    AGENT {
-        string id
-        string name
-        float weight
-        string role
-    }
-    CLAIM {
-        string id
-        string topic
-        string text
-        string normalized
-    }
-    POSITION {
-        string agent_id
-        string claim_id
-        string stance
-        float confidence
-    }
-    CITATION {
-        string source
-        string locator
-    }
-```
+<p align="center"><sub><b>Figure 2.</b> Record model. One epoch, many agents and assertions, many attestations, zero or more citations per attestation.</sub></p>
 
 `weight` defaults to `1.0`. `confidence` is clamped to `[0, 1]`. A position that
 references an undeclared agent or claim is rejected at validation, so a typo
@@ -142,23 +91,11 @@ cannot silently drop a vote.
 
 ## Epoch lifecycle
 
-```mermaid
-sequenceDiagram
-    participant T as Pool telemetry
-    participant L as Liquidity agents
-    participant K as Risk kernel
-    participant P as Risk policy
-    participant C as Operations console
+<p align="center">
+  <img src="https://i.imgur.com/vDm69Qe.png" alt="Sequence diagram of one epoch from telemetry to rendered report" width="100%">
+</p>
 
-    T->>L: depth, volatility, price impact
-    L->>K: attestations with stance, confidence, weight
-    K->>K: parse and normalize assertions
-    K->>K: aggregate support and stress mass
-    K->>P: decisive depth, polarity, stress ratio
-    P-->>K: regime per assertion
-    K->>C: risk report and digest-stamped attestation
-    C-->>C: render to console or standalone HTML
-```
+<p align="center"><sub><b>Figure 3.</b> One epoch end to end. The kernel only reads the record; it never calls back into the agents.</sub></p>
 
 ## Regime classification
 
@@ -187,19 +124,11 @@ The classifier reads those three values against the risk policy:
 - `HEDGE` when `stress_ratio >= stress_ceiling`
 - `WATCH` otherwise
 
-```mermaid
-stateDiagram-v2
-    [*] --> Evaluate
-    Evaluate --> BACKSTOP: depth <= minimum_depth
-    Evaluate --> Strong: depth > minimum_depth
-    Strong --> EXPAND: polarity >= threshold and stress < ceiling
-    Strong --> HEDGE: stress >= ceiling
-    Strong --> WATCH: otherwise
-    EXPAND --> [*]
-    WATCH --> [*]
-    HEDGE --> [*]
-    BACKSTOP --> [*]
-```
+<p align="center">
+  <img src="https://i.imgur.com/4zKq1ro.png" alt="Decision flow of the regime classifier" width="100%">
+</p>
+
+<p align="center"><sub><b>Figure 4.</b> Classifier decision flow. Four mutually exclusive outcomes, three policy parameters.</sub></p>
 
 The epoch also produces one scalar, the Stability Index, in `[0, 1]`. It is the
 depth-weighted mean of `|regime_polarity|` across assertions. A set of agents that
@@ -225,6 +154,12 @@ With the default policy (`expansion_threshold = 0.66`, `stress_ceiling = 0.34`),
 `|polarity| 0.333` is below the threshold so it is not `EXPAND`. The regime is
 `WATCH`, leaning healthy.
 
+<p align="center">
+  <img src="https://i.imgur.com/293KVAm.png" alt="Decisive depth per assertion and resulting Stability Index" width="90%">
+</p>
+
+<p align="center"><sub><b>Figure 5.</b> Decisive depth per assertion in <code>samples/pool-stress.qf</code>, with the resulting Stability Index. Assertion p5 carries no decisive depth and resolves to BACKSTOP.</sub></p>
+
 ## Risk policy
 
 Three parameters control classification. All are range-validated.
@@ -239,20 +174,11 @@ The defaults encode a two-thirds supermajority rule with a limited stress
 tolerance. Raising the threshold makes expansion rarer. Lowering the ceiling
 makes hedging more frequent.
 
-```mermaid
-quadrantChart
-    title Regime map: realised volatility against pool depth
-    x-axis Low volatility --> High volatility
-    y-axis Thin depth --> Deep depth
-    quadrant-1 Watch
-    quadrant-2 Expand
-    quadrant-3 Backstop
-    quadrant-4 Hedge
-    SOL-BONK: [0.72, 0.31]
-    WIF-SOL: [0.35, 0.74]
-    BONK-USDC: [0.48, 0.55]
-    NEWPAIR-01: [0.86, 0.18]
-```
+<p align="center">
+  <img src="https://i.imgur.com/zKjFJMk.png" alt="Regime map plotting volatility against pool depth" width="90%">
+</p>
+
+<p align="center"><sub><b>Figure 6.</b> Regime map. Depth rises up the y axis, volatility rises along the x axis. Points are illustrative pool positions.</sub></p>
 
 ## Attestations
 
@@ -264,6 +190,12 @@ diff cleanly and can be checked in CI before any on-chain submission.
 cargo run --release -- bundle samples/pool-stress.qf -o attestation.json
 cargo run --release -- verify attestation.json
 ```
+
+<p align="center">
+  <img src="https://i.imgur.com/08lXihF.png" alt="Attestation pipeline from epoch record to verified digest" width="100%">
+</p>
+
+<p align="center"><sub><b>Figure 7.</b> Bundle and verify. Canonicalization is what makes the digest stable across a parser round trip.</sub></p>
 
 The digest covers the canonical body with a fixed key order, positions sorted by
 `(assertion, agent, stance)` and floats snapped to six decimals. The snap makes
@@ -298,19 +230,6 @@ Stability index: 58.7%   Policy: expand>=0.66, stress<0.34
      dissenting: lzr, mm1
 ...
 ```
-
-Decisive depth per assertion in the same record:
-
-```mermaid
-xychart-beta
-    title "Decisive depth per assertion"
-    x-axis [p1, p2, p3, p4, p5]
-    y-axis "Decisive depth" 0 --> 5
-    bar [4.32, 3.85, 1.76, 2.19, 0.00]
-```
-
-`p5` has zero decisive depth because every attestation abstained, so it is
-classified `BACKSTOP`.
 
 ### Operations console
 
@@ -427,20 +346,11 @@ render determinism.
 
 ## Roadmap
 
-```mermaid
-gantt
-    title Delivery plan
-    dateFormat YYYY-MM
-    section Risk kernel
-    Regime engine and policy      :done,   2026-01, 2026-07
-    Stability attestations        :done,   2026-06, 2026-08
-    section Operations console
-    ANSI and HTML renderers       :done,   2026-07, 2026-09
-    section On-chain
-    Anchor program, devnet        :active, 2026-10, 2027-01
-    Reserve vault and CPI surface :        2026-12, 2027-03
-    Mainnet beta                  :        2027-03, 2027-06
-```
+<p align="center">
+  <img src="https://i.imgur.com/IzBxZZO.png" alt="Delivery timeline from risk kernel to mainnet beta" width="100%">
+</p>
+
+<p align="center"><sub><b>Figure 8.</b> Delivery plan. Kernel and console are done. On-chain work is in progress.</sub></p>
 
 ## Record format
 
