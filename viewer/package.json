@@ -11,6 +11,6 @@
     "test": "tsc -p tsconfig.json && node dist/render.test.js && node dist/solana.test.js",
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
-  "dependencies": { "@solana/web3.js": "^1.98.0" },
+  "dependencies": { "@solana/web3.js": "^3.1.1" },
   "devDependencies": { "typescript": "^5.9.3" }
 }
