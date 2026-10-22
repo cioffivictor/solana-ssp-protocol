@@ -12,5 +12,5 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": { "@solana/web3.js": "^1.98.0" },
-  "devDependencies": { "typescript": "^5.9.3" }
+  "devDependencies": { "typescript": "^7.0.2" }
 }
